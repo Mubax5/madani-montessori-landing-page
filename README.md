@@ -1,66 +1,448 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Madani Montessori Islamic School Website
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Website resmi **Madani Montessori Islamic School** — TK Islam Terpadu berbasis Montessori yang menyediakan program sekolah, bimbel, serta training & parenting untuk guru dan orang tua.
 
-## About Laravel
+Project ini dirancang sebagai website multipage dengan tampilan elegan, minimalis, clean, dan eksklusif. Website juga terhubung dengan **Admin CMS** sehingga konten seperti teks, gambar, program, galeri, kontak, dan CTA WhatsApp dapat dikelola tanpa mengubah kode secara langsung.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Preview
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+> Screenshot dapat ditambahkan setelah UI final selesai.
 
-## Learning Laravel
+| Home | Program Sekolah | Admin CMS |
+|---|---|---|
+| `screenshots/home.png` | `screenshots/program.png` | `screenshots/admin.png` |
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+---
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## Tentang Project
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Website ini dibuat untuk membantu Madani Montessori Islamic School menampilkan informasi sekolah secara profesional dan mudah diakses oleh orang tua calon siswa.
 
-## Laravel Sponsors
+Fokus utama website:
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+- Menampilkan profil sekolah secara elegan
+- Menjelaskan program KB, TK A, TK B, dan TK C
+- Menampilkan program unggulan berbasis Montessori dan Islam Terpadu
+- Menyediakan informasi bimbel
+- Menampilkan program Training & Parenting
+- Menampilkan galeri kegiatan sekolah
+- Menyediakan form kontak dan pendaftaran
+- Memudahkan calon orang tua menghubungi admin melalui WhatsApp
+- Memudahkan admin sekolah mengelola konten website melalui CMS
 
-### Premium Partners
+---
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+## Fitur Utama
 
-## Contributing
+### Website Publik
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+- Home page
+- Tentang Kami
+- Program Sekolah
+- Program Unggulan
+- Bimbel
+- Training & Parenting
+- Galeri
+- Kontak & Pendaftaran
+- CTA WhatsApp
+- Maps / lokasi sekolah
+- Form minat pendaftaran
+- Responsive mobile, tablet, dan desktop
 
-## Code of Conduct
+### Admin CMS
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Admin CMS digunakan untuk mengelola konten website secara dinamis.
 
-## Security Vulnerabilities
+Fitur admin:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+- Login admin
+- Dashboard admin
+- Kelola hero section
+- Kelola halaman website
+- Kelola program sekolah
+- Kelola program unggulan
+- Kelola bimbel
+- Kelola training & parenting
+- Kelola galeri kegiatan
+- Kelola FAQ
+- Kelola kontak sekolah
+- Kelola template pesan WhatsApp
+- Kelola data pendaftaran
+- Upload dan ganti gambar
+- Edit teks website tanpa ubah kode
 
-## License
+---
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Identitas Sekolah
+
+| Informasi | Detail |
+|---|---|
+| Nama Sekolah | Madani Montessori Islamic School |
+| Jenjang | KB, TK A, TK B, TK C |
+| Konsep | TK Islam Terpadu berbasis Montessori |
+| Program Tambahan | Bimbel, Training & Parenting |
+| Alamat | Jalan Raya Perum Korpri Blok J1 No.16, Cisauk |
+| WhatsApp | 0821 2357 6275 |
+
+---
+
+## Teknologi yang Digunakan
+
+Project ini direkomendasikan menggunakan stack berikut:
+
+- **Laravel** — Backend dan web framework
+- **Blade Template** — View website publik
+- **Tailwind CSS** — Styling modern dan responsive
+- **Filament Admin** — Admin CMS
+- **MySQL** — Database
+- **Laravel Eloquent ORM** — Relasi dan query database
+- **Laravel Storage** — Upload gambar dan file
+- **Vite** — Asset bundling
+- **WhatsApp Link Integration** — CTA dan template pesan otomatis
+
+---
+
+## Design Direction
+
+Website menggunakan konsep visual:
+
+- Elegan
+- Minimalis
+- Clean
+- Premium
+- Islami modern
+- Mewah dan eksklusif
+- Tidak terlalu ramai
+- Tidak terlihat seperti template AI generik
+
+### Warna Utama
+
+| Nama | Warna |
+|---|---|
+| Primary Navy | `#0A1F5C` |
+| Elegant Blue | `#123C8C` |
+| Royal Blue | `#1D4ED8` |
+| Gold Accent | `#F5C542` |
+| Soft Yellow | `#FFE08A` |
+| Cream | `#FFF7E6` |
+| White | `#FFFFFF` |
+| Text Dark | `#111827` |
+| Text Muted | `#64748B` |
+
+### Font
+
+- **Poppins** untuk body text dan UI
+- **League Spartan** untuk heading
+- Logo ditampilkan dalam bentuk bulat dengan border radius penuh
+
+---
+
+## Struktur Halaman
+
+```txt
+/
+├── Home
+├── Tentang Kami
+├── Program Sekolah
+├── Program Unggulan
+├── Bimbel
+├── Training & Parenting
+├── Galeri
+└── Kontak & Pendaftaran
+```
+
+---
+
+## Struktur Admin CMS
+
+```txt
+/admin
+├── Dashboard
+├── Halaman
+├── Hero Section
+├── Program Sekolah
+├── Program Unggulan
+├── Bimbel
+├── Training & Parenting
+├── Galeri
+├── FAQ
+├── Kontak
+├── Template WhatsApp
+└── Pendaftaran
+```
+
+---
+
+## Database Utama
+
+Beberapa tabel utama yang digunakan:
+
+| Tabel | Fungsi |
+|---|---|
+| `users` | Data admin CMS |
+| `pages` | Konten halaman dinamis |
+| `sections` | Section konten website |
+| `programs` | Program sekolah dan bimbel |
+| `featured_programs` | Program unggulan |
+| `galleries` | Galeri kegiatan |
+| `faqs` | FAQ website |
+| `registrations` | Data form pendaftaran |
+| `settings` | Pengaturan umum website |
+| `whatsapp_templates` | Template pesan WhatsApp |
+
+---
+
+## Instalasi Project
+
+### 1. Clone Repository
+
+```bash
+git clone https://github.com/username/madani-montessori-website.git
+cd madani-montessori-website
+```
+
+### 2. Install Dependency Backend
+
+```bash
+composer install
+```
+
+### 3. Install Dependency Frontend
+
+```bash
+npm install
+```
+
+### 4. Setup Environment
+
+Copy file `.env.example` menjadi `.env`.
+
+```bash
+cp .env.example .env
+```
+
+Lalu sesuaikan konfigurasi database:
+
+```env
+APP_NAME="Madani Montessori Islamic School"
+APP_ENV=local
+APP_DEBUG=true
+APP_URL=http://localhost:8000
+
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=madani_montessori
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+### 5. Generate App Key
+
+```bash
+php artisan key:generate
+```
+
+### 6. Jalankan Migration dan Seeder
+
+```bash
+php artisan migrate --seed
+```
+
+### 7. Jalankan Storage Link
+
+```bash
+php artisan storage:link
+```
+
+### 8. Jalankan Development Server
+
+```bash
+php artisan serve
+```
+
+Di terminal lain, jalankan Vite:
+
+```bash
+npm run dev
+```
+
+Website dapat dibuka di:
+
+```txt
+http://localhost:8000
+```
+
+Admin CMS dapat dibuka di:
+
+```txt
+http://localhost:8000/admin
+```
+
+---
+
+## Akun Admin Default
+
+> Sesuaikan dengan data seeder project.
+
+```txt
+Email    : admin@madanimontessori.sch.id
+Password : password
+```
+
+Segera ubah password setelah login pertama.
+
+---
+
+## Build Production
+
+Untuk build asset production:
+
+```bash
+npm run build
+```
+
+Pastikan konfigurasi `.env` production sudah disesuaikan:
+
+```env
+APP_ENV=production
+APP_DEBUG=false
+APP_URL=https://domain-website.com
+```
+
+Lalu jalankan:
+
+```bash
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+```
+
+---
+
+## Integrasi WhatsApp
+
+Website menggunakan CTA WhatsApp dengan format:
+
+```txt
+https://wa.me/6282123576275?text=ISI_PESAN_ENCODED
+```
+
+Contoh template pesan:
+
+```txt
+Assalamu’alaikum, saya ingin konsultasi pendaftaran Madani Montessori Islamic School. Mohon info program, jadwal, dan biaya. Terima kasih.
+```
+
+Template pesan dapat dikelola melalui Admin CMS jika fitur sudah tersedia.
+
+---
+
+## Responsive Design
+
+Website dibuat dengan pendekatan **mobile-first**.
+
+Breakpoint:
+
+| Ukuran | Layout |
+|---|---|
+| 360–430px | Mobile layout 1 kolom |
+| >= 768px | Tablet layout 2 kolom |
+| >= 1024px | Desktop layout lebih luas dan grid |
+
+---
+
+## Folder Penting
+
+```txt
+app/
+├── Models/
+├── Http/
+│   ├── Controllers/
+│   └── Requests/
+
+resources/
+├── views/
+│   ├── layouts/
+│   ├── components/
+│   └── pages/
+├── css/
+└── js/
+
+database/
+├── migrations/
+└── seeders/
+
+public/
+├── images/
+└── storage/
+```
+
+---
+
+## Roadmap
+
+- [ ] Redesign semua halaman publik dengan tema elegan minimalis
+- [ ] Integrasi penuh dengan Admin CMS
+- [ ] Upload dan manajemen gambar dari admin
+- [ ] Dynamic content untuk semua section
+- [ ] Form pendaftaran tersimpan ke database
+- [ ] Export data pendaftaran
+- [ ] Lightbox galeri
+- [ ] SEO meta tag per halaman
+- [ ] Optimasi performa gambar
+- [ ] Deployment production
+
+---
+
+## Deployment Checklist
+
+Sebelum deploy, pastikan:
+
+- [ ] `.env` production sudah benar
+- [ ] `APP_DEBUG=false`
+- [ ] Database sudah dibuat
+- [ ] Migration sudah dijalankan
+- [ ] Storage link sudah aktif
+- [ ] Asset sudah di-build dengan `npm run build`
+- [ ] Folder `storage` dan `bootstrap/cache` writable
+- [ ] Admin default sudah diganti password
+- [ ] Domain dan SSL sudah aktif
+
+---
+
+## Catatan Keamanan
+
+File berikut tidak boleh di-upload ke GitHub:
+
+```txt
+.env
+/vendor
+/node_modules
+/storage/logs
+/storage/framework/cache
+/storage/framework/sessions
+```
+
+Pastikan `.gitignore` sudah dikonfigurasi dengan benar.
+
+---
+
+## Lisensi
+
+Project ini dibuat untuk kebutuhan website resmi **Madani Montessori Islamic School**.
+
+---
+
+## Kontak
+
+**Madani Montessori Islamic School**  
+Jalan Raya Perum Korpri Blok J1 No.16, Cisauk  
+
+WhatsApp: **0821 2357 6275**
+
+```txt
+© 2025 Madani Montessori Islamic School. All rights reserved.
+```
