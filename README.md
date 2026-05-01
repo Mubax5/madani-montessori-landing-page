@@ -6,16 +6,6 @@ Project ini dirancang sebagai website multipage dengan tampilan elegan, minimali
 
 ---
 
-## Preview
-
-> Screenshot dapat ditambahkan setelah UI final selesai.
-
-| Home | Program Sekolah | Admin CMS |
-|---|---|---|
-| `screenshots/home.png` | `screenshots/program.png` | `screenshots/admin.png` |
-
----
-
 ## Tentang Project
 
 Website ini dibuat untuk membantu Madani Montessori Islamic School menampilkan informasi sekolah secara profesional dan mudah diakses oleh orang tua calon siswa.
@@ -436,13 +426,6 @@ Project ini dibuat untuk kebutuhan website resmi **Madani Montessori Islamic Sch
 
 ---
 
-## Kontak
-
-**Madani Montessori Islamic School**  
-Jalan Raya Perum Korpri Blok J1 No.16, Cisauk  
-
-WhatsApp: **0821 2357 6275**
-
 ```txt
-© 2025 Madani Montessori Islamic School. All rights reserved.
+© 2026 Mubax5. All rights reserved.
 ```
