@@ -65,10 +65,10 @@
                         <strong>Montessori yang tenang, Islami, dan terarah.</strong>
                         <span>Sekolah dan bimbel untuk anak usia dini dengan komunikasi orang tua yang dekat.</span>
                         <div class="hero-microgrid">
-                            <span>KB - TK C</span>
+                            <span>KB - TK A, B, C</span>
                             <span>Calistung</span>
                             <span>Mengaji</span>
-                            <span>Parenting</span>
+                            <span>Sensorial</span>
                         </div>
                     </div>
                 </div>
