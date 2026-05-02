@@ -36,21 +36,38 @@ class MediaAsset extends Model
             return $this->file_path;
         }
 
-        return Storage::disk('public')->url($this->file_path);
+        return Storage::disk(config('filesystems.default', 'public'))->url($this->file_path);
     }
 
     protected static function booted(): void
     {
         static::saving(function (MediaAsset $asset): void {
             if ($asset->file_path) {
-                $asset->file_name = $asset->file_name ?: basename($asset->file_path);
+                $path = parse_url($asset->file_path, PHP_URL_PATH) ?: $asset->file_path;
+                $fileName = basename($path) ?: 'media';
 
-                if (! $asset->mime_type && Storage::disk('public')->exists($asset->file_path)) {
-                    $asset->mime_type = Storage::disk('public')->mimeType($asset->file_path) ?: 'application/octet-stream';
+                if ($asset->isDirty('file_path')) {
+                    $asset->file_name = $fileName;
+                    $asset->mime_type = null;
+                    $asset->file_size = null;
+                } else {
+                    $asset->file_name = $asset->file_name ?: $fileName;
                 }
 
-                if (! $asset->file_size && Storage::disk('public')->exists($asset->file_path)) {
-                    $asset->file_size = Storage::disk('public')->size($asset->file_path);
+                if (Str::startsWith($asset->file_path, ['http://', 'https://'])) {
+                    $asset->mime_type = $asset->mime_type ?: 'image/remote';
+
+                    return;
+                }
+
+                $disk = Storage::disk(config('filesystems.default', 'public'));
+
+                if (! $asset->mime_type && $disk->exists($asset->file_path)) {
+                    $asset->mime_type = $disk->mimeType($asset->file_path) ?: 'application/octet-stream';
+                }
+
+                if (! $asset->file_size && $disk->exists($asset->file_path)) {
+                    $asset->file_size = $disk->size($asset->file_path);
                 }
             }
 

@@ -13,7 +13,9 @@ class ManageAdminUsers extends ManageRecords
     protected function getHeaderActions(): array
     {
         return [
-            CreateAction::make()->visible(fn (): bool => AdminUserResource::canCreate()),
+            CreateAction::make()
+                ->mutateDataUsing(fn (array $data): array => AdminUserResource::resolveAvatarInputs($data))
+                ->visible(fn (): bool => AdminUserResource::canCreate()),
         ];
     }
 }

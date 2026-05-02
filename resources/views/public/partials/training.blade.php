@@ -74,7 +74,9 @@
                             @endif
                             <p>{{ $event->description }}</p>
                         </div>
-                        <a href="{{ \App\Support\SiteContent::whatsappUrl('minat_training_parenting') }}" class="training-agenda-link" aria-label="Minta jadwal untuk {{ $event->title }}">Daftar</a>
+                        <a href="{{ \App\Support\SiteContent::whatsappUrl('minat_training_parenting') }}" class="training-agenda-link" aria-label="Minta jadwal untuk {{ $event->title }}">
+                            <span aria-hidden="true">-&gt;</span>
+                        </a>
                     </article>
                 @empty
                     <article class="training-empty-card">
@@ -86,7 +88,9 @@
                             <h4>Jadwal sedang disusun</h4>
                             <p>Hubungi admin untuk menerima info batch workshop berikutnya atau request sesi khusus sekolah dan komunitas.</p>
                         </div>
-                        <a href="{{ \App\Support\SiteContent::whatsappUrl('minat_training_parenting') }}" class="training-agenda-link">Minta Jadwal</a>
+                        <a href="{{ \App\Support\SiteContent::whatsappUrl('minat_training_parenting') }}" class="training-agenda-link" aria-label="Minta jadwal Training & Parenting">
+                            <span aria-hidden="true">-&gt;</span>
+                        </a>
                     </article>
                 @endforelse
                 </div>

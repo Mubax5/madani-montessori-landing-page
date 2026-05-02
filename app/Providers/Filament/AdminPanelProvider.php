@@ -36,7 +36,7 @@ class AdminPanelProvider extends PanelProvider
                 '<div class="madani-admin-brand"><img src="' . asset('images/logo-madani-montessori.png') . '" alt="Logo Madani Montessori Islamic School"><span><strong>Madani CMS</strong><small>Montessori Islamic School</small></span></div>'
             ))
             ->brandLogoHeight('3.75rem')
-            ->favicon(asset('images/logo-madani-montessori.png'))
+            ->favicon(asset('images/favicon-madani.png'))
             ->font('Poppins')
             ->darkMode(false)
             ->sidebarCollapsibleOnDesktop()

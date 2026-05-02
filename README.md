@@ -213,20 +213,23 @@ Copy file `.env.example` menjadi `.env`.
 cp .env.example .env
 ```
 
-Lalu sesuaikan konfigurasi database:
+Lalu sesuaikan konfigurasi database dan password admin awal:
 
 ```env
 APP_NAME="Madani Montessori Islamic School"
 APP_ENV=local
 APP_DEBUG=true
 APP_URL=http://localhost:8000
+ADMIN_INITIAL_PASSWORD=admin123
 
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
 DB_PORT=3306
-DB_DATABASE=madani_montessori
+DB_DATABASE=madani_cms
 DB_USERNAME=root
 DB_PASSWORD=
+DB_CHARSET=utf8mb4
+DB_COLLATION=utf8mb4_unicode_ci
 ```
 
 ### 5. Generate App Key
@@ -246,6 +249,8 @@ php artisan migrate --seed
 ```bash
 php artisan storage:link
 ```
+
+Catatan: command ini untuk lokal atau hosting tradisional. Untuk Laravel Cloud, jangan masukkan `php artisan storage:link` ke deploy commands.
 
 ### 8. Jalankan Development Server
 
@@ -279,10 +284,10 @@ http://localhost:8000/admin
 
 ```txt
 Email    : admin@madanimontessori.sch.id
-Password : password
+Password : nilai `ADMIN_INITIAL_PASSWORD` saat seed pertama, default lokal `admin123`
 ```
 
-Segera ubah password setelah login pertama.
+Seeder tidak akan menimpa password admin yang sudah ada. Untuk production, set `ADMIN_INITIAL_PASSWORD` ke password kuat sebelum seed pertama, lalu segera ubah password setelah login pertama.
 
 ---
 
@@ -300,6 +305,7 @@ Pastikan konfigurasi `.env` production sudah disesuaikan:
 APP_ENV=production
 APP_DEBUG=false
 APP_URL=https://domain-website.com
+ADMIN_INITIAL_PASSWORD=password-kuat
 ```
 
 Lalu jalankan:
@@ -309,6 +315,51 @@ php artisan config:cache
 php artisan route:cache
 php artisan view:cache
 ```
+
+---
+
+## Deploy Laravel Cloud
+
+Repo ini bisa dideploy ke Laravel Cloud dengan build dan deploy commands berikut.
+
+Build commands:
+
+```bash
+composer install --no-dev --prefer-dist --optimize-autoloader --no-interaction
+npm ci
+npm run build
+php artisan optimize
+```
+
+Deploy commands:
+
+```bash
+php artisan migrate --force
+```
+
+Setelah deploy pertama selesai, jalankan seed satu kali dari Commands Laravel Cloud:
+
+```bash
+php artisan db:seed --force
+```
+
+Jangan jadikan `php artisan db:seed --force` sebagai deploy command permanen. Seeder membuat akun admin awal, dan data awal halaman publik memang dibutuhkan supaya route seperti `/` tidak 404.
+
+Environment variable minimal untuk Laravel Cloud:
+
+```env
+APP_ENV=production
+APP_DEBUG=false
+APP_URL=https://domain-laravel-cloud.laravel.cloud
+ADMIN_INITIAL_PASSWORD=password-super-kuat
+SESSION_DRIVER=database
+CACHE_STORE=database
+QUEUE_CONNECTION=database
+FILESYSTEM_DISK=public
+MAIL_MAILER=log
+```
+
+Untuk upload gambar CMS production, gunakan object storage/S3-compatible storage dan set `FILESYSTEM_DISK=s3`. Upload Filament mengikuti disk default dari env tersebut.
 
 ---
 
@@ -395,10 +446,11 @@ Sebelum deploy, pastikan:
 - [ ] `APP_DEBUG=false`
 - [ ] Database sudah dibuat
 - [ ] Migration sudah dijalankan
-- [ ] Storage link sudah aktif
+- [ ] Seed data awal sudah dijalankan sekali
 - [ ] Asset sudah di-build dengan `npm run build`
-- [ ] Folder `storage` dan `bootstrap/cache` writable
+- [ ] Folder `storage` dan `bootstrap/cache` writable untuk hosting non-Cloud
 - [ ] Admin default sudah diganti password
+- [ ] Upload CMS production memakai object storage jika deploy ke Laravel Cloud
 - [ ] Domain dan SSL sudah aktif
 
 ---

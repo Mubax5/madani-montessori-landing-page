@@ -20,6 +20,9 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 
 class MediaAssetResource extends Resource
 {
@@ -42,15 +45,21 @@ class MediaAssetResource extends Resource
     public static function form(Schema $schema): Schema
     {
         return $schema->components([
-            FileUpload::make('file_path')
-                ->label('File')
-                ->disk('public')
+            FileUpload::make('file_upload')
+                ->label('Upload file')
+                ->disk(config('filesystems.default', 'public'))
                 ->directory('media')
+                ->visibility('public')
                 ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
                 ->maxSize(2048)
                 ->openable()
                 ->downloadable()
-                ->required(),
+                ->helperText('Pakai ini kalau FILESYSTEM_DISK sudah memakai object storage/S3 di Laravel Cloud.'),
+            TextInput::make('file_url')
+                ->label('URL gambar')
+                ->url()
+                ->maxLength(2048)
+                ->helperText('Opsional. Jika diisi, URL ini akan dipakai dan mengabaikan upload file.'),
             TextInput::make('alt_text')
                 ->label('Alt text')
                 ->required()
@@ -79,7 +88,9 @@ class MediaAssetResource extends Resource
             ])
             ->recordActions([
                 LandingPagePreview::action('galeri'),
-                EditAction::make(),
+                EditAction::make()
+                    ->mutateRecordDataUsing(fn (array $data): array => static::hydrateMediaInputs($data))
+                    ->mutateDataUsing(fn (array $data): array => static::resolveMediaInputs($data)),
                 DeleteAction::make(),
             ])
             ->toolbarActions([
@@ -94,5 +105,47 @@ class MediaAssetResource extends Resource
         return [
             'index' => ManageMediaAssets::route('/'),
         ];
+    }
+
+    public static function hydrateMediaInputs(array $data): array
+    {
+        $path = (string) ($data['file_path'] ?? '');
+
+        if (Str::startsWith($path, ['http://', 'https://'])) {
+            $data['file_url'] = $path;
+        } elseif (filled($path)) {
+            $data['file_upload'] = $path;
+        }
+
+        return $data;
+    }
+
+    public static function resolveMediaInputs(array $data): array
+    {
+        $url = trim((string) ($data['file_url'] ?? ''));
+        $upload = static::normalizeUploadState($data['file_upload'] ?? null);
+        $path = filled($url) ? $url : $upload;
+
+        if (blank($path)) {
+            throw ValidationException::withMessages([
+                'file_upload' => 'Upload file atau isi URL gambar.',
+                'file_url' => 'Upload file atau isi URL gambar.',
+            ]);
+        }
+
+        $data['file_path'] = $path;
+
+        unset($data['file_upload'], $data['file_url']);
+
+        return $data;
+    }
+
+    private static function normalizeUploadState(mixed $state): ?string
+    {
+        if (is_array($state)) {
+            $state = Arr::first($state);
+        }
+
+        return filled($state) ? (string) $state : null;
     }
 }

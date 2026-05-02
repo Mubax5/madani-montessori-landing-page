@@ -271,10 +271,10 @@
 
     .section-kicker::before {
         content: "";
-        width: 28px;
+        width: 18px;
         height: 2px;
         border-radius: 999px;
-        background: var(--gold);
+        background: rgba(245, 197, 66, 0.82);
     }
 
     .section-kicker--light {
@@ -453,10 +453,10 @@
 
     .hero-eyebrow::before {
         content: "";
-        width: 38px;
+        width: 24px;
         height: 2px;
         border-radius: 999px;
-        background: var(--gold);
+        background: rgba(245, 197, 66, 0.88);
     }
 
     .home-hero h1,
@@ -1136,10 +1136,10 @@
 
     .training-panel-eyebrow::before {
         content: "";
-        width: 18px;
+        width: 14px;
         height: 2px;
         border-radius: var(--radius-pill);
-        background: var(--gold);
+        background: rgba(245, 197, 66, 0.82);
     }
 
     .training-topics-panel h3,
@@ -1365,25 +1365,29 @@
 
     .training-agenda-link {
         display: inline-flex;
-        width: fit-content;
-        min-height: 40px;
+        width: 42px;
+        height: 42px;
+        min-height: 42px;
         align-items: center;
         justify-content: center;
-        border-radius: var(--radius-pill);
+        border-radius: 50%;
         border: 1px solid rgba(10, 31, 92, 0.16);
-        background: #fff;
-        padding: 10px 15px;
+        background: rgba(255, 255, 255, 0.82);
+        padding: 0;
         color: var(--navy);
-        font-size: .82rem;
+        font-family: var(--font-display);
+        font-size: 1rem;
+        line-height: 1;
         font-weight: 900;
         box-shadow: 0 10px 22px rgba(10, 31, 92, 0.06);
-        transition: transform .2s var(--ease), border-color .2s var(--ease), background .2s var(--ease);
+        transition: transform .2s var(--ease), border-color .2s var(--ease), background .2s var(--ease), box-shadow .2s var(--ease);
     }
 
     .training-agenda-link:hover {
-        transform: translateY(-2px);
+        transform: translateY(-2px) translateX(2px);
         border-color: rgba(245, 197, 66, 0.62);
         background: var(--gold-soft);
+        box-shadow: 0 14px 28px rgba(245, 197, 66, 0.2);
     }
 
     .training-empty-card {
@@ -1870,6 +1874,102 @@
         box-shadow: 0 20px 44px rgba(15, 118, 110, 0.28);
     }
 
+    :where(
+        .highlight-card,
+        .program-roadmap__item,
+        .learning-mode,
+        .feature-row,
+        .method-card,
+        .package-card,
+        .benefit-card,
+        .training-topics-panel,
+        .training-schedule-panel,
+        .training-agenda-card,
+        .training-empty-card,
+        .gallery-card,
+        .map-panel,
+        .address-card,
+        .step-card,
+        .faq-item,
+        .cta-card
+    ) {
+        transition:
+            translate .24s var(--ease),
+            box-shadow .24s var(--ease),
+            border-color .24s var(--ease),
+            background .24s var(--ease);
+    }
+
+    :where(
+        .hero-visual__frame img,
+        .story-image img,
+        .gallery-card img,
+        .map-panel iframe
+    ) {
+        transition: transform .42s var(--ease), filter .42s var(--ease);
+    }
+
+    .reveal-item {
+        opacity: 0;
+        translate: 0 18px;
+        transition:
+            opacity .56s var(--ease),
+            translate .56s var(--ease),
+            box-shadow .24s var(--ease),
+            border-color .24s var(--ease);
+        transition-delay: var(--reveal-delay, 0ms);
+    }
+
+    .reveal-item.is-visible {
+        opacity: 1;
+        translate: 0 0;
+    }
+
+    @media (hover: hover) {
+        :where(
+            .highlight-card,
+            .program-roadmap__item,
+            .learning-mode,
+            .feature-row,
+            .method-card,
+            .package-card,
+            .benefit-card,
+            .training-topics-panel,
+            .training-schedule-panel,
+            .training-agenda-card,
+            .training-empty-card,
+            .gallery-card,
+            .map-panel,
+            .address-card,
+            .step-card,
+            .faq-item,
+            .cta-card
+        ):hover {
+            translate: 0 -4px;
+            border-color: rgba(245, 197, 66, 0.42);
+            box-shadow: 0 24px 58px rgba(10, 31, 92, 0.12);
+        }
+
+        .package-card--featured:hover {
+            translate: 0 -6px;
+        }
+
+        .hero-visual__frame:hover img,
+        .story-image:hover img,
+        .gallery-card:hover img {
+            transform: scale(1.045);
+            filter: saturate(1.04);
+        }
+
+        .btn:hover {
+            box-shadow: 0 22px 44px rgba(10, 31, 92, 0.16);
+        }
+
+        .btn--gold:hover {
+            box-shadow: 0 24px 48px rgba(245, 197, 66, 0.3);
+        }
+    }
+
     .site-footer {
         position: relative;
         overflow: hidden;
@@ -2248,6 +2348,8 @@
             scroll-behavior: auto !important;
             transition: none !important;
             animation: none !important;
+            transform: none !important;
+            translate: none !important;
         }
     }
 }

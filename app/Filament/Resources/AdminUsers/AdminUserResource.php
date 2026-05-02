@@ -21,7 +21,10 @@ use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class AdminUserResource extends Resource
 {
@@ -68,14 +71,21 @@ class AdminUserResource extends Resource
                 ->required(fn (?AdminUser $record): bool => $record === null)
                 ->dehydrateStateUsing(fn (?string $state): ?string => filled($state) ? Hash::make($state) : null)
                 ->dehydrated(fn (?string $state): bool => filled($state)),
-            FileUpload::make('avatar_path')
-                ->label('Avatar')
-                ->disk('public')
+            FileUpload::make('avatar_upload')
+                ->label('Upload avatar')
+                ->disk(config('filesystems.default', 'public'))
                 ->directory('admin-avatars')
+                ->visibility('public')
                 ->image()
                 ->openable()
                 ->downloadable()
-                ->maxSize(2048),
+                ->maxSize(2048)
+                ->helperText('Pakai ini kalau FILESYSTEM_DISK sudah memakai object storage/S3 di Laravel Cloud.'),
+            TextInput::make('avatar_url')
+                ->label('Avatar URL')
+                ->url()
+                ->maxLength(2048)
+                ->helperText('Opsional. Jika diisi, URL ini akan dipakai dan mengabaikan upload avatar.'),
             Toggle::make('is_active')
                 ->label('Aktif')
                 ->default(true),
@@ -89,7 +99,7 @@ class AdminUserResource extends Resource
             ->columns([
                 ImageColumn::make('avatar_path')
                     ->label('Avatar')
-                    ->disk('public')
+                    ->getStateUsing(fn (AdminUser $record): ?string => static::avatarPreviewUrl($record->avatar_path))
                     ->imageSize(42)
                     ->circular(),
                 TextColumn::make('name')->label('Nama')->searchable()->sortable(),
@@ -99,7 +109,9 @@ class AdminUserResource extends Resource
                 TextColumn::make('last_login_at')->label('Login terakhir')->dateTime('d M Y H:i')->sortable(),
             ])
             ->recordActions([
-                EditAction::make(),
+                EditAction::make()
+                    ->mutateRecordDataUsing(fn (array $data): array => static::hydrateAvatarInputs($data))
+                    ->mutateDataUsing(fn (array $data): array => static::resolveAvatarInputs($data)),
                 DeleteAction::make(),
             ])
             ->toolbarActions([
@@ -114,5 +126,52 @@ class AdminUserResource extends Resource
         return [
             'index' => ManageAdminUsers::route('/'),
         ];
+    }
+
+    public static function hydrateAvatarInputs(array $data): array
+    {
+        $path = (string) ($data['avatar_path'] ?? '');
+
+        if (Str::startsWith($path, ['http://', 'https://'])) {
+            $data['avatar_url'] = $path;
+        } elseif (filled($path)) {
+            $data['avatar_upload'] = $path;
+        }
+
+        return $data;
+    }
+
+    public static function resolveAvatarInputs(array $data): array
+    {
+        $url = trim((string) ($data['avatar_url'] ?? ''));
+        $upload = static::normalizeUploadState($data['avatar_upload'] ?? null);
+
+        $data['avatar_path'] = filled($url) ? $url : $upload;
+
+        unset($data['avatar_upload'], $data['avatar_url']);
+
+        return $data;
+    }
+
+    public static function avatarPreviewUrl(?string $path): ?string
+    {
+        if (blank($path)) {
+            return null;
+        }
+
+        if (Str::startsWith($path, ['http://', 'https://'])) {
+            return $path;
+        }
+
+        return Storage::disk(config('filesystems.default', 'public'))->url($path);
+    }
+
+    private static function normalizeUploadState(mixed $state): ?string
+    {
+        if (is_array($state)) {
+            $state = Arr::first($state);
+        }
+
+        return filled($state) ? (string) $state : null;
     }
 }

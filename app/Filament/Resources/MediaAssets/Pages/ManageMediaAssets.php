@@ -13,7 +13,9 @@ class ManageMediaAssets extends ManageRecords
     protected function getHeaderActions(): array
     {
         return [
-            CreateAction::make()->visible(fn (): bool => MediaAssetResource::canCreate()),
+            CreateAction::make()
+                ->mutateDataUsing(fn (array $data): array => MediaAssetResource::resolveMediaInputs($data))
+                ->visible(fn (): bool => MediaAssetResource::canCreate()),
         ];
     }
 }

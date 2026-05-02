@@ -40,15 +40,21 @@ class DatabaseSeeder extends Seeder
             ])
             ->delete();
 
-        AdminUser::updateOrCreate(
-            ['email' => 'admin@madanimontessori.sch.id'],
-            [
-                'role_id' => $roles['super_admin']->id,
-                'name' => 'Admin Madani',
-                'password_hash' => Hash::make('admin123'),
-                'is_active' => true,
-            ],
-        );
+        $admin = AdminUser::firstOrNew([
+            'email' => 'admin@madanimontessori.sch.id',
+        ]);
+
+        $admin->fill([
+            'role_id' => $roles['super_admin']->id,
+            'name' => 'Admin Madani',
+            'is_active' => true,
+        ]);
+
+        if (! $admin->exists) {
+            $admin->password_hash = Hash::make((string) env('ADMIN_INITIAL_PASSWORD', 'admin123'));
+        }
+
+        $admin->save();
 
         $this->seedSettings();
         $this->seedNavigation();
