@@ -18,7 +18,7 @@ class ImageUpload
             ->image()
             ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
             ->rules(['image', 'mimetypes:image/jpeg,image/png,image/webp'])
-            ->maxSize(2048)
+            ->maxSize(10240)
             ->openable()
             ->downloadable()
             ->getUploadedFileNameForStorageUsing(fn (TemporaryUploadedFile $file): string => Str::ulid() . '.' . self::extensionForMime($file->getMimeType()));
