@@ -1,11 +1,8 @@
 @php
     $rawMapsUrl = trim((string) $settings->get('maps_url'));
     $rawMapsEmbedUrl = trim((string) $settings->get('maps_embed_url'));
-    $hasOldLocationKeyword = fn (string $url): bool => str_contains(strtolower($url), 'national+education+centre')
-        || str_contains(strtolower($url), 'national%20education%20centre')
-        || str_contains(strtolower($url), 'national education centre');
-    $mapsUrl = filter_var($rawMapsUrl, FILTER_VALIDATE_URL) && ! $hasOldLocationKeyword($rawMapsUrl) ? $rawMapsUrl : null;
-    $mapsEmbedUrl = filter_var($rawMapsEmbedUrl, FILTER_VALIDATE_URL) && ! $hasOldLocationKeyword($rawMapsEmbedUrl) ? $rawMapsEmbedUrl : null;
+    $mapsUrl = filter_var($rawMapsUrl, FILTER_VALIDATE_URL) ? $rawMapsUrl : null;
+    $mapsEmbedUrl = filter_var($rawMapsEmbedUrl, FILTER_VALIDATE_URL) ? $rawMapsEmbedUrl : null;
 @endphp
 
 <section class="cream-band section-pad">
