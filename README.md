@@ -1,6 +1,6 @@
 # Madani Montessori Islamic School Website
 
-Website resmi **Madani Montessori Islamic School** — TK Islam Terpadu berbasis Montessori yang menyediakan program sekolah, bimbel, serta training & parenting untuk guru dan orang tua.
+Website resmi **Madani Montessori Islamic School**. TK Islam Terpadu berbasis Montessori yang menyediakan program sekolah, bimbel, serta training & parenting untuk guru dan orang tua.
 
 Project ini dirancang sebagai website multipage dengan tampilan elegan, minimalis, clean, dan eksklusif. Website juga terhubung dengan **Admin CMS** sehingga konten seperti teks, gambar, program, galeri, kontak, dan CTA WhatsApp dapat dikelola tanpa mengubah kode secara langsung.
 
