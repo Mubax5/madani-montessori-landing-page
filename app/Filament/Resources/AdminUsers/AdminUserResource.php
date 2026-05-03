@@ -72,7 +72,7 @@ class AdminUserResource extends Resource
                 ->dehydrateStateUsing(fn (?string $state): ?string => filled($state) ? Hash::make($state) : null)
                 ->dehydrated(fn (?string $state): bool => filled($state)),
             ImageUpload::make('avatar_upload', 'admin-avatars', 'Upload avatar')
-                ->helperText('Pakai ini kalau FILESYSTEM_DISK sudah memakai object storage/S3 di Laravel Cloud.'),
+                ->helperText('File yang didukung jpeg, png, webp. Max 10MB'),
             TextInput::make('avatar_url')
                 ->label('Avatar URL')
                 ->url()
