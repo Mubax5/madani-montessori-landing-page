@@ -5,7 +5,7 @@
     $heroImage = $hero?->image?->url;
     $heroAlt = $hero?->image?->alt_text ?: 'Kegiatan Madani Montessori Islamic School';
     $siteName = $settings->get('site_name', 'Madani Montessori Islamic School');
-    $siteTagline = $settings->get('site_tagline', 'TK Islam Terpadu berbasis Montessori, Bimbel, Training & Parenting.');
+    $siteTagline = $settings->get('site_tagline', 'TK Islam Terpadu berbasis Montessori, Bimbel, dan Agenda.');
     $heroHeading = $hero?->heading ?: $page->title;
     $heroSubheading = $hero?->subheading ?: $page->meta_description;
     $badges = $sections->get('hero')?->payload['badges'] ?? ['TK Islam Terpadu', 'Montessori', 'Bimbel', 'Parenting'];
@@ -27,7 +27,7 @@
         'program-sekolah' => ['KB sampai TK C', 'Program bertahap dari eksplorasi awal, kesiapan literasi, sampai persiapan transisi ke SD.'],
         'program-unggulan' => ['Program Inti', 'Setiap kegiatan menyeimbangkan praktik langsung, pembiasaan adab, dan kepekaan sensorial.'],
         'bimbel' => ['Bimbel Ramah Anak', 'Pendampingan calistung, mengaji, matematika, dan English dengan asesmen awal.'],
-        'training-parenting' => ['Guru & Orang Tua', 'Kelas praktis untuk menyamakan ritme pendidikan anak di sekolah dan rumah.'],
+        'agenda' => ['Agenda Sekolah', 'Trial class, study tour, parenting class, workshop, dan kegiatan sekolah.'],
         'galeri' => ['Dokumentasi', 'Cuplikan kegiatan sekolah, bimbel, event, dan parenting yang bisa diperbarui dari CMS.'],
         'kontak' => ['Konsultasi Pendaftaran', 'Admin membantu memilih program, jadwal kunjungan, dan langkah pendaftaran berikutnya.'],
         default => ['Madani Montessori', $siteTagline],
@@ -189,8 +189,6 @@
             @include('public.partials.bimbel')
             @include('public.partials.faq')
             <a href="{{ \App\Support\SiteContent::whatsappUrl('minat_bimbel') }}" class="mobile-sticky-cta">Tanya Bimbel via WhatsApp</a>
-        @elseif ($page->slug === 'training-parenting')
-            @include('public.partials.training')
         @elseif ($page->slug === 'galeri')
             @include('public.partials.gallery', ['compact' => false])
         @elseif ($page->slug === 'kontak')
@@ -211,7 +209,7 @@
                 <div>
                     <div class="section-kicker section-kicker--light">Konsultasi</div>
                     <h2>Diskusikan program yang paling cocok untuk anak.</h2>
-                    <p>Admin Madani siap membantu menjelaskan pilihan sekolah, bimbel, training, jadwal, dan langkah pendaftaran.</p>
+                    <p>Admin Madani siap membantu menjelaskan pilihan sekolah, bimbel, agenda, jadwal, dan langkah pendaftaran.</p>
                 </div>
                 <a href="{{ $whatsappUrl }}" class="btn btn--gold">Chat Admin Madani</a>
             </div>

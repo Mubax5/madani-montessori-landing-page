@@ -1,6 +1,6 @@
 # Madani Montessori Islamic School Website
 
-Website resmi **Madani Montessori Islamic School**. TK Islam Terpadu berbasis Montessori yang menyediakan program sekolah, bimbel, serta training & parenting untuk guru dan orang tua.
+Website resmi **Madani Montessori Islamic School** untuk TK Islam Terpadu berbasis Montessori yang menyediakan program sekolah, bimbel, serta agenda kegiatan sekolah.
 
 Project ini dirancang sebagai website multipage dengan tampilan elegan, minimalis, clean, dan eksklusif. Website juga terhubung dengan **Admin CMS** sehingga konten seperti teks, gambar, program, galeri, kontak, dan CTA WhatsApp dapat dikelola tanpa mengubah kode secara langsung.
 
@@ -16,7 +16,7 @@ Fokus utama website:
 - Menjelaskan program KB, TK A, TK B, dan TK C
 - Menampilkan program unggulan berbasis Montessori dan Islam Terpadu
 - Menyediakan informasi bimbel
-- Menampilkan program Training & Parenting
+- Menampilkan Agenda seperti trial class, study tour, open house, parenting class, workshop, field trip, dan event sekolah
 - Menampilkan galeri kegiatan sekolah
 - Menyediakan form kontak dan pendaftaran
 - Memudahkan calon orang tua menghubungi admin melalui WhatsApp
@@ -33,7 +33,7 @@ Fokus utama website:
 - Program Sekolah
 - Program Unggulan
 - Bimbel
-- Training & Parenting
+- Agenda
 - Galeri
 - Kontak & Pendaftaran
 - CTA WhatsApp
@@ -54,7 +54,7 @@ Fitur admin:
 - Kelola program sekolah
 - Kelola program unggulan
 - Kelola bimbel
-- Kelola training & parenting
+- Kelola agenda, kategori agenda, dan pendaftaran agenda
 - Kelola galeri kegiatan
 - Kelola FAQ
 - Kelola kontak sekolah
@@ -72,7 +72,7 @@ Fitur admin:
 | Nama Sekolah | Madani Montessori Islamic School |
 | Jenjang | KB, TK A, TK B, TK C |
 | Konsep | TK Islam Terpadu berbasis Montessori |
-| Program Tambahan | Bimbel, Training & Parenting |
+| Program Tambahan | Bimbel, Agenda |
 | Alamat | Jalan Raya Perum Korpri Blok J1 No.16, Cisauk |
 | WhatsApp | 0821 2357 6275 |
 
@@ -82,15 +82,15 @@ Fitur admin:
 
 Project ini direkomendasikan menggunakan stack berikut:
 
-- **Laravel** — Backend dan web framework
-- **Blade Template** — View website publik
-- **Tailwind CSS** — Styling modern dan responsive
-- **Filament Admin** — Admin CMS
-- **MySQL** — Database
-- **Laravel Eloquent ORM** — Relasi dan query database
-- **Laravel Storage** — Upload gambar dan file
-- **Vite** — Asset bundling
-- **WhatsApp Link Integration** — CTA dan template pesan otomatis
+- **Laravel**  EBackend dan web framework
+- **Blade Template**  EView website publik
+- **Tailwind CSS**  EStyling modern dan responsive
+- **Filament Admin**  EAdmin CMS
+- **MySQL**  EDatabase
+- **Laravel Eloquent ORM**  ERelasi dan query database
+- **Laravel Storage**  EUpload gambar dan file
+- **Vite**  EAsset bundling
+- **WhatsApp Link Integration**  ECTA dan template pesan otomatis
 
 ---
 
@@ -138,9 +138,20 @@ Website menggunakan konsep visual:
 ├── Program Sekolah
 ├── Program Unggulan
 ├── Bimbel
-├── Training & Parenting
+├── Agenda
 ├── Galeri
 └── Kontak & Pendaftaran
+```
+
+---
+
+Route publik Agenda:
+
+```txt
+GET /agenda
+GET /agenda/{slug}
+POST /agenda/{agenda}/registrations
+GET /training-parenting -> redirect 301 ke /agenda
 ```
 
 ---
@@ -155,7 +166,7 @@ Website menggunakan konsep visual:
 ├── Program Sekolah
 ├── Program Unggulan
 ├── Bimbel
-├── Training & Parenting
+├── Agenda
 ├── Galeri
 ├── FAQ
 ├── Kontak
@@ -176,6 +187,9 @@ Beberapa tabel utama yang digunakan:
 | `sections` | Section konten website |
 | `programs` | Program sekolah dan bimbel |
 | `featured_programs` | Program unggulan |
+| `agenda_categories` | Kategori agenda sekolah |
+| `agendas` | Data agenda sekolah |
+| `agenda_registrations` | Data pendaftaran agenda |
 | `galleries` | Galeri kegiatan |
 | `faqs` | FAQ website |
 | `registrations` | Data form pendaftaran |
@@ -359,7 +373,23 @@ FILESYSTEM_DISK=public
 MAIL_MAILER=log
 ```
 
-Untuk upload gambar CMS production, gunakan object storage/S3-compatible storage dan set `FILESYSTEM_DISK=s3`. Upload Filament mengikuti disk default dari env tersebut.
+Untuk upload gambar CMS production, gunakan object storage/S3-compatible storage dan set `FILESYSTEM_DISK=s3`. Upload Filament mengikuti disk default dari env tersebut. Livewire temporary upload akan ikut memakai S3 saat `FILESYSTEM_DISK=s3`, atau bisa dipaksa dengan `LIVEWIRE_TEMPORARY_FILE_UPLOAD_DISK=s3`.
+
+Contoh environment object storage Laravel Cloud:
+
+```env
+FILESYSTEM_DISK=s3
+AWS_ACCESS_KEY_ID=isi_dari_laravel_cloud
+AWS_SECRET_ACCESS_KEY=isi_dari_laravel_cloud
+AWS_DEFAULT_REGION=auto
+AWS_BUCKET=madani-media
+AWS_ENDPOINT=https://endpoint-s3-compatible
+AWS_URL=https://public-bucket-url
+AWS_USE_PATH_STYLE_ENDPOINT=false
+LIVEWIRE_TEMPORARY_FILE_UPLOAD_DISK=s3
+```
+
+Jangan commit `.env` dan jangan menaruh secret key di kode.
 
 ---
 
@@ -389,7 +419,7 @@ Breakpoint:
 
 | Ukuran | Layout |
 |---|---|
-| 360–430px | Mobile layout 1 kolom |
+| 360 E30px | Mobile layout 1 kolom |
 | >= 768px | Tablet layout 2 kolom |
 | >= 1024px | Desktop layout lebih luas dan grid |
 
@@ -401,14 +431,14 @@ Breakpoint:
 app/
 ├── Models/
 ├── Http/
-│   ├── Controllers/
-│   └── Requests/
+━E  ├── Controllers/
+━E  └── Requests/
 
 resources/
 ├── views/
-│   ├── layouts/
-│   ├── components/
-│   └── pages/
+━E  ├── layouts/
+━E  ├── components/
+━E  └── pages/
 ├── css/
 └── js/
 

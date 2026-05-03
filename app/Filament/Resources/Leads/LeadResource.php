@@ -54,7 +54,7 @@ class LeadResource extends Resource
                     'TK B' => 'TK B',
                     'TK C' => 'TK C',
                     'Bimbel' => 'Bimbel',
-                    'Training & Parenting' => 'Training & Parenting',
+                    'Agenda' => 'Agenda',
                 ])
                 ->required(),
             TextInput::make('whatsapp_number')->label('Nomor WhatsApp')->required()->maxLength(30),

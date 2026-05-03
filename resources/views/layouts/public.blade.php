@@ -36,7 +36,7 @@
                 @foreach ($headerNavigation as $item)
                     @php
                         $path = trim($item->url, '/');
-                        $isActive = ($item->url === '/' && request()->is('/')) || ($path !== '' && request()->is($path));
+                        $isActive = ($item->url === '/' && request()->is('/')) || ($path !== '' && (request()->is($path) || request()->is($path . '/*')));
                     @endphp
                     <a href="{{ $item->url }}" @class(['is-active' => $isActive])>{{ $item->label }}</a>
                 @endforeach

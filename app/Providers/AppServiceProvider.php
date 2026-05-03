@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use App\Models\Agenda;
+use App\Models\AgendaCategory;
+use App\Models\AgendaRegistration;
 use App\Models\BimbelPackage;
 use App\Models\BimbelPackageItem;
 use App\Models\Faq;
@@ -14,7 +17,6 @@ use App\Models\Page;
 use App\Models\PageSection;
 use App\Models\Program;
 use App\Models\SiteSetting;
-use App\Models\TrainingEvent;
 use App\Models\WhatsappTemplate;
 use App\Observers\AuditObserver;
 use Illuminate\Auth\Events\Login;
@@ -44,7 +46,9 @@ class AppServiceProvider extends ServiceProvider
             FeaturedProgram::class,
             BimbelPackage::class,
             BimbelPackageItem::class,
-            TrainingEvent::class,
+            AgendaCategory::class,
+            Agenda::class,
+            AgendaRegistration::class,
             GalleryItem::class,
             Faq::class,
             Lead::class,

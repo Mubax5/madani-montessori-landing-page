@@ -4,6 +4,7 @@ namespace App\Filament\Resources\MediaAssets;
 
 use App\Filament\Resources\Concerns\AdminResourceAccess;
 use App\Filament\Resources\MediaAssets\Pages\ManageMediaAssets;
+use App\Filament\Support\ImageUpload;
 use App\Filament\Support\LandingPagePreview;
 use App\Models\MediaAsset;
 use BackedEnum;
@@ -11,7 +12,6 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
-use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
@@ -45,15 +45,7 @@ class MediaAssetResource extends Resource
     public static function form(Schema $schema): Schema
     {
         return $schema->components([
-            FileUpload::make('file_upload')
-                ->label('Upload file')
-                ->disk(config('filesystems.default', 'public'))
-                ->directory('media')
-                ->visibility('public')
-                ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
-                ->maxSize(2048)
-                ->openable()
-                ->downloadable()
+            ImageUpload::make('file_upload', 'media', 'Upload file')
                 ->helperText('Pakai ini kalau FILESYSTEM_DISK sudah memakai object storage/S3 di Laravel Cloud.'),
             TextInput::make('file_url')
                 ->label('URL gambar')

@@ -51,7 +51,7 @@ class FaqResource extends Resource
                     'program-sekolah' => 'Program Sekolah',
                     'program-unggulan' => 'Program Unggulan',
                     'bimbel' => 'Bimbel',
-                    'training-parenting' => 'Training & Parenting',
+                    'agenda' => 'Agenda',
                     'galeri' => 'Galeri',
                     'kontak' => 'Kontak',
                 ])

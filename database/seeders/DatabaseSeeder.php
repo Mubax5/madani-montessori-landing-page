@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 use App\Models\AdminUser;
+use App\Models\Agenda;
+use App\Models\AgendaCategory;
 use App\Models\BimbelPackage;
 use App\Models\BimbelPackageItem;
 use App\Models\Faq;
@@ -15,7 +17,6 @@ use App\Models\PageSection;
 use App\Models\Program;
 use App\Models\Role;
 use App\Models\SiteSetting;
-use App\Models\TrainingEvent;
 use App\Models\WhatsappTemplate;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -62,7 +63,8 @@ class DatabaseSeeder extends Seeder
         $this->seedPages();
         $this->seedPrograms();
         $this->seedBimbel();
-        $this->seedTraining();
+        $this->seedAgendaCategories();
+        $this->seedAgendas();
         $this->seedGallery();
         $this->seedFaqs();
         $this->seedWhatsappTemplates();
@@ -72,7 +74,7 @@ class DatabaseSeeder extends Seeder
     {
         foreach ([
             'site_name' => ['Madani Montessori Islamic School', 'text'],
-            'site_tagline' => ['TK Islam Terpadu berbasis Montessori, Bimbel, Training & Parenting.', 'textarea'],
+            'site_tagline' => ['TK Islam Terpadu berbasis Montessori, Bimbel, dan Agenda kegiatan sekolah.', 'textarea'],
             'address' => ['National Education Centre, Tangerang, Banten', 'textarea'],
             'whatsapp_number' => ['6282123576275', 'text'],
             'email' => ['info@madanimontessori.sch.id', 'text'],
@@ -96,7 +98,7 @@ class DatabaseSeeder extends Seeder
             ['Program Sekolah', '/program-sekolah', 3],
             ['Program Unggulan', '/program-unggulan', 4],
             ['Bimbel', '/bimbel', 5],
-            ['Training & Parenting', '/training-parenting', 6],
+            ['Agenda', '/agenda', 6],
             ['Galeri', '/galeri', 7],
             ['Kontak', '/kontak', 8],
         ] as [$label, $url, $order]) {
@@ -112,6 +114,11 @@ class DatabaseSeeder extends Seeder
                 'is_active' => true,
             ]);
         }
+
+        NavigationItem::query()
+            ->where('url', '/training-parenting')
+            ->whereIn('location', ['header', 'footer'])
+            ->update(['is_active' => false]);
     }
 
     private function seedMedia(): void
@@ -138,7 +145,7 @@ class DatabaseSeeder extends Seeder
             'program-sekolah' => ['Program Sekolah', 'Program KB dan TK Madani', 'Program sekolah KB, TK A, TK B, dan TK C dengan pilihan reguler, half-day, dan full-day.'],
             'program-unggulan' => ['Program Unggulan', 'Program Unggulan Madani', 'Kegiatan unggulan sekolah yang menguatkan karakter, kemandirian, dan adab anak.'],
             'bimbel' => ['Bimbel', 'Bimbel Madani', 'Bimbel ramah anak untuk membaca, menulis, berhitung, dan pendampingan belajar.'],
-            'training-parenting' => ['Training & Parenting', 'Training dan Parenting Madani', 'Workshop guru, kelas parenting, dan konsultasi pendidikan anak.'],
+            'agenda' => ['Agenda', 'Agenda Madani Montessori', 'Trial class, study tour, parenting class, workshop, field trip, dan kegiatan sekolah.'],
             'galeri' => ['Galeri', 'Galeri Kegiatan Madani', 'Dokumentasi kegiatan sekolah, bimbel, dan event parenting.'],
             'kontak' => ['Kontak & Pendaftaran', 'Kontak dan Pendaftaran', 'Hubungi Madani Montessori dan kirim data pendaftaran calon siswa.'],
         ];
@@ -264,20 +271,96 @@ class DatabaseSeeder extends Seeder
         }
     }
 
-    private function seedTraining(): void
+    private function seedAgendaCategories(): void
     {
         foreach ([
-            ['Workshop Montessori untuk Guru', 'Montessori', 'guru', now()->addWeeks(2)->toDateString(), '09.00-12.00'],
-            ['Kelas Parenting: Rutinitas Anak di Rumah', 'Parenting', 'orang_tua', now()->addWeeks(4)->toDateString(), '10.00-11.30'],
-        ] as $order => [$title, $topic, $target, $date, $time]) {
-            TrainingEvent::updateOrCreate(['title' => $title], [
-                'topic' => $topic,
-                'target_audience' => $target,
-                'event_date' => $date,
-                'event_time' => $time,
-                'description' => 'Sesi praktis dengan contoh kegiatan dan ruang tanya jawab.',
-                'status' => 'published',
+            ['Trial Class', 'trial-class', 'Kelas percobaan untuk calon siswa.', '#F5C542', 'academic-cap'],
+            ['Study Tour', 'study-tour', 'Kunjungan belajar di luar sekolah.', '#1D4ED8', 'map'],
+            ['Open House', 'open-house', 'Sesi kunjungan dan pengenalan sekolah.', '#0A1F5C', 'home'],
+            ['Parenting Class', 'parenting-class', 'Kelas parenting untuk orang tua.', '#0F766E', 'users'],
+            ['Workshop', 'workshop', 'Workshop guru dan komunitas pendidikan.', '#7C3AED', 'sparkles'],
+            ['Field Trip', 'field-trip', 'Kegiatan eksplorasi dan perjalanan edukatif.', '#EA580C', 'flag'],
+            ['Event Sekolah', 'event-sekolah', 'Agenda dan perayaan sekolah.', '#DB2777', 'calendar-days'],
+            ['Bimbel', 'bimbel', 'Kegiatan bimbel Madani.', '#2563EB', 'book-open'],
+        ] as $order => [$name, $slug, $description, $color, $icon]) {
+            AgendaCategory::updateOrCreate(['slug' => $slug], [
+                'name' => $name,
+                'description' => $description,
+                'color' => $color,
+                'icon' => $icon,
                 'sort_order' => $order + 1,
+                'is_active' => true,
+            ]);
+        }
+    }
+
+    private function seedAgendas(): void
+    {
+        $categories = AgendaCategory::query()->pluck('id', 'slug');
+
+        foreach ([
+            [
+                'trial-class-madani-montessori',
+                'Trial Class Madani Montessori',
+                'trial-class',
+                now()->addWeeks(2)->setTime(9, 0),
+                now()->addWeeks(2)->setTime(11, 0),
+                'Madani Montessori Islamic School',
+                'whatsapp',
+                null,
+                true,
+                null,
+                'Kelas percobaan untuk mengenal ritme Montessori Islami Madani.',
+            ],
+            [
+                'study-tour-ke-kidzania',
+                'Study Tour ke KidZania',
+                'study-tour',
+                now()->addWeeks(5)->setTime(8, 0),
+                now()->addWeeks(5)->setTime(14, 0),
+                'KidZania Jakarta',
+                'form',
+                24,
+                false,
+                250000,
+                'Kegiatan eksplorasi profesi dan pengalaman belajar langsung di KidZania.',
+            ],
+            [
+                'parenting-class-rutinitas-anak',
+                'Parenting Class: Rutinitas Anak di Rumah',
+                'parenting-class',
+                now()->addWeeks(4)->setTime(10, 0),
+                now()->addWeeks(4)->setTime(11, 30),
+                'Madani Montessori Islamic School',
+                'whatsapp',
+                null,
+                true,
+                null,
+                'Kelas parenting praktis untuk menyelaraskan rutinitas sekolah dan rumah.',
+            ],
+        ] as $order => [$slug, $title, $categorySlug, $startAt, $endAt, $location, $registrationType, $quota, $isFree, $price, $excerpt]) {
+            Agenda::updateOrCreate(['slug' => $slug], [
+                'agenda_category_id' => $categories[$categorySlug] ?? null,
+                'title' => $title,
+                'excerpt' => $excerpt,
+                'description' => '<p>' . e($excerpt) . '</p><p>Admin dapat memperbarui rundown, benefit, target peserta, kuota, dan informasi pendaftaran dari CMS.</p>',
+                'location_name' => $location,
+                'location_address' => $location,
+                'start_at' => $startAt,
+                'end_at' => $endAt,
+                'registration_start_at' => now(),
+                'registration_end_at' => $startAt->copy()->subDay(),
+                'target_audience' => $categorySlug === 'parenting-class' ? 'Orang tua' : 'Calon siswa dan orang tua',
+                'quota' => $quota,
+                'price' => $price,
+                'is_free' => $isFree,
+                'registration_type' => $registrationType,
+                'status' => 'published',
+                'is_featured' => $order === 0,
+                'sort_order' => $order + 1,
+                'meta_title' => $title,
+                'meta_description' => $excerpt,
+                'published_at' => now(),
             ]);
         }
     }
@@ -324,7 +407,7 @@ class DatabaseSeeder extends Seeder
             ['Konsultasi Umum', 'konsultasi_umum', 'Assalamualaikum, saya ingin konsultasi pendaftaran Madani Montessori Islamic School. Mohon info program, jadwal, dan biaya. Terima kasih.'],
             ['Minat Program Sekolah', 'minat_program_sekolah', 'Assalamualaikum, saya berminat mendaftar Program Sekolah di Madani Montessori Islamic School. Mohon info KB/TK, jadwal, dan biaya. Terima kasih.'],
             ['Minat Bimbel', 'minat_bimbel', 'Assalamualaikum, saya ingin bertanya tentang program Bimbel Madani Montessori Islamic School. Mohon info paket, jadwal, dan biaya. Terima kasih.'],
-            ['Minat Training & Parenting', 'minat_training_parenting', 'Assalamualaikum, saya ingin bertanya tentang Training & Parenting Madani Montessori Islamic School. Mohon info jadwal dan topiknya. Terima kasih.'],
+            ['Minat Agenda', 'minat_agenda', 'Assalamualaikum, saya ingin bertanya tentang agenda {agenda} di Madani Montessori Islamic School. Mohon info jadwal, lokasi, dan pendaftarannya. Terima kasih.'],
         ] as [$name, $key, $message]) {
             WhatsappTemplate::updateOrCreate(['template_key' => $key], [
                 'name' => $name,
@@ -332,5 +415,9 @@ class DatabaseSeeder extends Seeder
                 'is_active' => true,
             ]);
         }
+
+        WhatsappTemplate::query()
+            ->where('template_key', 'minat_training_parenting')
+            ->update(['is_active' => false]);
     }
 }

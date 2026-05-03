@@ -34,7 +34,7 @@
         <label>
             <span>Pilih Program</span>
             <select name="selected_program" required>
-                @foreach (['KB', 'TK A', 'TK B', 'TK C', 'Bimbel', 'Training & Parenting'] as $option)
+                @foreach (['KB', 'TK A', 'TK B', 'TK C', 'Bimbel', 'Agenda'] as $option)
                     <option value="{{ $option }}" @selected(old('selected_program') === $option)>{{ $option }}</option>
                 @endforeach
             </select>

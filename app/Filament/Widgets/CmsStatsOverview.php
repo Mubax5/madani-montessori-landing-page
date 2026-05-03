@@ -2,10 +2,11 @@
 
 namespace App\Filament\Widgets;
 
+use App\Models\Agenda;
+use App\Models\AgendaRegistration;
 use App\Models\GalleryItem;
 use App\Models\Lead;
 use App\Models\Program;
-use App\Models\TrainingEvent;
 use Filament\Support\Icons\Heroicon;
 use Filament\Widgets\StatsOverviewWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
@@ -29,9 +30,21 @@ class CmsStatsOverview extends StatsOverviewWidget
             Stat::make('Program Aktif', Program::query()->where('is_active', true)->count())
                 ->icon(Heroicon::OutlinedAcademicCap)
                 ->color('info'),
-            Stat::make('Event Published', TrainingEvent::query()->where('status', 'published')->count())
+            Stat::make('Total Agenda', Agenda::query()->count())
                 ->icon(Heroicon::OutlinedCalendarDays)
                 ->color('gray'),
+            Stat::make('Agenda Published', Agenda::query()->where('status', 'published')->count())
+                ->icon(Heroicon::OutlinedCalendarDays)
+                ->color('gray'),
+            Stat::make('Agenda Terdekat', Agenda::query()->where('status', 'published')->where('start_at', '>=', now()->startOfDay())->count())
+                ->icon(Heroicon::OutlinedBellAlert)
+                ->color('success'),
+            Stat::make('Pendaftar Agenda', AgendaRegistration::query()->count())
+                ->icon(Heroicon::OutlinedTicket)
+                ->color('primary'),
+            Stat::make('Pendaftar Baru Agenda', AgendaRegistration::query()->where('status', 'new')->count())
+                ->icon(Heroicon::OutlinedInboxStack)
+                ->color('warning'),
         ];
     }
 }

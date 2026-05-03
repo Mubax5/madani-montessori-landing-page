@@ -2,6 +2,9 @@
 
 namespace App\Filament\Support;
 
+use App\Models\Agenda;
+use App\Models\AgendaCategory;
+use App\Models\AgendaRegistration;
 use App\Models\BimbelPackage;
 use App\Models\BimbelPackageItem;
 use App\Models\Faq;
@@ -14,7 +17,6 @@ use App\Models\Page;
 use App\Models\PageSection;
 use App\Models\Program;
 use App\Models\SiteSetting;
-use App\Models\TrainingEvent;
 use App\Models\WhatsappTemplate;
 use Filament\Actions\Action;
 use Filament\Schemas\Components\Html;
@@ -88,7 +90,7 @@ class LandingPagePreview
             'program-sekolah' => route('program-sekolah'),
             'program-unggulan' => route('program-unggulan'),
             'bimbel' => route('bimbel'),
-            'training-parenting' => route('training-parenting'),
+            'agenda' => route('agenda.index'),
             'galeri' => route('galeri'),
             'kontak' => route('kontak'),
             default => url($slug),
@@ -107,7 +109,8 @@ class LandingPagePreview
             $record instanceof Program => 'program-sekolah',
             $record instanceof FeaturedProgram => 'program-unggulan',
             $record instanceof BimbelPackage, $record instanceof BimbelPackageItem => 'bimbel',
-            $record instanceof TrainingEvent => 'training-parenting',
+            $record instanceof Agenda => 'agenda/' . $record->slug,
+            $record instanceof AgendaCategory, $record instanceof AgendaRegistration => 'agenda',
             $record instanceof GalleryItem, $record instanceof MediaAsset => 'galeri',
             $record instanceof Faq => $record->page_scope,
             $record instanceof Lead => $record->source_page ?: 'kontak',
@@ -133,7 +136,7 @@ class LandingPagePreview
             'program-sekolah' => 'Program Sekolah',
             'program-unggulan' => 'Program Unggulan',
             'bimbel' => 'Bimbel',
-            'training-parenting' => 'Training & Parenting',
+            'agenda' => 'Agenda',
             'galeri' => 'Galeri',
             'kontak' => 'Kontak',
         ];
@@ -163,7 +166,7 @@ class LandingPagePreview
         return match ($key) {
             'minat_program_sekolah' => 'program-sekolah',
             'minat_bimbel' => 'bimbel',
-            'minat_training_parenting' => 'training-parenting',
+            'minat_agenda' => 'agenda',
             default => 'kontak',
         };
     }

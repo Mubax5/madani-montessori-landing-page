@@ -4,13 +4,13 @@ namespace App\Filament\Resources\AdminUsers;
 
 use App\Filament\Resources\AdminUsers\Pages\ManageAdminUsers;
 use App\Filament\Resources\Concerns\AdminResourceAccess;
+use App\Filament\Support\ImageUpload;
 use App\Models\AdminUser;
 use BackedEnum;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
-use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
@@ -71,15 +71,7 @@ class AdminUserResource extends Resource
                 ->required(fn (?AdminUser $record): bool => $record === null)
                 ->dehydrateStateUsing(fn (?string $state): ?string => filled($state) ? Hash::make($state) : null)
                 ->dehydrated(fn (?string $state): bool => filled($state)),
-            FileUpload::make('avatar_upload')
-                ->label('Upload avatar')
-                ->disk(config('filesystems.default', 'public'))
-                ->directory('admin-avatars')
-                ->visibility('public')
-                ->image()
-                ->openable()
-                ->downloadable()
-                ->maxSize(2048)
+            ImageUpload::make('avatar_upload', 'admin-avatars', 'Upload avatar')
                 ->helperText('Pakai ini kalau FILESYSTEM_DISK sudah memakai object storage/S3 di Laravel Cloud.'),
             TextInput::make('avatar_url')
                 ->label('Avatar URL')

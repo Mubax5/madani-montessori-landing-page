@@ -9,7 +9,6 @@ use App\Models\GalleryItem;
 use App\Models\NavigationItem;
 use App\Models\Page;
 use App\Models\Program;
-use App\Models\TrainingEvent;
 use App\Support\SiteContent;
 use Illuminate\Contracts\View\View;
 
@@ -39,13 +38,12 @@ class PublicPageController extends Controller
             'programs' => Program::active()->get(),
             'featuredPrograms' => FeaturedProgram::active()->get(),
             'bimbelPackages' => BimbelPackage::active()->with('items')->get(),
-            'trainingEvents' => TrainingEvent::published()->get(),
             'galleryItems' => GalleryItem::active()->with('media')->take($slug === 'galeri' ? 12 : 6)->get(),
             'faqs' => Faq::active()->where('page_scope', $slug)->get(),
             'whatsappUrl' => SiteContent::whatsappUrl(match ($slug) {
                 'program-sekolah' => 'minat_program_sekolah',
                 'bimbel' => 'minat_bimbel',
-                'training-parenting' => 'minat_training_parenting',
+                'agenda' => 'minat_agenda',
                 default => 'konsultasi_umum',
             }),
         ]);
