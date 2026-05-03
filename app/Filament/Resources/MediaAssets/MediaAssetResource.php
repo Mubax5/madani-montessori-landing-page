@@ -46,10 +46,11 @@ class MediaAssetResource extends Resource
     {
         return $schema->components([
             ImageUpload::make('file_upload', 'media', 'Upload file')
-                ->helperText('Pakai ini kalau FILESYSTEM_DISK sudah memakai object storage/S3 di Laravel Cloud.'),
+                ->helperText('JPG, PNG, atau WEBP maksimal 10MB. File disimpan dengan nama acak.'),
             TextInput::make('file_url')
                 ->label('URL gambar')
                 ->url()
+                ->rules(['nullable', 'url', 'starts_with:http://,https://'])
                 ->maxLength(2048)
                 ->helperText('Opsional. Jika diisi, URL ini akan dipakai dan mengabaikan upload file.'),
             TextInput::make('alt_text')

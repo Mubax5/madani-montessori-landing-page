@@ -2248,6 +2248,32 @@
         box-shadow: 0 30px 72px rgba(0, 0, 0, 0.22);
     }
 
+    .agenda-detail-hero--compact {
+        padding: 54px 0 58px;
+    }
+
+    .agenda-detail-hero__grid--compact {
+        align-items: end;
+    }
+
+    .agenda-detail-hero__cta {
+        display: grid;
+        gap: 16px;
+        align-content: start;
+        justify-items: start;
+        border-radius: 26px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        background: rgba(255, 255, 255, 0.1);
+        padding: 22px;
+        color: #fff;
+    }
+
+    .agenda-detail-hero__cta p {
+        margin: 0;
+        color: rgba(255, 255, 255, 0.78);
+        font-weight: 800;
+    }
+
     .agenda-detail-layout {
         display: grid;
         gap: 22px;
@@ -2261,6 +2287,28 @@
         background: rgba(255, 255, 255, 0.96);
         padding: 26px;
         box-shadow: var(--shadow-md);
+    }
+
+    .agenda-detail-main {
+        padding: 18px;
+    }
+
+    .agenda-detail-cover {
+        overflow: hidden;
+        min-height: 250px;
+        border-radius: 24px;
+        background: var(--cream);
+    }
+
+    .agenda-detail-cover img {
+        width: 100%;
+        height: 100%;
+        min-height: 250px;
+        object-fit: cover;
+    }
+
+    .agenda-detail-copy {
+        padding: 22px 6px 4px;
     }
 
     .agenda-detail-main .section-title {
@@ -2301,8 +2349,15 @@
         margin-top: 26px;
     }
 
+    .agenda-detail-facts--stacked {
+        grid-template-columns: 1fr;
+        margin-top: 18px;
+    }
+
     .agenda-map-link {
         margin-top: 4px;
+        width: 100%;
+        justify-content: center;
     }
 
     .agenda-registration-panel h2 {
@@ -2372,6 +2427,11 @@
         font-size: .9rem;
     }
 
+    .agenda-registration-panel__cta {
+        width: 100%;
+        justify-content: center;
+    }
+
     :where(
         .highlight-card,
         .program-roadmap__item,
@@ -2387,8 +2447,6 @@
         .agenda-featured,
         .agenda-card,
         .agenda-empty,
-        .agenda-detail-main,
-        .agenda-registration-panel,
         .gallery-card,
         .map-panel,
         .address-card,
@@ -2447,8 +2505,6 @@
             .agenda-featured,
             .agenda-card,
             .agenda-empty,
-            .agenda-detail-main,
-            .agenda-registration-panel,
             .gallery-card,
             .map-panel,
             .address-card,
@@ -2560,6 +2616,22 @@
     }
 
     .footer-links a:hover {
+        color: #fff;
+    }
+
+    .footer-contact__links {
+        display: grid;
+        gap: 8px;
+        margin-top: 18px;
+    }
+
+    .footer-contact__links a {
+        color: rgba(255, 255, 255, 0.78);
+        font-size: .94rem;
+        font-weight: 700;
+    }
+
+    .footer-contact__links a:hover {
         color: #fff;
     }
 

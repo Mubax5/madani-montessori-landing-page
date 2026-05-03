@@ -21,6 +21,7 @@ use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
@@ -76,6 +77,7 @@ class AdminUserResource extends Resource
             TextInput::make('avatar_url')
                 ->label('Avatar URL')
                 ->url()
+                ->rules(['nullable', 'url', 'starts_with:http://,https://'])
                 ->maxLength(2048)
                 ->helperText('Opsional. Jika diisi, URL ini akan dipakai dan mengabaikan upload avatar.'),
             Toggle::make('is_active')
@@ -155,7 +157,9 @@ class AdminUserResource extends Resource
             return $path;
         }
 
-        return Storage::disk(config('filesystems.default', 'public'))->url($path);
+        $disk = Storage::disk(config('filesystems.default', 'public'));
+
+        return $disk instanceof FilesystemAdapter ? $disk->url($path) : null;
     }
 
     private static function normalizeUploadState(mixed $state): ?string

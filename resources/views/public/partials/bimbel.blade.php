@@ -3,7 +3,7 @@
         <div class="section-kicker">Bimbel</div>
         <h2 class="section-title">Pendampingan belajar yang tenang, bertahap, dan mudah diikuti anak.</h2>
         <p class="section-lead">
-            Paket bimbel tampil seperti layanan premium, namun tetap mengambil nama, target, detail, dan CTA dari CMS.
+            Pilihan bimbel disusun agar anak mendapat pendampingan sesuai kebutuhan belajar dan ritmenya.
         </p>
 
         <div class="bimbel-layout">
@@ -28,7 +28,7 @@
                 <article class="package-card package-card--featured">
                     <span class="package-label">Paket A</span>
                     <h3>Calistung dan Mengaji</h3>
-                    <p>Admin dapat menambahkan paket bimbel melalui CMS.</p>
+                    <p>Pilihan paket bimbel akan tersedia sesuai jadwal dan kebutuhan anak.</p>
                     <a href="{{ \App\Support\SiteContent::whatsappUrl('minat_bimbel') }}" class="btn btn--gold">Tanya paket bimbel</a>
                 </article>
             @endforelse

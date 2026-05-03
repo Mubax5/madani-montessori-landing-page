@@ -28,8 +28,8 @@
         'program-unggulan' => ['Program Inti', 'Setiap kegiatan menyeimbangkan praktik langsung, pembiasaan adab, dan kepekaan sensorial.'],
         'bimbel' => ['Bimbel Ramah Anak', 'Pendampingan calistung, mengaji, matematika, dan English dengan asesmen awal.'],
         'agenda' => ['Agenda Sekolah', 'Trial class, study tour, parenting class, workshop, dan kegiatan sekolah.'],
-        'galeri' => ['Dokumentasi', 'Cuplikan kegiatan sekolah, bimbel, event, dan parenting yang bisa diperbarui dari CMS.'],
-        'kontak' => ['Konsultasi Pendaftaran', 'Admin membantu memilih program, jadwal kunjungan, dan langkah pendaftaran berikutnya.'],
+        'galeri' => ['Dokumentasi', 'Cuplikan kegiatan sekolah, bimbel, event, dan parenting dalam suasana Madani.'],
+        'kontak' => ['Konsultasi Pendaftaran', 'Tim Madani membantu memilih program, jadwal kunjungan, dan langkah pendaftaran berikutnya.'],
         default => ['Madani Montessori', $siteTagline],
     };
 @endphp
@@ -209,9 +209,9 @@
                 <div>
                     <div class="section-kicker section-kicker--light">Konsultasi</div>
                     <h2>Diskusikan program yang paling cocok untuk anak.</h2>
-                    <p>Admin Madani siap membantu menjelaskan pilihan sekolah, bimbel, agenda, jadwal, dan langkah pendaftaran.</p>
+                    <p>Tim Madani siap membantu menjelaskan pilihan sekolah, bimbel, agenda, jadwal, dan langkah pendaftaran.</p>
                 </div>
-                <a href="{{ $whatsappUrl }}" class="btn btn--gold">Chat Admin Madani</a>
+                <a href="{{ $whatsappUrl }}" class="btn btn--gold">Chat Tim Madani</a>
             </div>
         </div>
     </section>

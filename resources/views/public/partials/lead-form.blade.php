@@ -5,7 +5,7 @@
     <div>
         <div class="section-kicker">Pendaftaran</div>
         <h2 class="section-title">Kirim data calon siswa.</h2>
-        <p class="section-lead">Data ini membantu admin menghubungi orang tua dengan informasi program yang lebih sesuai.</p>
+        <p class="section-lead">Data ini membantu tim Madani menghubungi orang tua dengan informasi program yang lebih sesuai.</p>
     </div>
 
     @if (session('success'))

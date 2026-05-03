@@ -58,8 +58,6 @@ const revealSelectors = [
     '.agenda-card',
     '.agenda-empty',
     '.agenda-detail-hero__grid > *',
-    '.agenda-detail-main',
-    '.agenda-registration-panel',
     '.gallery-card',
     '.story-text',
     '.story-image-stack',

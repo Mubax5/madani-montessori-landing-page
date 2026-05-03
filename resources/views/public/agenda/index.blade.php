@@ -14,22 +14,23 @@
             </div>
 
             <aside class="agenda-hero__panel">
-                <span>Agenda aktif</span>
+                <span>Agenda Terdekat</span>
                 <strong>{{ $upcomingAgendas->count() }}</strong>
-                <p>Kegiatan terdekat yang sudah published dari CMS.</p>
-                <div class="agenda-hero__mini">
-                    <span>Trial Class</span>
-                    <span>Study Tour</span>
-                    <span>Open House</span>
-                    <span>Parenting</span>
-                </div>
+                <p>Temukan jadwal kegiatan terbaru Madani Montessori untuk calon siswa dan orang tua.</p>
+                @if ($categories->isNotEmpty())
+                    <div class="agenda-hero__mini">
+                        @foreach ($categories->take(4) as $category)
+                            <span>{{ $category->name }}</span>
+                        @endforeach
+                    </div>
+                @endif
             </aside>
         </div>
     </section>
 
     <section class="white-band section-pad">
         <div class="section-shell">
-            <div class="section-kicker">Featured Agenda</div>
+            <div class="section-kicker">Agenda Pilihan</div>
             <h2 class="section-title">Kegiatan pilihan dan jadwal paling dekat.</h2>
 
             @if ($featuredAgenda)
@@ -41,13 +42,13 @@
                         @if ($featuredAgenda->cover_image_url)
                             <img src="{{ $featuredAgenda->cover_image_url }}" alt="Cover {{ $featuredAgenda->title }}">
                         @else
-                            <div class="agenda-image-placeholder">Featured Agenda</div>
+                            <div class="agenda-image-placeholder">Agenda Pilihan</div>
                         @endif
                     </div>
                     <div class="agenda-featured__body">
                         <span class="agenda-badge" @if ($featuredBadgeStyle) style="{{ $featuredBadgeStyle }}" @endif>{{ $featuredAgenda->category?->name ?? 'Agenda' }}</span>
                         <h3>{{ $featuredAgenda->title }}</h3>
-                        <p>{{ $featuredAgenda->excerpt ?: 'Agenda sekolah Madani Montessori yang bisa dikelola lengkap dari CMS.' }}</p>
+                        <p>{{ $featuredAgenda->excerpt ?: 'Kegiatan pilihan Madani Montessori untuk pengalaman belajar yang hangat dan terarah.' }}</p>
                         <dl class="agenda-featured__facts">
                             <div><dt>Tanggal</dt><dd>{{ $featuredAgenda->date_label }}</dd></div>
                             <div><dt>Jam</dt><dd>{{ $featuredAgenda->time_label }}</dd></div>
@@ -61,8 +62,8 @@
                 </article>
             @else
                 <article class="agenda-empty">
-                    <strong>Belum ada agenda yang tersedia saat ini.</strong>
-                    <p>Hubungi admin untuk bertanya jadwal trial class, open house, atau kegiatan berikutnya.</p>
+                    <strong>Belum ada agenda terbaru saat ini.</strong>
+                    <p>Silakan hubungi kami untuk informasi jadwal trial class, open house, atau kegiatan berikutnya.</p>
                     <a href="{{ $whatsappUrl }}" class="btn btn--gold" target="_blank" rel="noopener noreferrer">Tanya Jadwal via WhatsApp</a>
                 </article>
             @endif
@@ -91,8 +92,8 @@
                     @include('public.agenda.partials.card', ['agenda' => $agenda])
                 @empty
                     <article class="agenda-empty agenda-empty--wide">
-                        <strong>Belum ada agenda yang tersedia saat ini.</strong>
-                        <p>Jadwal kategori ini belum dibuka. Admin bisa membantu memberi info agenda terdekat via WhatsApp.</p>
+                        <strong>Belum ada agenda terbaru saat ini.</strong>
+                        <p>Jadwal kategori ini belum tersedia. Silakan hubungi kami untuk informasi jadwal berikutnya.</p>
                         <a href="{{ $whatsappUrl }}" class="btn btn--gold" target="_blank" rel="noopener noreferrer">Tanya Jadwal via WhatsApp</a>
                     </article>
                 @endforelse

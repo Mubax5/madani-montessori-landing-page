@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -36,7 +37,9 @@ class MediaAsset extends Model
             return $this->file_path;
         }
 
-        return Storage::disk(config('filesystems.default', 'public'))->url($this->file_path);
+        $disk = Storage::disk(config('filesystems.default', 'public'));
+
+        return $disk instanceof FilesystemAdapter ? $disk->url($this->file_path) : $this->file_path;
     }
 
     protected static function booted(): void

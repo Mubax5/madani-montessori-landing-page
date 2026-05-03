@@ -7,7 +7,7 @@
         <div class="section-kicker">Program Unggulan</div>
         <h2 class="section-title">Kegiatan inti yang membentuk adab, fokus, dan kemandirian.</h2>
         <p class="section-lead">
-            Program unggulan tetap mudah diperbarui dari CMS, sementara tampilannya dibuat seperti editorial feature list yang lebih tenang.
+            Program unggulan dirancang untuk membantu anak belajar melalui rutinitas yang hangat, konkret, dan konsisten.
         </p>
 
         <div class="featured-list">
@@ -25,7 +25,7 @@
                     <span class="feature-badge">01</span>
                     <div class="feature-row__body">
                         <h3>Tahfidz, Doa dan Hadits</h3>
-                        <p>Admin dapat menambahkan program unggulan melalui CMS.</p>
+                        <p>Kegiatan unggulan akan ditampilkan sesuai program yang sedang berjalan.</p>
                         <div class="gold-divider" aria-hidden="true"></div>
                     </div>
                 </article>

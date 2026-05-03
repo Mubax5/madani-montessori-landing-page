@@ -22,6 +22,8 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Resources\Resource;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -80,11 +82,27 @@ class AgendaResource extends Resource
             RichEditor::make('description')
                 ->label('Deskripsi lengkap')
                 ->columnSpanFull(),
-            ImageUpload::make('cover_image_path', 'agendas', 'Cover Image')
-                ->helperText('JPG, PNG, atau WEBP maksimal 2MB. File disimpan dengan nama acak.'),
+            Section::make('Gambar Agenda')
+                ->description('Isi salah satu: upload gambar atau gunakan URL gambar.')
+                ->components([
+                    ImageUpload::make('cover_image_path', 'agendas', 'Upload Cover Image')
+                        ->helperText('JPG, PNG, atau WEBP maksimal 10MB. File disimpan dengan nama acak.'),
+                    TextInput::make('cover_image_manual_url')
+                        ->label('Cover Image URL')
+                        ->url()
+                        ->rules(['nullable', 'url', 'starts_with:http://,https://'])
+                        ->maxLength(2048)
+                        ->helperText('Opsional. Jika diisi, URL ini akan dipakai sebagai cover publik.'),
+                ])
+                ->columnSpanFull(),
             TextInput::make('location_name')->label('Nama lokasi')->maxLength(180),
             Textarea::make('location_address')->label('Alamat lokasi')->rows(3),
-            TextInput::make('maps_url')->label('Maps URL')->url()->maxLength(2048),
+            TextInput::make('maps_url')
+                ->label('Maps URL')
+                ->url()
+                ->rules(['nullable', 'url', 'starts_with:http://,https://'])
+                ->maxLength(2048)
+                ->helperText('Masukkan link Google Maps langsung agar tombol Buka Lokasi mengarah ke lokasi yang tepat.'),
             DateTimePicker::make('start_at')->label('Mulai'),
             DateTimePicker::make('end_at')->label('Selesai'),
             DateTimePicker::make('registration_start_at')->label('Pendaftaran mulai'),
@@ -102,7 +120,12 @@ class AgendaResource extends Resource
                 ])
                 ->required()
                 ->default('whatsapp'),
-            TextInput::make('registration_url')->label('URL pendaftaran')->url()->maxLength(2048),
+            TextInput::make('registration_url')
+                ->label('URL pendaftaran')
+                ->url()
+                ->rules(['nullable', 'url', 'starts_with:http://,https://'])
+                ->required(fn (Get $get): bool => $get('registration_type') === 'external_url')
+                ->maxLength(2048),
             Textarea::make('whatsapp_template')->label('Template WhatsApp')->rows(3),
             Select::make('status')
                 ->options([
@@ -167,6 +190,7 @@ class AgendaResource extends Resource
                 LandingPagePreview::action('agenda'),
                 ViewAction::make(),
                 EditAction::make()
+                    ->mutateRecordDataUsing(fn (array $data, Agenda $record): array => static::hydrateCoverInputs($data, $record))
                     ->mutateDataUsing(fn (array $data): array => static::stampUpdatedBy($data)),
                 ReplicateAction::make()
                     ->label('Duplicate')
@@ -206,6 +230,7 @@ class AgendaResource extends Resource
 
     public static function stampCreatedBy(array $data): array
     {
+        $data = static::resolveCoverInputs($data);
         $data['created_by'] = Auth::guard('admin')->id();
         $data['updated_by'] = Auth::guard('admin')->id();
 
@@ -214,7 +239,26 @@ class AgendaResource extends Resource
 
     public static function stampUpdatedBy(array $data): array
     {
+        $data = static::resolveCoverInputs($data);
         $data['updated_by'] = Auth::guard('admin')->id();
+
+        return $data;
+    }
+
+    public static function hydrateCoverInputs(array $data, Agenda $record): array
+    {
+        $data['cover_image_manual_url'] = $record->getRawOriginal('cover_image_url');
+
+        return $data;
+    }
+
+    public static function resolveCoverInputs(array $data): array
+    {
+        $data['cover_image_url'] = filled($data['cover_image_manual_url'] ?? null)
+            ? trim((string) $data['cover_image_manual_url'])
+            : null;
+
+        unset($data['cover_image_manual_url']);
 
         return $data;
     }

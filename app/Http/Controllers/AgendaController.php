@@ -18,11 +18,17 @@ class AgendaController extends Controller
     {
         $selectedCategory = $request->string('category')->toString();
         $categories = AgendaCategory::active()->get();
+        $activeCategory = $categories->firstWhere('slug', $selectedCategory);
+
+        if (! $activeCategory) {
+            $selectedCategory = '';
+        }
+
         $page = $this->page('agenda', 'Agenda', 'Agenda Madani Montessori');
 
         $published = Agenda::published()
             ->with('category')
-            ->when(filled($selectedCategory), fn ($query) => $query->whereHas('category', fn ($query) => $query->where('slug', $selectedCategory)));
+            ->when($activeCategory, fn ($query) => $query->where('agenda_category_id', $activeCategory->id));
 
         $upcoming = (clone $published)
             ->upcoming()
@@ -65,7 +71,7 @@ class AgendaController extends Controller
     {
         $agenda = Agenda::published()
             ->where('slug', $slug)
-            ->with(['category', 'registrations'])
+            ->with('category')
             ->firstOrFail();
 
         $page = new Page([
@@ -78,14 +84,24 @@ class AgendaController extends Controller
         $relatedAgendas = Agenda::published()
             ->with('category')
             ->whereKeyNot($agenda->id)
-            ->where(function ($query) use ($agenda): void {
-                $query
-                    ->when($agenda->agenda_category_id, fn ($query) => $query->where('agenda_category_id', $agenda->agenda_category_id))
-                    ->orWhere('start_at', '>=', now()->startOfDay());
-            })
+            ->when($agenda->agenda_category_id, fn ($query) => $query->where('agenda_category_id', $agenda->agenda_category_id))
+            ->upcoming()
             ->orderBy('start_at')
             ->limit(3)
             ->get();
+
+        if ($relatedAgendas->count() < 3) {
+            $fallbackAgendas = Agenda::published()
+                ->with('category')
+                ->whereKeyNot($agenda->id)
+                ->whereNotIn('id', $relatedAgendas->pluck('id'))
+                ->upcoming()
+                ->orderBy('start_at')
+                ->limit(3 - $relatedAgendas->count())
+                ->get();
+
+            $relatedAgendas = $relatedAgendas->concat($fallbackAgendas);
+        }
 
         return view('public.agenda.show', [
             'page' => $page,

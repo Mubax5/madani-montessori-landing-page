@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\AdminUser;
 use App\Models\Agenda;
+use App\Models\AgendaCategory;
 use App\Models\Lead;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -56,6 +57,72 @@ class PublicWebsiteTest extends TestCase
             'parent_name' => 'Bunda Aisyah',
             'status' => 'new',
         ]);
+    }
+
+    public function test_agenda_filter_uses_active_database_categories(): void
+    {
+        $category = AgendaCategory::query()->create([
+            'name' => 'Seminar Orang Tua',
+            'slug' => 'seminar-orang-tua',
+            'description' => 'Sesi belajar bersama orang tua.',
+            'sort_order' => 99,
+            'is_active' => true,
+        ]);
+
+        Agenda::query()->create([
+            'agenda_category_id' => $category->id,
+            'title' => 'Seminar Orang Tua Madani',
+            'slug' => 'seminar-orang-tua-madani',
+            'excerpt' => 'Sesi diskusi keluarga Madani.',
+            'start_at' => now()->addDays(10),
+            'registration_type' => 'whatsapp',
+            'status' => 'published',
+            'published_at' => now(),
+        ]);
+
+        $this->get(route('agenda.index', ['category' => $category->slug]))
+            ->assertOk()
+            ->assertSee('Seminar Orang Tua', false)
+            ->assertSee('Seminar Orang Tua Madani', false);
+    }
+
+    public function test_agenda_cover_image_url_takes_priority_over_uploaded_path(): void
+    {
+        $agenda = Agenda::query()->create([
+            'title' => 'Open House Cover URL',
+            'slug' => 'open-house-cover-url',
+            'excerpt' => 'Agenda dengan gambar URL.',
+            'cover_image_path' => 'agendas/uploaded-cover.webp',
+            'cover_image_url' => 'https://example.com/cover-agenda.webp',
+            'start_at' => now()->addDays(12),
+            'registration_type' => 'whatsapp',
+            'status' => 'published',
+            'published_at' => now(),
+        ]);
+
+        $this->get(route('agenda.show', $agenda->slug))
+            ->assertOk()
+            ->assertSee('https://example.com/cover-agenda.webp', false)
+            ->assertDontSee('agendas/uploaded-cover.webp', false);
+    }
+
+    public function test_public_pages_do_not_show_internal_terms(): void
+    {
+        foreach (['/', '/tentang', '/program-sekolah', '/program-unggulan', '/bimbel', '/agenda', '/galeri', '/kontak'] as $path) {
+            $this->get($path)
+                ->assertOk()
+                ->assertDontSeeText('CMS')
+                ->assertDontSeeText('Admin')
+                ->assertDontSeeText('admin')
+                ->assertDontSeeText('published')
+                ->assertDontSeeText('testing')
+                ->assertDontSeeText('dummy')
+                ->assertDontSeeText('seeder')
+                ->assertDontSeeText('object storage')
+                ->assertDontSeeText('Featured Agenda')
+                ->assertDontSeeText('Agenda aktif')
+                ->assertDontSeeText('Hubungi Admin');
+        }
     }
 
     public function test_registration_form_stores_a_new_lead(): void

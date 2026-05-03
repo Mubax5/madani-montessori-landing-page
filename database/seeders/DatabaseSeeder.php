@@ -75,11 +75,14 @@ class DatabaseSeeder extends Seeder
         foreach ([
             'site_name' => ['Madani Montessori Islamic School', 'text'],
             'site_tagline' => ['TK Islam Terpadu berbasis Montessori, Bimbel, dan Agenda kegiatan sekolah.', 'textarea'],
-            'address' => ['National Education Centre, Tangerang, Banten', 'textarea'],
+            'address' => ['Madani Montessori Islamic School', 'textarea'],
             'whatsapp_number' => ['6282123576275', 'text'],
-            'email' => ['info@madanimontessori.sch.id', 'text'],
-            'maps_url' => ['https://maps.google.com/?q=National+Education+Centre', 'url'],
-            'maps_embed_url' => ['https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d652.1473505745165!2d106.62805344122339!3d-6.3529058163396215!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69e3874490ef33%3A0x64684f18b41459a0!2sNational%20Education%20Centre!5e0!3m2!1sen!2sid!4v1777585749144!5m2!1sen!2sid', 'url'],
+            'whatsapp_display' => ['+62 821-2357-6275', 'text'],
+            'email' => ['madanimontessori@gmail.com', 'text'],
+            'instagram_handle' => ['@madanimontessori', 'text'],
+            'instagram_url' => ['https://www.instagram.com/madanimontessori', 'url'],
+            'maps_url' => ['', 'url'],
+            'maps_embed_url' => ['', 'url'],
             'primary_color' => ['#0A1F5C', 'color'],
             'footer_summary' => ['Madani Montessori Islamic School mendampingi anak belajar mandiri, berakhlak, dan percaya diri melalui pendekatan Montessori dan nilai Islam Terpadu.', 'textarea'],
         ] as $key => [$value, $type]) {
@@ -187,7 +190,7 @@ class DatabaseSeeder extends Seeder
                 ]],
             ],
             'kontak' => [
-                ['contact', 'Kontak', 'Mari konsultasikan kebutuhan anak', 'Isi form pendaftaran atau hubungi WhatsApp agar admin dapat membantu memilih program yang sesuai.', 'Chat WhatsApp', 'konsultasi_umum', null, null],
+                ['contact', 'Kontak', 'Mari konsultasikan kebutuhan anak', 'Isi form pendaftaran atau hubungi WhatsApp agar tim Madani dapat membantu memilih program yang sesuai.', 'Chat WhatsApp', 'konsultasi_umum', null, null],
             ],
         ];
 
@@ -264,7 +267,7 @@ class DatabaseSeeder extends Seeder
 
             foreach (['Asesmen awal anak', 'Jadwal fleksibel', 'Laporan perkembangan'] as $index => $item) {
                 BimbelPackageItem::updateOrCreate(['package_id' => $package->id, 'title' => $item], [
-                    'description' => 'Admin akan menjelaskan detail sesuai kebutuhan anak.',
+                    'description' => 'Detail disesuaikan dengan kebutuhan anak.',
                     'sort_order' => $index + 1,
                 ]);
             }
@@ -343,7 +346,7 @@ class DatabaseSeeder extends Seeder
                 'agenda_category_id' => $categories[$categorySlug] ?? null,
                 'title' => $title,
                 'excerpt' => $excerpt,
-                'description' => '<p>' . e($excerpt) . '</p><p>Admin dapat memperbarui rundown, benefit, target peserta, kuota, dan informasi pendaftaran dari CMS.</p>',
+                'description' => '<p>' . e($excerpt) . '</p><p>Rundown, manfaat kegiatan, target peserta, kuota, dan informasi pendaftaran akan disampaikan sesuai jadwal agenda.</p>',
                 'location_name' => $location,
                 'location_address' => $location,
                 'start_at' => $startAt,
@@ -377,7 +380,7 @@ class DatabaseSeeder extends Seeder
             GalleryItem::updateOrCreate(['media_id' => $asset->id], [
                 'category' => $index === 2 ? 'event' : 'sekolah',
                 'title' => ['Kegiatan kelas', 'Ruang belajar', 'Konsultasi keluarga'][$index] ?? 'Foto kegiatan',
-                'description' => 'Foto awal dapat diganti admin melalui Media Library.',
+                'description' => 'Dokumentasi kegiatan Madani Montessori.',
                 'is_featured' => $index === 0,
                 'sort_order' => $index + 1,
                 'is_active' => true,
@@ -389,9 +392,9 @@ class DatabaseSeeder extends Seeder
     {
         foreach ([
             ['program-sekolah', 'Apakah bisa konsultasi sebelum mendaftar?', 'Bisa. Orang tua dapat menghubungi WhatsApp untuk menyesuaikan program dengan usia dan kebutuhan anak.'],
-            ['program-sekolah', 'Apakah tersedia half-day dan full-day?', 'Ya, admin dapat menjelaskan jadwal yang tersedia sesuai program dan kapasitas kelas.'],
+            ['program-sekolah', 'Apakah tersedia half-day dan full-day?', 'Ya, tim Madani dapat menjelaskan jadwal yang tersedia sesuai program dan kapasitas kelas.'],
             ['bimbel', 'Apakah bimbel harus setiap hari?', 'Tidak harus. Jadwal dapat disesuaikan setelah asesmen awal.'],
-            ['kontak', 'Bagaimana cara mendaftar?', 'Isi form pendaftaran atau kirim pesan WhatsApp. Admin akan menghubungi untuk langkah berikutnya.'],
+            ['kontak', 'Bagaimana cara mendaftar?', 'Isi form pendaftaran atau kirim pesan WhatsApp. Tim Madani akan menghubungi untuk langkah berikutnya.'],
         ] as $order => [$scope, $question, $answer]) {
             Faq::updateOrCreate(['page_scope' => $scope, 'question' => $question], [
                 'answer' => $answer,

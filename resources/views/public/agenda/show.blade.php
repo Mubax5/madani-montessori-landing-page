@@ -3,11 +3,15 @@
 @php
     $category = $agenda->category;
     $badgeStyle = $category?->color ? '--badge-color: ' . $category->color : null;
+    $isFormRegistration = $agenda->registration_type === 'form';
+    $ctaUrl = $isFormRegistration ? '#agenda-registration' : $agenda->registrationCtaUrl();
+    $ctaExternal = ! $isFormRegistration;
+    $ctaLabel = $agenda->registration_type === 'external_url' ? 'Daftar Sekarang' : ($isFormRegistration ? 'Isi Pendaftaran' : 'Daftar via WhatsApp');
 @endphp
 
 @section('content')
-    <section class="agenda-detail-hero elegant-blue-texture">
-        <div class="agenda-detail-hero__grid">
+    <section class="agenda-detail-hero agenda-detail-hero--compact elegant-blue-texture">
+        <div class="agenda-detail-hero__grid agenda-detail-hero__grid--compact">
             <div>
                 <div class="hero-eyebrow">Detail Agenda</div>
                 <span class="agenda-badge agenda-badge--light" @if ($badgeStyle) style="{{ $badgeStyle }}" @endif>{{ $category?->name ?? 'Agenda' }}</span>
@@ -19,12 +23,9 @@
                 </div>
             </div>
 
-            <div class="agenda-detail-hero__media">
-                @if ($agenda->cover_image_url)
-                    <img src="{{ $agenda->cover_image_url }}" alt="Cover {{ $agenda->title }}">
-                @else
-                    <div class="agenda-image-placeholder">Agenda Madani</div>
-                @endif
+            <div class="agenda-detail-hero__cta">
+                <p>{{ $agenda->registrationStatusLabel() }}</p>
+                <a href="{{ $ctaUrl }}" class="btn btn--gold" @if ($ctaExternal) target="_blank" rel="noopener noreferrer" @endif>{{ $ctaLabel }}</a>
             </div>
         </div>
     </section>
@@ -32,22 +33,40 @@
     <section class="cream-band section-pad">
         <div class="section-shell agenda-detail-layout">
             <article class="agenda-detail-main">
-                <div class="section-kicker">Detail Informasi</div>
-                <h2 class="section-title">Informasi kegiatan.</h2>
-
-                @if ($agenda->excerpt)
-                    <p class="agenda-detail-lead">{{ $agenda->excerpt }}</p>
-                @endif
-
-                <div class="agenda-richtext">
-                    @if ($agenda->description)
-                        {!! \App\Support\HtmlSanitizer::clean($agenda->description) !!}
+                <div class="agenda-detail-cover">
+                    @if ($agenda->cover_image_url)
+                        <img src="{{ $agenda->cover_image_url }}" alt="Cover {{ $agenda->title }}">
                     @else
-                        <p>Detail agenda akan diperbarui oleh admin CMS.</p>
+                        <div class="agenda-image-placeholder">Agenda Madani</div>
                     @endif
                 </div>
 
-                <div class="agenda-detail-facts">
+                <div class="agenda-detail-copy">
+                    <div class="section-kicker">Informasi Agenda</div>
+                    <h2 class="section-title">Rincian kegiatan.</h2>
+
+                    @if ($agenda->excerpt)
+                        <p class="agenda-detail-lead">{{ $agenda->excerpt }}</p>
+                    @endif
+
+                    <div class="agenda-richtext">
+                        @if ($agenda->description)
+                            {!! \App\Support\HtmlSanitizer::clean($agenda->description) !!}
+                        @else
+                            <p>Informasi lengkap akan tersedia menjelang jadwal kegiatan.</p>
+                        @endif
+                    </div>
+                </div>
+            </article>
+
+            <aside class="agenda-registration-panel" id="agenda-registration">
+                <div class="section-kicker">Ringkasan</div>
+                <h2>{{ $agenda->registrationStatusLabel() }}</h2>
+
+                <dl class="agenda-detail-facts agenda-detail-facts--stacked">
+                    <div><span>Tanggal</span><strong>{{ $agenda->date_label }}</strong></div>
+                    <div><span>Jam</span><strong>{{ $agenda->time_label }}</strong></div>
+                    <div><span>Lokasi</span><strong>{{ $agenda->location_name ?: 'Madani Montessori Islamic School' }}</strong></div>
                     @if ($agenda->target_audience)
                         <div><span>Target Peserta</span><strong>{{ $agenda->target_audience }}</strong></div>
                     @endif
@@ -55,28 +74,21 @@
                         <div><span>Kuota</span><strong>{{ $agenda->quota }} peserta</strong></div>
                     @endif
                     <div><span>Biaya</span><strong>{{ $agenda->formatted_price }}</strong></div>
-                    <div><span>Status</span><strong>{{ $agenda->registrationStatusLabel() }}</strong></div>
-                </div>
+                </dl>
 
                 @if ($agenda->maps_url)
-                    <a href="{{ $agenda->maps_url }}" class="btn btn--outline-dark agenda-map-link" target="_blank" rel="noopener noreferrer">Buka Maps</a>
+                    <a href="{{ $agenda->maps_url }}" class="btn btn--outline-dark agenda-map-link" target="_blank" rel="noopener noreferrer">Buka Lokasi</a>
                 @endif
-            </article>
-
-            <aside class="agenda-registration-panel" id="agenda-registration">
-                <div class="section-kicker">Pendaftaran</div>
-                <h2>Daftar agenda ini.</h2>
-                <p>{{ $agenda->registrationStatusLabel() }}</p>
 
                 @if (session('success'))
-                    <div class="success-message">{{ session('success') }}</div>
+                    <div class="success-message" role="status">{{ session('success') }}</div>
                 @endif
 
                 @error('agenda_registration')
                     <small>{{ $message }}</small>
                 @enderror
 
-                @if ($agenda->registration_type === 'form' && $agenda->isRegistrationOpen())
+                @if ($isFormRegistration && $agenda->isRegistrationOpen())
                     <form action="{{ route('agenda.registrations.store', $agenda->slug) }}" method="POST" class="agenda-registration-form">
                         @csrf
                         <label>
@@ -117,9 +129,9 @@
                         <button type="submit" class="btn btn--gold">Kirim Pendaftaran</button>
                     </form>
                 @else
-                    <a href="{{ $agenda->registrationCtaUrl() }}" class="btn btn--gold" target="_blank" rel="noopener noreferrer">Daftar Sekarang</a>
-                    @if ($agenda->registration_type === 'form')
-                        <p class="agenda-registration-note">Form internal tidak tampil karena pendaftaran belum dibuka.</p>
+                    <a href="{{ $agenda->registrationCtaUrl() }}" class="btn btn--gold agenda-registration-panel__cta" target="_blank" rel="noopener noreferrer">{{ $agenda->registration_type === 'external_url' ? 'Daftar Sekarang' : 'Daftar via WhatsApp' }}</a>
+                    @if ($isFormRegistration)
+                        <p class="agenda-registration-note">Pendaftaran online belum dibuka untuk jadwal ini.</p>
                     @endif
                 @endif
             </aside>
@@ -127,7 +139,7 @@
     </section>
 
     @if ($relatedAgendas->isNotEmpty())
-        <section class="white-band section-pad">
+        <section class="white-band section-pad section-pad--tight">
             <div class="section-shell">
                 <div class="section-kicker">Agenda Terkait</div>
                 <h2 class="section-title">Kegiatan lain yang mungkin cocok.</h2>

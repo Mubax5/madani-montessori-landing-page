@@ -13,6 +13,14 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="public-body">
+    @php
+        $instagramHandle = filled($settings->get('instagram_handle')) ? $settings->get('instagram_handle') : '@madanimontessori';
+        $instagramUrl = filled($settings->get('instagram_url')) ? $settings->get('instagram_url') : 'https://www.instagram.com/madanimontessori';
+        $footerWhatsappNumber = preg_replace('/\D+/', '', $settings->get('whatsapp_number', '6282123576275')) ?: '6282123576275';
+        $footerWhatsappDisplay = filled($settings->get('whatsapp_display')) ? $settings->get('whatsapp_display') : '+62 821-2357-6275';
+        $footerEmail = filled($settings->get('email')) ? $settings->get('email') : 'madanimontessori@gmail.com';
+    @endphp
+
     <a href="#main-content" class="skip-link">Lewati ke konten</a>
 
     <header class="site-header">
@@ -73,12 +81,17 @@
             <div class="footer-contact">
                 <h2 class="footer-heading">Kontak</h2>
                 <p>{{ $settings->get('address') }}</p>
-                <a href="{{ $whatsappUrl }}" class="btn btn--gold">Hubungi Admin</a>
+                <div class="footer-contact__links">
+                    <a href="{{ $instagramUrl }}" target="_blank" rel="noopener noreferrer">Instagram: {{ $instagramHandle }}</a>
+                    <a href="https://wa.me/{{ $footerWhatsappNumber }}" target="_blank" rel="noopener noreferrer">WhatsApp: {{ $footerWhatsappDisplay }}</a>
+                    <a href="mailto:{{ $footerEmail }}">Email: {{ $footerEmail }}</a>
+                </div>
+                <a href="{{ $whatsappUrl }}" class="btn btn--gold">Hubungi Kami</a>
             </div>
         </div>
         <div class="site-footer__bottom">
             <span>&copy; {{ now()->year }} Madani Montessori Islamic School.</span>
-            <span>Designed for a calm, premium school experience.</span>
+            <span>Lingkungan belajar yang hangat, tenang, dan terarah.</span>
         </div>
     </footer>
 </body>

@@ -3,7 +3,7 @@
         <div class="section-kicker">Galeri</div>
         <h2 class="section-title">{{ ($compact ?? false) ? 'Cuplikan ruang belajar dan kegiatan anak.' : 'Momen sekolah dalam komposisi galeri editorial.' }}</h2>
         <p class="section-lead">
-            Foto tetap berasal dari CMS galeri, dengan frame rounded dan masonry layout agar tidak terasa seperti grid standar.
+            Lihat suasana belajar, bermain, dan kegiatan keluarga Madani Montessori.
         </p>
 
         @unless ($compact ?? false)
@@ -38,7 +38,7 @@
                         <div class="image-placeholder">{{ $placeholder }}</div>
                         <figcaption>
                             <strong>{{ $placeholder }}</strong>
-                            <span>CMS</span>
+                            <span>Kegiatan</span>
                         </figcaption>
                     </figure>
                 @endforeach

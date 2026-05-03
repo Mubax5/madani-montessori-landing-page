@@ -5,9 +5,9 @@
         <div class="stepper">
             @foreach ([
                 ['Konsultasi awal', 'Diskusikan usia, kebutuhan anak, dan program yang paling sesuai.'],
-                ['Pilih program', 'Admin membantu menjelaskan pilihan KB, TK, bimbel, atau training.'],
+                ['Pilih program', 'Tim Madani membantu menjelaskan pilihan KB, TK, bimbel, atau agenda.'],
                 ['Observasi anak', 'Guru melihat kesiapan anak agar kelas dan ritme belajar lebih tepat.'],
-                ['Konfirmasi jadwal', 'Orang tua menerima arahan jadwal, administrasi, dan langkah berikutnya.'],
+                ['Konfirmasi jadwal', 'Orang tua menerima arahan jadwal, biaya, dan langkah berikutnya.'],
             ] as $step)
                 <article class="step-card">
                     <span class="step-number">{{ $loop->iteration }}</span>

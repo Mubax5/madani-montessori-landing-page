@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Support\SiteContent;
+use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -18,6 +19,7 @@ class Agenda extends Model
         'excerpt',
         'description',
         'cover_image_path',
+        'cover_image_url',
         'location_name',
         'location_address',
         'maps_url',
@@ -97,6 +99,16 @@ class Agenda extends Model
 
     public function getCoverImageUrlAttribute(): ?string
     {
+        $manualUrl = trim((string) ($this->attributes['cover_image_url'] ?? ''));
+
+        if (
+            filled($manualUrl)
+            && Str::startsWith($manualUrl, ['http://', 'https://'])
+            && filter_var($manualUrl, FILTER_VALIDATE_URL)
+        ) {
+            return $manualUrl;
+        }
+
         if (blank($this->cover_image_path)) {
             return null;
         }
@@ -105,7 +117,13 @@ class Agenda extends Model
             return $this->cover_image_path;
         }
 
-        return Storage::disk(config('filesystems.default', 'public'))->url($this->cover_image_path);
+        try {
+            $disk = Storage::disk(config('filesystems.default', 'public'));
+
+            return $disk instanceof FilesystemAdapter ? $disk->url($this->cover_image_path) : null;
+        } catch (\Throwable) {
+            return null;
+        }
     }
 
     public function getDateLabelAttribute(): string
