@@ -2,16 +2,19 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasFileUrls;
+use App\Support\MediaUrl;
 use App\Support\SiteContent;
-use Illuminate\Filesystem\FilesystemAdapter;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class Agenda extends Model
 {
+    use HasFileUrls;
+
     protected $fillable = [
         'agenda_category_id',
         'title',
@@ -97,33 +100,17 @@ class Agenda extends Model
         return $query->whereNotNull('start_at')->where('start_at', '<', now()->startOfDay());
     }
 
-    public function getCoverImageUrlAttribute(): ?string
+    protected function coverImageFinalUrl(): Attribute
     {
-        $manualUrl = trim((string) ($this->attributes['cover_image_url'] ?? ''));
+        return Attribute::get(fn (): ?string => $this->resolveFileUrl(
+            path: $this->cover_image_path,
+            manualUrl: $this->cover_image_url,
+        ));
+    }
 
-        if (
-            filled($manualUrl)
-            && Str::startsWith($manualUrl, ['http://', 'https://'])
-            && filter_var($manualUrl, FILTER_VALIDATE_URL)
-        ) {
-            return $manualUrl;
-        }
-
-        if (blank($this->cover_image_path)) {
-            return null;
-        }
-
-        if (Str::startsWith($this->cover_image_path, ['http://', 'https://', '/'])) {
-            return $this->cover_image_path;
-        }
-
-        try {
-            $disk = Storage::disk(config('filesystems.default', 'public'));
-
-            return $disk instanceof FilesystemAdapter ? $disk->url($this->cover_image_path) : null;
-        } catch (\Throwable) {
-            return null;
-        }
+    protected function coverUrl(): Attribute
+    {
+        return Attribute::get(fn (): ?string => $this->cover_image_final_url);
     }
 
     public function getDateLabelAttribute(): string
@@ -133,7 +120,7 @@ class Agenda extends Model
         }
 
         if ($this->end_at && $this->end_at->toDateString() !== $this->start_at->toDateString()) {
-            return $this->start_at->translatedFormat('d M Y') . ' - ' . $this->end_at->translatedFormat('d M Y');
+            return $this->start_at->translatedFormat('d M Y').' - '.$this->end_at->translatedFormat('d M Y');
         }
 
         return $this->start_at->translatedFormat('d M Y');
@@ -146,7 +133,7 @@ class Agenda extends Model
         }
 
         if ($this->end_at) {
-            return $this->start_at->format('H:i') . ' - ' . $this->end_at->format('H:i');
+            return $this->start_at->format('H:i').' - '.$this->end_at->format('H:i');
         }
 
         return $this->start_at->format('H:i');
@@ -158,7 +145,7 @@ class Agenda extends Model
             return 'Gratis';
         }
 
-        return 'Rp ' . number_format((float) $this->price, 0, ',', '.');
+        return 'Rp '.number_format((float) $this->price, 0, ',', '.');
     }
 
     public function registrationStatusLabel(): string
@@ -213,7 +200,7 @@ class Agenda extends Model
                 $this->whatsapp_template,
             );
 
-            return 'https://wa.me/' . $phone . '?text=' . rawurlencode($message);
+            return 'https://wa.me/'.$phone.'?text='.rawurlencode($message);
         }
 
         return SiteContent::whatsappUrl('minat_agenda', [
@@ -226,6 +213,17 @@ class Agenda extends Model
     protected static function booted(): void
     {
         static::saving(function (Agenda $agenda): void {
+            $agenda->cover_image_url = MediaUrl::normalizeManualUrl($agenda->cover_image_url);
+
+            if (MediaUrl::isRemoteUrl($agenda->cover_image_path)) {
+                $agenda->cover_image_url ??= $agenda->cover_image_path;
+                $agenda->cover_image_path = null;
+            } else {
+                $agenda->cover_image_path = MediaUrl::isTemporaryPath($agenda->cover_image_path)
+                    ? null
+                    : MediaUrl::normalizePath($agenda->cover_image_path);
+            }
+
             if (blank($agenda->slug) && filled($agenda->title)) {
                 $agenda->slug = Str::slug($agenda->title);
             }

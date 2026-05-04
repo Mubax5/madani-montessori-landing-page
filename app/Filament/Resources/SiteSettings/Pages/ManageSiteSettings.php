@@ -13,7 +13,9 @@ class ManageSiteSettings extends ManageRecords
     protected function getHeaderActions(): array
     {
         return [
-            CreateAction::make()->visible(fn (): bool => SiteSettingResource::canCreate()),
+            CreateAction::make()
+                ->mutateDataUsing(fn (array $data): array => SiteSettingResource::resolveSettingInputs($data))
+                ->visible(fn (): bool => SiteSettingResource::canCreate()),
         ];
     }
 }

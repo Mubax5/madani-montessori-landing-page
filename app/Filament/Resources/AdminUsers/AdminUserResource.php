@@ -6,6 +6,7 @@ use App\Filament\Resources\AdminUsers\Pages\ManageAdminUsers;
 use App\Filament\Resources\Concerns\AdminResourceAccess;
 use App\Filament\Support\ImageUpload;
 use App\Models\AdminUser;
+use App\Support\MediaUrl;
 use BackedEnum;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
@@ -21,11 +22,8 @@ use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Filesystem\FilesystemAdapter;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 
 class AdminUserResource extends Resource
 {
@@ -72,7 +70,7 @@ class AdminUserResource extends Resource
                 ->required(fn (?AdminUser $record): bool => $record === null)
                 ->dehydrateStateUsing(fn (?string $state): ?string => filled($state) ? Hash::make($state) : null)
                 ->dehydrated(fn (?string $state): bool => filled($state)),
-            ImageUpload::make('avatar_upload', 'admin-avatars', 'Upload avatar')
+            ImageUpload::make('avatar_path', 'avatars', 'Upload avatar')
                 ->helperText('File yang didukung jpeg, png, webp. Max 10MB'),
             TextInput::make('avatar_url')
                 ->label('Avatar URL')
@@ -91,9 +89,10 @@ class AdminUserResource extends Resource
         return $table
             ->recordTitleAttribute('name')
             ->columns([
-                ImageColumn::make('avatar_path')
+                ImageColumn::make('avatar_final_url')
                     ->label('Avatar')
-                    ->getStateUsing(fn (AdminUser $record): ?string => static::avatarPreviewUrl($record->avatar_path))
+                    ->getStateUsing(fn (AdminUser $record): ?string => $record->avatar_final_url)
+                    ->defaultImageUrl(MediaUrl::placeholderDataUri('Avatar'))
                     ->imageSize(42)
                     ->circular(),
                 TextColumn::make('name')->label('Nama')->searchable()->sortable(),
@@ -104,7 +103,6 @@ class AdminUserResource extends Resource
             ])
             ->recordActions([
                 EditAction::make()
-                    ->mutateRecordDataUsing(fn (array $data): array => static::hydrateAvatarInputs($data))
                     ->mutateDataUsing(fn (array $data): array => static::resolveAvatarInputs($data)),
                 DeleteAction::make(),
             ])
@@ -122,52 +120,17 @@ class AdminUserResource extends Resource
         ];
     }
 
-    public static function hydrateAvatarInputs(array $data): array
-    {
-        $path = (string) ($data['avatar_path'] ?? '');
-
-        if (Str::startsWith($path, ['http://', 'https://'])) {
-            $data['avatar_url'] = $path;
-        } elseif (filled($path)) {
-            $data['avatar_upload'] = $path;
-        }
-
-        return $data;
-    }
-
     public static function resolveAvatarInputs(array $data): array
     {
-        $url = trim((string) ($data['avatar_url'] ?? ''));
-        $upload = static::normalizeUploadState($data['avatar_upload'] ?? null);
+        $data['avatar_url'] = MediaUrl::normalizeManualUrl($data['avatar_url'] ?? null);
+        $data['avatar_path'] = MediaUrl::normalizePath($data['avatar_path'] ?? null);
 
-        $data['avatar_path'] = filled($url) ? $url : $upload;
-
-        unset($data['avatar_upload'], $data['avatar_url']);
+        if (MediaUrl::isTemporaryPath($data['avatar_path'])) {
+            throw ValidationException::withMessages([
+                'avatar_path' => 'Upload avatar belum tersimpan ke folder final. Upload ulang avatar.',
+            ]);
+        }
 
         return $data;
-    }
-
-    public static function avatarPreviewUrl(?string $path): ?string
-    {
-        if (blank($path)) {
-            return null;
-        }
-
-        if (Str::startsWith($path, ['http://', 'https://'])) {
-            return $path;
-        }
-
-        $disk = Storage::disk(config('filesystems.default', 'public'));
-
-        return $disk instanceof FilesystemAdapter ? $disk->url($path) : null;
-    }
-
-    private static function normalizeUploadState(mixed $state): ?string
-    {
-        if (is_array($state)) {
-            $state = Arr::first($state);
-        }
-
-        return filled($state) ? (string) $state : null;
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Filament\Support;
 
+use App\Support\MediaUrl;
 use Filament\Forms\Components\FileUpload;
 use Illuminate\Support\Str;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
@@ -12,16 +13,19 @@ class ImageUpload
     {
         return FileUpload::make($name)
             ->label($label)
-            ->disk(config('filesystems.default', 'public'))
+            ->disk(MediaUrl::defaultDisk())
             ->directory($directory)
             ->visibility('public')
             ->image()
             ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
             ->rules(['image', 'mimetypes:image/jpeg,image/png,image/webp'])
             ->maxSize(10240)
+            ->storeFiles()
+            ->moveFiles()
+            ->previewable()
             ->openable()
             ->downloadable()
-            ->getUploadedFileNameForStorageUsing(fn (TemporaryUploadedFile $file): string => Str::ulid() . '.' . self::extensionForMime($file->getMimeType()));
+            ->getUploadedFileNameForStorageUsing(fn (TemporaryUploadedFile $file): string => Str::ulid().'.'.self::extensionForMime($file->getMimeType()));
     }
 
     private static function extensionForMime(?string $mime): string

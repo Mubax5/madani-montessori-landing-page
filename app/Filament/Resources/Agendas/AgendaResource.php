@@ -7,6 +7,7 @@ use App\Filament\Resources\Concerns\AdminResourceAccess;
 use App\Filament\Support\ImageUpload;
 use App\Filament\Support\LandingPagePreview;
 use App\Models\Agenda;
+use App\Support\MediaUrl;
 use BackedEnum;
 use Filament\Actions\BulkAction;
 use Filament\Actions\BulkActionGroup;
@@ -38,6 +39,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 
 class AgendaResource extends Resource
 {
@@ -87,7 +89,7 @@ class AgendaResource extends Resource
                 ->components([
                     ImageUpload::make('cover_image_path', 'agendas', 'Upload Cover Image')
                         ->helperText('JPG, PNG, atau WEBP maksimal 10MB. File disimpan dengan nama acak.'),
-                    TextInput::make('cover_image_manual_url')
+                    TextInput::make('cover_image_url')
                         ->label('Cover Image URL')
                         ->url()
                         ->rules(['nullable', 'url', 'starts_with:http://,https://'])
@@ -152,9 +154,10 @@ class AgendaResource extends Resource
             ->recordTitleAttribute('title')
             ->defaultSort('start_at')
             ->columns([
-                ImageColumn::make('cover_image_url')
+                ImageColumn::make('cover_image_final_url')
                     ->label('Cover')
-                    ->getStateUsing(fn (Agenda $record): ?string => $record->cover_image_url)
+                    ->getStateUsing(fn (Agenda $record): ?string => $record->cover_image_final_url)
+                    ->defaultImageUrl(MediaUrl::placeholderDataUri('Agenda'))
                     ->imageSize(52)
                     ->square(),
                 TextColumn::make('title')->label('Judul')->searchable()->sortable(),
@@ -190,14 +193,13 @@ class AgendaResource extends Resource
                 LandingPagePreview::action('agenda'),
                 ViewAction::make(),
                 EditAction::make()
-                    ->mutateRecordDataUsing(fn (array $data, Agenda $record): array => static::hydrateCoverInputs($data, $record))
                     ->mutateDataUsing(fn (array $data): array => static::stampUpdatedBy($data)),
                 ReplicateAction::make()
                     ->label('Duplicate')
                     ->excludeAttributes(['slug', 'created_by', 'updated_by', 'created_at', 'updated_at'])
                     ->beforeReplicaSaved(fn (Agenda $replica): Agenda => $replica->forceFill([
-                        'title' => $replica->title . ' (Copy)',
-                        'slug' => Str::slug($replica->title . ' copy ' . Str::ulid()),
+                        'title' => $replica->title.' (Copy)',
+                        'slug' => Str::slug($replica->title.' copy '.Str::ulid()),
                         'status' => 'draft',
                         'is_featured' => false,
                         'published_at' => null,
@@ -230,7 +232,7 @@ class AgendaResource extends Resource
 
     public static function stampCreatedBy(array $data): array
     {
-        $data = static::resolveCoverInputs($data);
+        $data = static::normalizeCoverInputs($data);
         $data['created_by'] = Auth::guard('admin')->id();
         $data['updated_by'] = Auth::guard('admin')->id();
 
@@ -239,26 +241,22 @@ class AgendaResource extends Resource
 
     public static function stampUpdatedBy(array $data): array
     {
-        $data = static::resolveCoverInputs($data);
+        $data = static::normalizeCoverInputs($data);
         $data['updated_by'] = Auth::guard('admin')->id();
 
         return $data;
     }
 
-    public static function hydrateCoverInputs(array $data, Agenda $record): array
+    public static function normalizeCoverInputs(array $data): array
     {
-        $data['cover_image_manual_url'] = $record->getRawOriginal('cover_image_url');
+        $data['cover_image_url'] = MediaUrl::normalizeManualUrl($data['cover_image_url'] ?? null);
+        $data['cover_image_path'] = MediaUrl::normalizePath($data['cover_image_path'] ?? null);
 
-        return $data;
-    }
-
-    public static function resolveCoverInputs(array $data): array
-    {
-        $data['cover_image_url'] = filled($data['cover_image_manual_url'] ?? null)
-            ? trim((string) $data['cover_image_manual_url'])
-            : null;
-
-        unset($data['cover_image_manual_url']);
+        if (MediaUrl::isTemporaryPath($data['cover_image_path'])) {
+            throw ValidationException::withMessages([
+                'cover_image_path' => 'Upload gambar belum tersimpan ke folder final. Upload ulang gambar.',
+            ]);
+        }
 
         return $data;
     }

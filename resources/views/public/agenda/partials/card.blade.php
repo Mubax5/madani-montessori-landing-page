@@ -1,6 +1,6 @@
 @php
     $compact = $compact ?? false;
-    $coverUrl = $agenda->cover_image_url;
+    $coverUrl = $agenda->cover_image_final_url;
     $category = $agenda->category;
     $registerUrl = $agenda->registration_type === 'form'
         ? route('agenda.show', $agenda->slug) . '#agenda-registration'
@@ -14,7 +14,7 @@
         @if ($coverUrl)
             <img src="{{ $coverUrl }}" alt="Cover {{ $agenda->title }}" loading="lazy">
         @else
-            <div class="agenda-image-placeholder">Agenda Madani</div>
+            <x-image-placeholder class="agenda-image-placeholder" label="Agenda Madani" />
         @endif
     </a>
 

@@ -20,6 +20,11 @@ class SiteContent
         return self::settings()->get($key, $default);
     }
 
+    public static function imageUrl(string $key, ?string $fallback = null): ?string
+    {
+        return MediaUrl::resolve(self::setting($key)) ?: $fallback;
+    }
+
     public static function whatsappUrl(string $templateKey = 'konsultasi_umum', array $replacements = []): string
     {
         $phone = preg_replace('/\D+/', '', self::setting('whatsapp_number', '6282123576275'));
@@ -30,9 +35,9 @@ class SiteContent
             ?: 'Assalamualaikum, saya ingin konsultasi pendaftaran Madani Montessori Islamic School.';
 
         foreach ($replacements as $key => $value) {
-            $template = str_replace('{' . $key . '}', (string) $value, $template);
+            $template = str_replace('{'.$key.'}', (string) $value, $template);
         }
 
-        return 'https://wa.me/' . $phone . '?text=' . rawurlencode($template);
+        return 'https://wa.me/'.$phone.'?text='.rawurlencode($template);
     }
 }
