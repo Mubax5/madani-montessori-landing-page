@@ -39,10 +39,10 @@
                 @endphp
                 <article class="agenda-featured">
                     <div class="agenda-featured__media">
-                        @if ($featuredAgenda->cover_image_url)
-                            <img src="{{ $featuredAgenda->cover_image_url }}" alt="Cover {{ $featuredAgenda->title }}">
+                        @if ($featuredAgenda->cover_image_final_url)
+                            <img src="{{ $featuredAgenda->cover_image_final_url }}" alt="Cover {{ $featuredAgenda->title }}">
                         @else
-                            <div class="agenda-image-placeholder">Agenda Pilihan</div>
+                            <x-image-placeholder class="agenda-image-placeholder" label="Agenda Pilihan" />
                         @endif
                     </div>
                     <div class="agenda-featured__body">

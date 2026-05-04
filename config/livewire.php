@@ -8,7 +8,7 @@ $temporaryUploadDisk = env(
 return [
     'temporary_file_upload' => [
         'disk' => $temporaryUploadDisk,
-        'rules' => ['required', 'file', 'max:5120'],
+        'rules' => ['file', 'max:10240'],
         'directory' => env('LIVEWIRE_TEMPORARY_FILE_UPLOAD_DIRECTORY', 'livewire-tmp'),
         'middleware' => 'throttle:60,1',
         'preview_mimes' => ['png', 'jpg', 'jpeg', 'webp'],

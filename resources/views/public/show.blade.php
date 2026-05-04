@@ -2,7 +2,7 @@
 
 @php
     $hero = $sections->get('hero') ?? $sections->get('profile') ?? $sections->get('contact') ?? $sections->get('main') ?? $sections->first();
-    $heroImage = $hero?->image?->url;
+    $heroImage = $hero?->image_final_url;
     $heroAlt = $hero?->image?->alt_text ?: 'Kegiatan Madani Montessori Islamic School';
     $siteName = $settings->get('site_name', 'Madani Montessori Islamic School');
     $siteTagline = $settings->get('site_tagline', 'TK Islam Terpadu berbasis Montessori, Bimbel, dan Agenda.');
@@ -58,7 +58,7 @@
                         @if ($heroImage)
                             <img src="{{ $heroImage }}" alt="{{ $heroAlt }}">
                         @else
-                            <div class="image-placeholder">Foto Kegiatan Sekolah</div>
+                            <x-image-placeholder label="Foto Kegiatan Sekolah" />
                         @endif
                     </div>
                     <div class="hero-floating-card">
@@ -132,7 +132,7 @@
                             @if ($heroImage)
                                 <img src="{{ $heroImage }}" alt="{{ $heroAlt }}">
                             @else
-                                <div class="image-placeholder">Foto Ruang Kelas</div>
+                                <x-image-placeholder label="Foto Ruang Kelas" />
                             @endif
                         </div>
                         <div class="vision-card">

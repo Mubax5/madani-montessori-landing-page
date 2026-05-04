@@ -34,10 +34,10 @@
         <div class="section-shell agenda-detail-layout">
             <article class="agenda-detail-main">
                 <div class="agenda-detail-cover">
-                    @if ($agenda->cover_image_url)
-                        <img src="{{ $agenda->cover_image_url }}" alt="Cover {{ $agenda->title }}">
+                    @if ($agenda->cover_image_final_url)
+                        <img src="{{ $agenda->cover_image_final_url }}" alt="Cover {{ $agenda->title }}">
                     @else
-                        <div class="agenda-image-placeholder">Agenda Madani</div>
+                        <x-image-placeholder class="agenda-image-placeholder" label="Agenda Madani" />
                     @endif
                 </div>
 

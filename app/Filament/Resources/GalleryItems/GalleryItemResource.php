@@ -7,6 +7,7 @@ use App\Filament\Resources\GalleryItems\Pages\ManageGalleryItems;
 use App\Filament\Support\LandingPagePreview;
 use App\Models\GalleryItem;
 use App\Models\MediaAsset;
+use App\Support\MediaUrl;
 use BackedEnum;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
@@ -78,11 +79,10 @@ class GalleryItemResource extends Resource
         return $table
             ->recordTitleAttribute('title')
             ->columns([
-                ImageColumn::make('media.url')
+                ImageColumn::make('image_final_url')
                     ->label('Foto')
-                    ->getStateUsing(fn (GalleryItem $record): ?string => $record->media?->url
-                        ? (str_starts_with($record->media->url, 'http') ? $record->media->url : url($record->media->url))
-                        : null)
+                    ->getStateUsing(fn (GalleryItem $record): ?string => $record->image_final_url)
+                    ->defaultImageUrl(MediaUrl::placeholderDataUri('Galeri'))
                     ->imageSize(52)
                     ->square(),
                 TextColumn::make('title')->label('Judul')->searchable(),

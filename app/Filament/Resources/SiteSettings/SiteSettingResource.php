@@ -4,8 +4,10 @@ namespace App\Filament\Resources\SiteSettings;
 
 use App\Filament\Resources\Concerns\AdminResourceAccess;
 use App\Filament\Resources\SiteSettings\Pages\ManageSiteSettings;
+use App\Filament\Support\ImageUpload;
 use App\Filament\Support\LandingPagePreview;
 use App\Models\SiteSetting;
+use App\Support\MediaUrl;
 use BackedEnum;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
@@ -15,10 +17,12 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
+use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Validation\ValidationException;
 
 class SiteSettingResource extends Resource
 {
@@ -55,8 +59,22 @@ class SiteSettingResource extends Resource
                     'color' => 'Color',
                 ])
                 ->required()
+                ->live()
                 ->default('text'),
-            Textarea::make('setting_value')->label('Value')->rows(5),
+            ImageUpload::make('image_upload', 'settings', 'Upload image')
+                ->visible(fn (Get $get): bool => $get('setting_type') === 'image')
+                ->helperText('Isi salah satu: upload gambar atau gunakan URL gambar. JPG, PNG, WEBP maksimal 10MB.'),
+            TextInput::make('image_url')
+                ->label('Image URL')
+                ->url()
+                ->rules(['nullable', 'url', 'starts_with:http://,https://'])
+                ->maxLength(2048)
+                ->visible(fn (Get $get): bool => $get('setting_type') === 'image')
+                ->helperText('Opsional. Jika diisi, URL ini diprioritaskan dari upload.'),
+            Textarea::make('setting_value')
+                ->label('Value')
+                ->rows(5)
+                ->visible(fn (Get $get): bool => $get('setting_type') !== 'image'),
             LandingPagePreview::formPreview('home'),
         ]);
     }
@@ -72,7 +90,9 @@ class SiteSettingResource extends Resource
             ])
             ->recordActions([
                 LandingPagePreview::action(),
-                EditAction::make(),
+                EditAction::make()
+                    ->mutateRecordDataUsing(fn (array $data): array => static::hydrateImageInputs($data))
+                    ->mutateDataUsing(fn (array $data): array => static::resolveSettingInputs($data)),
                 DeleteAction::make(),
             ])
             ->toolbarActions([
@@ -87,5 +107,46 @@ class SiteSettingResource extends Resource
         return [
             'index' => ManageSiteSettings::route('/'),
         ];
+    }
+
+    public static function hydrateImageInputs(array $data): array
+    {
+        if (($data['setting_type'] ?? null) !== 'image') {
+            return $data;
+        }
+
+        $value = (string) ($data['setting_value'] ?? '');
+
+        if (MediaUrl::isRemoteUrl($value)) {
+            $data['image_url'] = $value;
+        } elseif (filled($value)) {
+            $data['image_upload'] = MediaUrl::normalizePath($value);
+        }
+
+        return $data;
+    }
+
+    public static function resolveSettingInputs(array $data): array
+    {
+        if (($data['setting_type'] ?? null) !== 'image') {
+            unset($data['image_upload'], $data['image_url']);
+
+            return $data;
+        }
+
+        $url = MediaUrl::normalizeManualUrl($data['image_url'] ?? null);
+        $path = MediaUrl::normalizePath($data['image_upload'] ?? null);
+
+        if (MediaUrl::isTemporaryPath($path)) {
+            throw ValidationException::withMessages([
+                'image_upload' => 'Upload gambar belum tersimpan ke folder final. Upload ulang gambar.',
+            ]);
+        }
+
+        $data['setting_value'] = $url ?: $path;
+
+        unset($data['image_upload'], $data['image_url']);
+
+        return $data;
     }
 }

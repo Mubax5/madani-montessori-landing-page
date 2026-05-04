@@ -127,9 +127,9 @@ class DatabaseSeeder extends Seeder
     private function seedMedia(): void
     {
         foreach ([
-            ['hero-classroom.png', '/images/generated/hero-classroom.png', 'Kegiatan belajar Montessori Islami di kelas Madani'],
-            ['about-classroom.png', '/images/generated/about-classroom.png', 'Ruang kelas Montessori yang hangat dan rapi'],
-            ['cta-family.png', '/images/generated/cta-family.png', 'Ilustrasi keluarga berkonsultasi dengan sekolah'],
+            ['hero-classroom.png', 'images/generated/hero-classroom.png', 'Kegiatan belajar Montessori Islami di kelas Madani'],
+            ['about-classroom.png', 'images/generated/about-classroom.png', 'Ruang kelas Montessori yang hangat dan rapi'],
+            ['cta-family.png', 'images/generated/cta-family.png', 'Ilustrasi keluarga berkonsultasi dengan sekolah'],
         ] as [$file, $path, $alt]) {
             MediaAsset::updateOrCreate(['file_path' => $path], [
                 'file_name' => $file,
@@ -167,8 +167,8 @@ class DatabaseSeeder extends Seeder
 
     private function seedSections(Page $page): void
     {
-        $heroImage = MediaAsset::where('file_path', '/images/generated/hero-classroom.png')->first();
-        $aboutImage = MediaAsset::where('file_path', '/images/generated/about-classroom.png')->first();
+        $heroImage = MediaAsset::where('file_path', 'images/generated/hero-classroom.png')->first();
+        $aboutImage = MediaAsset::where('file_path', 'images/generated/about-classroom.png')->first();
 
         $content = [
             'home' => [
@@ -346,7 +346,7 @@ class DatabaseSeeder extends Seeder
                 'agenda_category_id' => $categories[$categorySlug] ?? null,
                 'title' => $title,
                 'excerpt' => $excerpt,
-                'description' => '<p>' . e($excerpt) . '</p><p>Rundown, manfaat kegiatan, target peserta, kuota, dan informasi pendaftaran akan disampaikan sesuai jadwal agenda.</p>',
+                'description' => '<p>'.e($excerpt).'</p><p>Rundown, manfaat kegiatan, target peserta, kuota, dan informasi pendaftaran akan disampaikan sesuai jadwal agenda.</p>',
                 'location_name' => $location,
                 'location_address' => $location,
                 'start_at' => $startAt,
@@ -371,9 +371,9 @@ class DatabaseSeeder extends Seeder
     private function seedGallery(): void
     {
         $media = MediaAsset::whereIn('file_path', [
-            '/images/generated/hero-classroom.png',
-            '/images/generated/about-classroom.png',
-            '/images/generated/cta-family.png',
+            'images/generated/hero-classroom.png',
+            'images/generated/about-classroom.png',
+            'images/generated/cta-family.png',
         ])->get();
 
         foreach ($media as $index => $asset) {
