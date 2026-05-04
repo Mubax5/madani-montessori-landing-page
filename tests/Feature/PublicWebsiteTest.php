@@ -5,7 +5,7 @@ namespace Tests\Feature;
 use App\Models\AdminUser;
 use App\Models\Agenda;
 use App\Models\AgendaCategory;
-use App\Models\Lead;
+use App\Models\MediaAsset;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -104,6 +104,22 @@ class PublicWebsiteTest extends TestCase
             ->assertOk()
             ->assertSee('https://example.com/cover-agenda.webp', false)
             ->assertDontSee('agendas/uploaded-cover.webp', false);
+    }
+
+    public function test_gallery_page_shows_uploaded_media_without_gallery_item(): void
+    {
+        MediaAsset::query()->create([
+            'file_name' => 'uploaded-gallery.webp',
+            'file_path' => 'https://example.com/uploaded-gallery.webp',
+            'mime_type' => 'image/webp',
+            'alt_text' => 'Foto Upload Galeri',
+            'caption' => 'Media library upload',
+        ]);
+
+        $this->get(route('galeri'))
+            ->assertOk()
+            ->assertSee('Foto Upload Galeri', false)
+            ->assertSee('https://example.com/uploaded-gallery.webp', false);
     }
 
     public function test_public_pages_do_not_show_internal_terms(): void
