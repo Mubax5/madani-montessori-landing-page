@@ -7,6 +7,7 @@ use App\Models\Agenda;
 use App\Models\AgendaCategory;
 use App\Models\MediaAsset;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class PublicWebsiteTest extends TestCase
@@ -120,6 +121,41 @@ class PublicWebsiteTest extends TestCase
             ->assertOk()
             ->assertSee('Foto Upload Galeri', false)
             ->assertSee('https://example.com/uploaded-gallery.webp', false);
+    }
+
+    public function test_admin_media_library_renders_bucket_media_urls(): void
+    {
+        MediaAsset::query()->create([
+            'file_name' => 'bucket-gallery.webp',
+            'file_path' => null,
+            'file_url' => 'https://cdn.example.com/bucket-gallery.webp',
+            'mime_type' => 'image/webp',
+            'alt_text' => 'Bucket Gallery',
+            'caption' => 'Uploaded to bucket',
+        ]);
+
+        $admin = AdminUser::query()->where('email', 'admin@madanimontessori.sch.id')->firstOrFail();
+
+        $this->actingAs($admin, 'admin')
+            ->get('/admin/media-assets')
+            ->assertOk()
+            ->assertSee('Bucket Gallery', false);
+    }
+
+    public function test_admin_avatar_uses_uploaded_path_for_filament_profile(): void
+    {
+        Storage::fake('public');
+        config(['filesystems.uploads_disk' => 'public']);
+
+        Storage::disk('public')->put('avatars/admin.webp', 'avatar-bytes');
+
+        $admin = AdminUser::query()->where('email', 'admin@madanimontessori.sch.id')->firstOrFail();
+        $admin->forceFill([
+            'avatar_path' => 'avatars/admin.webp',
+            'avatar_url' => null,
+        ])->save();
+
+        $this->assertSame(Storage::disk('public')->url('avatars/admin.webp'), $admin->fresh()->getFilamentAvatarUrl());
     }
 
     public function test_public_pages_do_not_show_internal_terms(): void

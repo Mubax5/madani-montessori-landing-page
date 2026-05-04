@@ -322,7 +322,8 @@
     min-width: 0;
 }
 
-.madani-media-option img {
+.madani-media-option img,
+.madani-media-placeholder {
     width: 2.25rem;
     height: 2.25rem;
     flex: 0 0 2.25rem;
@@ -330,6 +331,14 @@
     border-radius: .7rem;
     border: 1px solid rgba(10, 31, 92, 0.1);
     background: #ffffff;
+}
+
+.madani-media-placeholder {
+    display: inline-block;
+    background:
+        radial-gradient(circle at 30% 25%, rgba(245, 197, 66, .28), transparent 1.5rem),
+        linear-gradient(135deg, rgba(10, 31, 92, .14), rgba(245, 197, 66, .12)),
+        #f8fbff;
 }
 
 .madani-media-option span {
@@ -365,7 +374,8 @@
     box-shadow: 0 10px 24px rgba(10, 31, 92, 0.05);
 }
 
-.madani-media-thumb img {
+.madani-media-thumb img,
+.madani-media-placeholder--large {
     width: 4.5rem;
     height: 4.5rem;
     flex: 0 0 4.5rem;

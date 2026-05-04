@@ -7,6 +7,7 @@ use App\Filament\Resources\PageSections\Pages\ManagePageSections;
 use App\Filament\Support\LandingPagePreview;
 use App\Models\MediaAsset;
 use App\Models\PageSection;
+use App\Support\MediaUrl;
 use BackedEnum;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
@@ -105,11 +106,10 @@ class PageSectionResource extends Resource
         return $table
             ->recordTitleAttribute('section_name')
             ->columns([
-                ImageColumn::make('image.url')
+                ImageColumn::make('image_final_url')
                     ->label('Gambar')
-                    ->getStateUsing(fn (PageSection $record): ?string => $record->image?->url
-                        ? (str_starts_with($record->image->url, 'http') ? $record->image->url : url($record->image->url))
-                        : null)
+                    ->getStateUsing(fn (PageSection $record): ?string => $record->image_final_url)
+                    ->defaultImageUrl(MediaUrl::placeholderDataUri('Section'))
                     ->imageSize(48)
                     ->square(),
                 TextColumn::make('page.title')->label('Halaman')->sortable()->searchable(),

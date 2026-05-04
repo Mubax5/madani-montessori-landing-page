@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ $page->meta_title ?: $page->title }}</title>
     <meta name="description" content="{{ $page->meta_description }}">
-    <link rel="icon" type="image/png" href="{{ asset('images/favicon-madani.png') }}">
+    <link rel="icon" type="image/png" href="{{ \App\Support\SiteContent::imageUrl('site_favicon', asset('images/favicon-madani.png')) }}">
     <link rel="apple-touch-icon" href="{{ asset('apple-touch-icon.png') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,6 +14,7 @@
 </head>
 <body class="public-body">
     @php
+        $logoUrl = \App\Support\SiteContent::imageUrl('site_logo', asset('images/logo-madani-montessori.png'));
         $instagramHandle = filled($settings->get('instagram_handle')) ? $settings->get('instagram_handle') : '@madanimontessori';
         $instagramUrl = filled($settings->get('instagram_url')) ? $settings->get('instagram_url') : 'https://www.instagram.com/madanimontessori';
         $footerWhatsappNumber = preg_replace('/\D+/', '', $settings->get('whatsapp_number', '6282123576275')) ?: '6282123576275';
@@ -26,7 +27,7 @@
     <header class="site-header">
         <div class="site-header__inner">
             <a href="{{ route('home') }}" class="brand-lockup" aria-label="{{ $settings->get('site_name', 'Madani Montessori Islamic School') }}">
-                <img src="{{ asset('images/logo-madani-montessori.png') }}" alt="Logo {{ $settings->get('site_name', 'Madani Montessori Islamic School') }}" class="logo-badge">
+                <img src="{{ $logoUrl }}" alt="Logo {{ $settings->get('site_name', 'Madani Montessori Islamic School') }}" class="logo-badge">
                 <span class="brand-copy">
                     <span class="brand-copy__name">Madani Montessori</span>
                     <span class="brand-copy__descriptor">Islamic School</span>
@@ -62,7 +63,7 @@
         <div class="site-footer__inner">
             <div class="footer-brand">
                 <div class="footer-brand__top">
-                    <img src="{{ asset('images/logo-madani-montessori.png') }}" alt="Logo {{ $settings->get('site_name', 'Madani Montessori Islamic School') }}" class="logo-badge logo-badge--footer">
+                    <img src="{{ $logoUrl }}" alt="Logo {{ $settings->get('site_name', 'Madani Montessori Islamic School') }}" class="logo-badge logo-badge--footer">
                     <div>
                         <strong>{{ $settings->get('site_name', 'Madani Montessori Islamic School') }}</strong>
                         <span>TK Islam Terpadu berbasis Montessori</span>

@@ -2,15 +2,19 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasFileUrls;
+use App\Support\MediaUrl;
 use Filament\Models\Contracts\FilamentUser;
+use Filament\Models\Contracts\HasAvatar;
 use Filament\Panel;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class AdminUser extends Authenticatable implements FilamentUser
+class AdminUser extends Authenticatable implements FilamentUser, HasAvatar
 {
-    use Notifiable;
+    use HasFileUrls, Notifiable;
 
     protected $table = 'admin_users';
 
@@ -22,6 +26,7 @@ class AdminUser extends Authenticatable implements FilamentUser
         'email',
         'password_hash',
         'avatar_path',
+        'avatar_url',
         'is_active',
         'last_login_at',
     ];
@@ -47,6 +52,11 @@ class AdminUser extends Authenticatable implements FilamentUser
     public function canAccessPanel(Panel $panel): bool
     {
         return $panel->getId() === 'admin' && $this->is_active;
+    }
+
+    public function getFilamentAvatarUrl(): ?string
+    {
+        return $this->avatar_final_url;
     }
 
     public function hasRole(string $slug): bool
@@ -82,5 +92,29 @@ class AdminUser extends Authenticatable implements FilamentUser
     public function canManageSettings(): bool
     {
         return $this->hasAnyRole(['super_admin', 'admin_konten']);
+    }
+
+    protected function avatarFinalUrl(): Attribute
+    {
+        return Attribute::get(fn (): ?string => $this->resolveFileUrl(
+            path: $this->avatar_path,
+            manualUrl: $this->avatar_url,
+        ));
+    }
+
+    protected static function booted(): void
+    {
+        static::saving(function (AdminUser $user): void {
+            $user->avatar_url = MediaUrl::normalizeManualUrl($user->avatar_url);
+
+            if (MediaUrl::isRemoteUrl($user->avatar_path)) {
+                $user->avatar_url ??= $user->avatar_path;
+                $user->avatar_path = null;
+            } else {
+                $user->avatar_path = MediaUrl::isTemporaryPath($user->avatar_path)
+                    ? null
+                    : MediaUrl::normalizePath($user->avatar_path);
+            }
+        });
     }
 }

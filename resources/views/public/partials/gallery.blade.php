@@ -19,13 +19,13 @@
         <div class="gallery-grid" data-gallery-grid>
             @forelse ($galleryItems as $item)
                 <figure class="gallery-card" data-category="{{ $item->category }}">
-                    @if ($item->media)
-                        <img src="{{ $item->media->url }}" alt="{{ $item->media->alt_text ?: $item->title }}">
-                        <button type="button" class="gallery-lightbox-trigger" data-lightbox-src="{{ $item->media->url }}" data-lightbox-title="{{ $item->title }}">
+                    @if ($item->image_final_url)
+                        <img src="{{ $item->image_final_url }}" alt="{{ $item->media?->alt_text ?: $item->title }}">
+                        <button type="button" class="gallery-lightbox-trigger" data-lightbox-src="{{ $item->image_final_url }}" data-lightbox-title="{{ $item->title }}">
                             <span class="sr-only">Buka foto {{ $item->title }}</span>
                         </button>
                     @else
-                        <div class="image-placeholder">Foto Kegiatan</div>
+                        <x-image-placeholder label="Foto Kegiatan" />
                     @endif
                     <figcaption>
                         <strong>{{ $item->title }}</strong>
@@ -35,7 +35,7 @@
             @empty
                 @foreach (['Sekolah', 'Bimbel', 'Event'] as $placeholder)
                     <figure class="gallery-card" data-category="{{ strtolower($placeholder) }}">
-                        <div class="image-placeholder">{{ $placeholder }}</div>
+                        <x-image-placeholder :label="$placeholder" />
                         <figcaption>
                             <strong>{{ $placeholder }}</strong>
                             <span>Kegiatan</span>
