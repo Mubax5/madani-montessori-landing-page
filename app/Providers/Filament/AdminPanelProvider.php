@@ -2,6 +2,12 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Pages\AdminLogin;
+use App\Filament\Pages\AdminProfile;
+use App\Http\Middleware\EnsureAdminIpIsAllowed;
+use App\Http\Middleware\EnsureProductionAdminMfaIsEnabled;
+use App\Http\Middleware\SecurityHeaders;
+use Filament\Auth\MultiFactor\App\AppAuthentication;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -26,14 +32,22 @@ class AdminPanelProvider extends PanelProvider
         return $panel
             ->default()
             ->id('admin')
-            ->path('admin')
+            ->path(config('security.admin_panel_path', 'admin'))
             ->viteTheme('resources/css/filament/admin/theme.css')
-            ->login()
+            ->login(AdminLogin::class)
+            ->profile(AdminProfile::class)
             ->authGuard('admin')
+            ->multiFactorAuthentication(
+                AppAuthentication::make()
+                    ->brandName('Madani CMS')
+                    ->recoverable()
+                    ->codeWindow(1),
+                isRequired: fn (): bool => app()->isProduction() || config('app.env') === 'production',
+            )
             ->homeUrl(fn (): string => route('home'))
             ->brandName('Madani CMS')
             ->brandLogo(fn (): HtmlString => new HtmlString(
-                '<div class="madani-admin-brand"><img src="' . asset('images/logo-madani-montessori.png') . '" alt="Logo Madani Montessori Islamic School"><span><strong>Madani CMS</strong><small>Montessori Islamic School</small></span></div>'
+                '<div class="madani-admin-brand"><img src="'.asset('images/logo-madani-montessori.png').'" alt="Logo Madani Montessori Islamic School"><span><strong>Madani CMS</strong><small>Montessori Islamic School</small></span></div>'
             ))
             ->brandLogoHeight('3.75rem')
             ->favicon(asset('images/favicon-madani.png'))
@@ -54,6 +68,7 @@ class AdminPanelProvider extends PanelProvider
                 AccountWidget::class,
             ])
             ->middleware([
+                EnsureAdminIpIsAllowed::class,
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
                 StartSession::class,
@@ -63,9 +78,11 @@ class AdminPanelProvider extends PanelProvider
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
+                SecurityHeaders::class,
             ])
             ->authMiddleware([
                 Authenticate::class,
+                EnsureProductionAdminMfaIsEnabled::class,
             ]);
     }
 }

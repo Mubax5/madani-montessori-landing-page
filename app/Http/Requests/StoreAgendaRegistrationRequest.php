@@ -13,6 +13,11 @@ class StoreAgendaRegistrationRequest extends FormRequest
 
     public function rules(): array
     {
+        return self::agendaRegistrationRules();
+    }
+
+    public static function agendaRegistrationRules(): array
+    {
         return [
             'parent_name' => ['required', 'string', 'min:3', 'max:150'],
             'child_name' => ['nullable', 'string', 'max:150'],

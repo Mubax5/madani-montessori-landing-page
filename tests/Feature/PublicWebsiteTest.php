@@ -94,7 +94,7 @@ class PublicWebsiteTest extends TestCase
             'slug' => 'open-house-cover-url',
             'excerpt' => 'Agenda dengan gambar URL.',
             'cover_image_path' => 'agendas/uploaded-cover.webp',
-            'cover_image_url' => 'https://example.com/cover-agenda.webp',
+            'cover_image_url' => 'https://madanimontessori.online/cover-agenda.webp',
             'start_at' => now()->addDays(12),
             'registration_type' => 'whatsapp',
             'status' => 'published',
@@ -103,7 +103,7 @@ class PublicWebsiteTest extends TestCase
 
         $this->get(route('agenda.show', $agenda->slug))
             ->assertOk()
-            ->assertSee('https://example.com/cover-agenda.webp', false)
+            ->assertSee('https://madanimontessori.online/cover-agenda.webp', false)
             ->assertDontSee('agendas/uploaded-cover.webp', false);
     }
 
@@ -111,7 +111,7 @@ class PublicWebsiteTest extends TestCase
     {
         MediaAsset::query()->create([
             'file_name' => 'uploaded-gallery.webp',
-            'file_path' => 'https://example.com/uploaded-gallery.webp',
+            'file_path' => 'https://madanimontessori.online/uploaded-gallery.webp',
             'mime_type' => 'image/webp',
             'alt_text' => 'Foto Upload Galeri',
             'caption' => 'Media library upload',
@@ -120,7 +120,7 @@ class PublicWebsiteTest extends TestCase
         $this->get(route('galeri'))
             ->assertOk()
             ->assertSee('Foto Upload Galeri', false)
-            ->assertSee('https://example.com/uploaded-gallery.webp', false);
+            ->assertSee('https://madanimontessori.online/uploaded-gallery.webp', false);
     }
 
     public function test_admin_media_library_renders_bucket_media_urls(): void
@@ -128,7 +128,7 @@ class PublicWebsiteTest extends TestCase
         MediaAsset::query()->create([
             'file_name' => 'bucket-gallery.webp',
             'file_path' => null,
-            'file_url' => 'https://cdn.example.com/bucket-gallery.webp',
+            'file_url' => 'https://madanimontessori.online/bucket-gallery.webp',
             'mime_type' => 'image/webp',
             'alt_text' => 'Bucket Gallery',
             'caption' => 'Uploaded to bucket',

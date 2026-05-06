@@ -7,6 +7,8 @@ use App\Filament\Resources\SiteSettings\Pages\ManageSiteSettings;
 use App\Filament\Support\ImageUpload;
 use App\Filament\Support\LandingPagePreview;
 use App\Models\SiteSetting;
+use App\Rules\AllowedExternalUrl;
+use App\Rules\InternalOrAllowedExternalUrl;
 use App\Support\MediaUrl;
 use BackedEnum;
 use Filament\Actions\BulkActionGroup;
@@ -67,13 +69,14 @@ class SiteSettingResource extends Resource
             TextInput::make('image_url')
                 ->label('Image URL')
                 ->url()
-                ->rules(['nullable', 'url', 'starts_with:http://,https://'])
+                ->rules(['nullable', new AllowedExternalUrl])
                 ->maxLength(2048)
                 ->visible(fn (Get $get): bool => $get('setting_type') === 'image')
                 ->helperText('Opsional. Jika diisi, URL ini diprioritaskan dari upload.'),
             Textarea::make('setting_value')
                 ->label('Value')
                 ->rows(5)
+                ->rules(fn (Get $get): array => $get('setting_type') === 'url' ? ['nullable', new InternalOrAllowedExternalUrl] : [])
                 ->visible(fn (Get $get): bool => $get('setting_type') !== 'image'),
             LandingPagePreview::formPreview('home'),
         ]);

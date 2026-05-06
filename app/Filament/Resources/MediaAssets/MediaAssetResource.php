@@ -7,6 +7,7 @@ use App\Filament\Resources\MediaAssets\Pages\ManageMediaAssets;
 use App\Filament\Support\ImageUpload;
 use App\Filament\Support\LandingPagePreview;
 use App\Models\MediaAsset;
+use App\Rules\AllowedExternalUrl;
 use App\Support\MediaUrl;
 use BackedEnum;
 use Filament\Actions\BulkActionGroup;
@@ -49,7 +50,7 @@ class MediaAssetResource extends Resource
             TextInput::make('file_url')
                 ->label('URL gambar')
                 ->url()
-                ->rules(['nullable', 'url', 'starts_with:http://,https://'])
+                ->rules(['nullable', new AllowedExternalUrl])
                 ->maxLength(2048)
                 ->helperText('Opsional. Jika diisi, URL ini akan dipakai dan mengabaikan upload file.'),
             TextInput::make('alt_text')

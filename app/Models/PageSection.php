@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Concerns\HasFileUrls;
+use App\Support\Security\ExternalUrl;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -42,6 +43,13 @@ class PageSection extends Model
     public function image(): BelongsTo
     {
         return $this->belongsTo(MediaAsset::class, 'image_id');
+    }
+
+    protected static function booted(): void
+    {
+        static::saving(function (PageSection $section): void {
+            $section->cta_url = ExternalUrl::normalizeInternalOrAllowed($section->cta_url);
+        });
     }
 
     protected function imageFinalUrl(): Attribute

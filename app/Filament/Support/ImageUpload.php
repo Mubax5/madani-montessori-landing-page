@@ -21,7 +21,7 @@ class ImageUpload
             ->visibility('public')
             ->image()
             ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
-            ->rules(['image', 'mimetypes:image/jpeg,image/png,image/webp'])
+            ->rules(['image', 'mimetypes:image/jpeg,image/png,image/webp', 'dimensions:max_width=4096,max_height=4096'])
             ->maxSize(10240)
             ->storeFiles()
             ->saveUploadedFileUsing(fn (BaseFileUpload $component, TemporaryUploadedFile $file): ?string => self::storeFinalFile($component, $file))

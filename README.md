@@ -227,14 +227,16 @@ Copy file `.env.example` menjadi `.env`.
 cp .env.example .env
 ```
 
-Lalu sesuaikan konfigurasi database dan password admin awal:
+Lalu sesuaikan konfigurasi database dan password admin awal. Jangan pakai password contoh atau password pendek.
 
 ```env
 APP_NAME="Madani Montessori Islamic School"
 APP_ENV=local
-APP_DEBUG=true
+APP_DEBUG=false
 APP_URL=http://localhost:8000
-ADMIN_INITIAL_PASSWORD=admin123
+ADMIN_INITIAL_PASSWORD=
+ADMIN_PANEL_PATH=admin
+ADMIN_ALLOWED_IPS=
 
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
@@ -287,21 +289,33 @@ http://localhost:8000
 Admin CMS dapat dibuka di:
 
 ```txt
-http://localhost:8000/admin
+http://localhost:8000/{ADMIN_PANEL_PATH}
 ```
 
 ---
 
-## Akun Admin Default
+## Akun Admin Awal
 
-> Sesuaikan dengan data seeder project.
+Seeder hanya membuat admin awal kalau tabel `admin_users` masih kosong.
 
 ```txt
 Email    : admin@madanimontessori.sch.id
-Password : nilai `ADMIN_INITIAL_PASSWORD` saat seed pertama, default lokal `admin123`
+Password : nilai `ADMIN_INITIAL_PASSWORD` saat seed pertama
 ```
 
-Seeder tidak akan menimpa password admin yang sudah ada. Untuk production, set `ADMIN_INITIAL_PASSWORD` ke password kuat sebelum seed pertama, lalu segera ubah password setelah login pertama.
+Tidak ada default password. Di production, `ADMIN_INITIAL_PASSWORD` wajib diisi password unik minimal 16 karakter sebelum seed pertama. Setelah admin pertama dibuat, hapus nilai env tersebut atau rotate ke secret baru.
+
+Rotasi password admin:
+
+```bash
+php artisan admin:rotate-password admin@madanimontessori.sch.id
+```
+
+Atau set password kuat eksplisit dari secret manager:
+
+```bash
+php artisan admin:rotate-password admin@madanimontessori.sch.id --password="PASSWORD_KUAT_DARI_SECRET_MANAGER"
+```
 
 ---
 
@@ -319,7 +333,11 @@ Pastikan konfigurasi `.env` production sudah disesuaikan:
 APP_ENV=production
 APP_DEBUG=false
 APP_URL=https://domain-website.com
-ADMIN_INITIAL_PASSWORD=password-kuat
+ADMIN_INITIAL_PASSWORD=
+ADMIN_PANEL_PATH=madani-cms
+SESSION_SECURE_COOKIE=true
+SESSION_ENCRYPT=true
+LOG_LEVEL=warning
 ```
 
 Lalu jalankan:
@@ -365,8 +383,12 @@ Environment variable minimal untuk Laravel Cloud:
 APP_ENV=production
 APP_DEBUG=false
 APP_URL=https://domain-laravel-cloud.laravel.cloud
-ADMIN_INITIAL_PASSWORD=password-super-kuat
+ADMIN_INITIAL_PASSWORD=
+ADMIN_PANEL_PATH=madani-cms
+ADMIN_ALLOWED_IPS=
 SESSION_DRIVER=database
+SESSION_SECURE_COOKIE=true
+SESSION_ENCRYPT=true
 CACHE_STORE=database
 QUEUE_CONNECTION=database
 FILESYSTEM_DISK=public
@@ -390,6 +412,60 @@ LIVEWIRE_TEMPORARY_FILE_UPLOAD_DISK=s3
 ```
 
 Jangan commit `.env` dan jangan menaruh secret key di kode.
+
+---
+
+## Security Hardening Production
+
+Admin CMS memakai Filament dengan MFA TOTP authenticator app dan recovery codes. Di production, admin yang belum mengaktifkan MFA akan diarahkan ke setup MFA dan tidak bisa mengakses resource lain sampai selesai.
+
+Environment penting:
+
+```env
+APP_ENV=production
+APP_DEBUG=false
+APP_URL=https://madanimontessori.online
+APP_KEY=base64:ISI_DARI_KEY_GENERATE
+LOG_LEVEL=warning
+ADMIN_INITIAL_PASSWORD=
+ADMIN_PANEL_PATH=madani-cms
+ADMIN_ALLOWED_IPS=
+SESSION_SECURE_COOKIE=true
+SESSION_HTTP_ONLY=true
+SESSION_SAME_SITE=lax
+SESSION_ENCRYPT=true
+SECURITY_ALLOWED_EXTERNAL_HOSTS=madanimontessori.online,www.madanimontessori.online,wa.me,forms.gle,docs.google.com,www.google.com,instagram.com,www.instagram.com
+```
+
+Untuk first deploy production:
+
+```bash
+php artisan key:generate --force
+php artisan migrate --force
+ADMIN_INITIAL_PASSWORD="PASSWORD_UNIK_MINIMAL_16_CHAR" php artisan db:seed --force
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+```
+
+Tugas manual setelah first deploy:
+
+- Rotate password admin production dan simpan di password manager.
+- Enable 2FA untuk semua admin, simpan recovery codes offline.
+- Kosongkan `ADMIN_INITIAL_PASSWORD` setelah admin pertama dibuat.
+- Pasang proteksi layer depan untuk `ADMIN_PANEL_PATH`, misalnya Cloudflare Access, Basic Auth, VPN, atau IP allowlist web server.
+- Isi `ADMIN_ALLOWED_IPS` jika ingin allowlist di aplikasi. Format koma, mendukung CIDR, contoh `203.0.113.10,198.51.100.0/24`.
+- Tambahkan host CDN/object storage ke `SECURITY_ALLOWED_EXTERNAL_HOSTS` kalau CMS perlu memakai URL gambar dari host tersebut.
+
+Contoh Nginx proteksi file sensitif:
+
+```nginx
+location ~ /\.(?!well-known).* { deny all; }
+location ~* /(composer\.(json|lock)|package(-lock)?\.json|phpunit\.xml)$ { deny all; }
+location ^~ /storage/logs/ { deny all; }
+```
+
+Audit log mencatat login admin, gagal login, logout, perubahan admin user, role, password, status aktif, dan 2FA. Audit tidak menyimpan password, hash, token, secret TOTP, recovery codes, atau session token. Retensi audit disarankan 180-365 hari sesuai kebutuhan operasional.
 
 ---
 
@@ -474,12 +550,19 @@ Sebelum deploy, pastikan:
 
 - [ ] `.env` production sudah benar
 - [ ] `APP_DEBUG=false`
+- [ ] `APP_ENV=production`
+- [ ] `LOG_LEVEL=warning`
+- [ ] `APP_KEY` valid dan tidak berubah setelah production berjalan
+- [ ] `SESSION_SECURE_COOKIE=true`
+- [ ] `SESSION_ENCRYPT=true`
 - [ ] Database sudah dibuat
 - [ ] Migration sudah dijalankan
 - [ ] Seed data awal sudah dijalankan sekali
 - [ ] Asset sudah di-build dengan `npm run build`
 - [ ] Folder `storage` dan `bootstrap/cache` writable untuk hosting non-Cloud
-- [ ] Admin default sudah diganti password
+- [ ] Password admin production sudah dirotasi
+- [ ] MFA semua admin sudah aktif
+- [ ] Admin path dilindungi Cloudflare Access, Basic Auth, VPN, atau IP allowlist
 - [ ] Upload CMS production memakai object storage jika deploy ke Laravel Cloud
 - [ ] Domain dan SSL sudah aktif
 

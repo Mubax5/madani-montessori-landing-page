@@ -2,6 +2,7 @@
 
 namespace App\Support;
 
+use App\Support\Security\ExternalUrl;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -62,6 +63,10 @@ class MediaUrl
             return null;
         }
 
+        if (ExternalUrl::looksLikeExternalUrl($path) && ! self::isRemoteUrl($path)) {
+            return null;
+        }
+
         if (self::isRemoteUrl($path)) {
             return $path;
         }
@@ -77,8 +82,7 @@ class MediaUrl
     {
         $value = is_string($value) ? trim($value) : '';
 
-        return Str::startsWith($value, ['http://', 'https://'])
-            && filter_var($value, FILTER_VALIDATE_URL) !== false;
+        return ExternalUrl::isAllowed($value);
     }
 
     public static function isTemporaryPath(?string $path): bool

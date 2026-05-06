@@ -2,9 +2,9 @@
 
 namespace App\Observers;
 
-use App\Models\AuditLog;
+use App\Models\AdminUser;
+use App\Support\AuditLogger;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Auth;
 
 class AuditObserver
 {
@@ -16,6 +16,45 @@ class AuditObserver
     public function updated(Model $model): void
     {
         $this->write('updated', $model, $model->getOriginal(), $model->getChanges());
+
+        if (! $model instanceof AdminUser) {
+            return;
+        }
+
+        if ($model->wasChanged('password_hash')) {
+            $this->write('password_changed', $model, null, ['email' => $model->email]);
+        }
+
+        if ($model->wasChanged('role_id')) {
+            $this->write('role_changed', $model, [
+                'role_id' => $model->getOriginal('role_id'),
+            ], [
+                'role_id' => $model->role_id,
+            ]);
+        }
+
+        if ($model->wasChanged('is_active')) {
+            $this->write($model->is_active ? 'reactivated' : 'deactivated', $model, [
+                'is_active' => $model->getOriginal('is_active'),
+            ], [
+                'is_active' => $model->is_active,
+            ]);
+        }
+
+        if ($model->wasChanged('app_authentication_secret')) {
+            $oldEnabled = filled($model->getOriginal('app_authentication_secret'));
+            $newEnabled = filled($model->app_authentication_secret);
+
+            $this->write(match (true) {
+                ! $oldEnabled && $newEnabled => '2fa_enabled',
+                $oldEnabled && ! $newEnabled => '2fa_disabled',
+                default => '2fa_secret_rotated',
+            }, $model, null, ['email' => $model->email]);
+        }
+
+        if ($model->wasChanged('app_authentication_recovery_codes') && ! $model->wasChanged('app_authentication_secret')) {
+            $this->write('2fa_recovery_regenerated', $model, null, ['email' => $model->email]);
+        }
     }
 
     public function deleted(Model $model): void
@@ -25,22 +64,10 @@ class AuditObserver
 
     private function write(string $action, Model $model, ?array $oldData, ?array $newData): void
     {
-        $admin = Auth::guard('admin')->user();
-
-        if (! $admin) {
+        if (! auth()->guard('admin')->check()) {
             return;
         }
 
-        AuditLog::create([
-            'admin_user_id' => $admin->id,
-            'action' => $action,
-            'module' => $model->getTable(),
-            'record_id' => $model->getKey(),
-            'old_data' => $oldData,
-            'new_data' => $newData,
-            'ip_address' => request()->ip(),
-            'user_agent' => substr((string) request()->userAgent(), 0, 2000),
-            'created_at' => now(),
-        ]);
+        AuditLogger::write($action, $model->getTable(), $model->getKey(), $oldData, $newData);
     }
 }

@@ -7,6 +7,8 @@ use App\Models\Agenda;
 use App\Models\AgendaCategory;
 use App\Models\NavigationItem;
 use App\Models\Page;
+use App\Support\PhoneNumber;
+use App\Support\PublicFormAbuseGuard;
 use App\Support\SiteContent;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -114,18 +116,27 @@ class AgendaController extends Controller
         ]);
     }
 
-    public function storeRegistration(StoreAgendaRegistrationRequest $request, Agenda $agenda): RedirectResponse
+    public function storeRegistration(Request $request, Agenda $agenda): RedirectResponse
     {
+        if (PublicFormAbuseGuard::hasHoneypotValue($request)) {
+            return back()->with('success', 'Terima kasih, pendaftaran agenda sudah kami terima.');
+        }
+
         if ($agenda->registration_type !== 'form' || ! $agenda->isRegistrationOpen()) {
             return back()->withErrors([
                 'agenda_registration' => 'Pendaftaran agenda ini sedang tidak dibuka.',
             ]);
         }
 
-        $agenda->registrations()->create($request->validated() + [
+        $data = $request->validate(StoreAgendaRegistrationRequest::agendaRegistrationRules(), (new StoreAgendaRegistrationRequest)->messages());
+        $normalizedPhone = PhoneNumber::normalizeIndonesianWhatsapp($data['whatsapp_number']);
+        PublicFormAbuseGuard::ensureAgendaRegistrationAllowed($request, (string) $normalizedPhone);
+
+        $agenda->registrations()->create($data + [
             'status' => 'new',
             'source' => 'public_agenda',
         ]);
+        PublicFormAbuseGuard::hit($request, 'agenda', (string) $normalizedPhone);
 
         return back()->with('success', 'Terima kasih, pendaftaran agenda sudah kami terima.');
     }

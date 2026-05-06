@@ -7,6 +7,7 @@ use App\Filament\Resources\Concerns\AdminResourceAccess;
 use App\Filament\Support\ImageUpload;
 use App\Filament\Support\LandingPagePreview;
 use App\Models\Agenda;
+use App\Rules\AllowedExternalUrl;
 use App\Support\MediaUrl;
 use BackedEnum;
 use Filament\Actions\BulkAction;
@@ -92,7 +93,7 @@ class AgendaResource extends Resource
                     TextInput::make('cover_image_url')
                         ->label('Cover Image URL')
                         ->url()
-                        ->rules(['nullable', 'url', 'starts_with:http://,https://'])
+                        ->rules(['nullable', new AllowedExternalUrl])
                         ->maxLength(2048)
                         ->helperText('Opsional. Jika diisi, URL ini akan dipakai sebagai cover publik.'),
                 ])
@@ -102,7 +103,7 @@ class AgendaResource extends Resource
             TextInput::make('maps_url')
                 ->label('Maps URL')
                 ->url()
-                ->rules(['nullable', 'url', 'starts_with:http://,https://'])
+                ->rules(['nullable', new AllowedExternalUrl])
                 ->maxLength(2048)
                 ->helperText('Masukkan link Google Maps langsung agar tombol Buka Lokasi mengarah ke lokasi yang tepat.'),
             DateTimePicker::make('start_at')->label('Mulai'),
@@ -125,7 +126,7 @@ class AgendaResource extends Resource
             TextInput::make('registration_url')
                 ->label('URL pendaftaran')
                 ->url()
-                ->rules(['nullable', 'url', 'starts_with:http://,https://'])
+                ->rules(['nullable', new AllowedExternalUrl])
                 ->required(fn (Get $get): bool => $get('registration_type') === 'external_url')
                 ->maxLength(2048),
             Textarea::make('whatsapp_template')->label('Template WhatsApp')->rows(3),

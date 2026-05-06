@@ -1,0 +1,34 @@
+<?php
+
+namespace App\Http\Middleware;
+
+use Closure;
+use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
+
+class SecurityHeaders
+{
+    public function handle(Request $request, Closure $next): Response
+    {
+        /** @var Response $response */
+        $response = $next($request);
+
+        if (! $response->isSuccessful() && ! $response->isRedirection()) {
+            return $response;
+        }
+
+        $headers = $response->headers;
+
+        $headers->set('X-Content-Type-Options', 'nosniff');
+        $headers->set('X-Frame-Options', 'SAMEORIGIN');
+        $headers->set('Referrer-Policy', 'strict-origin-when-cross-origin');
+        $headers->set('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
+        $headers->set('Content-Security-Policy', (string) config('security.headers.csp'));
+
+        if ($request->isSecure()) {
+            $headers->set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+        }
+
+        return $response;
+    }
+}

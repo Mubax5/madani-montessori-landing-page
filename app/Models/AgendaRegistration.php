@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Support\PhoneNumber;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -13,6 +14,7 @@ class AgendaRegistration extends Model
         'child_name',
         'child_age',
         'whatsapp_number',
+        'whatsapp_normalized',
         'email',
         'participant_count',
         'note',
@@ -23,5 +25,12 @@ class AgendaRegistration extends Model
     public function agenda(): BelongsTo
     {
         return $this->belongsTo(Agenda::class);
+    }
+
+    protected static function booted(): void
+    {
+        static::saving(function (AgendaRegistration $registration): void {
+            $registration->whatsapp_normalized = PhoneNumber::normalizeIndonesianWhatsapp($registration->whatsapp_number);
+        });
     }
 }

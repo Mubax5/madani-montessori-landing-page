@@ -91,6 +91,11 @@
                 @if ($isFormRegistration && $agenda->isRegistrationOpen())
                     <form action="{{ route('agenda.registrations.store', $agenda->slug) }}" method="POST" class="agenda-registration-form">
                         @csrf
+                        <div class="honeypot-field" aria-hidden="true">
+                            <label>Website
+                                <input type="text" name="{{ \App\Support\PublicFormAbuseGuard::honeypotField() }}" tabindex="-1" autocomplete="off">
+                            </label>
+                        </div>
                         <label>
                             <span>Nama orang tua</span>
                             <input type="text" name="parent_name" value="{{ old('parent_name') }}" required>

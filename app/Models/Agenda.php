@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Concerns\HasFileUrls;
 use App\Support\MediaUrl;
+use App\Support\Security\ExternalUrl;
 use App\Support\SiteContent;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
@@ -214,6 +215,8 @@ class Agenda extends Model
     {
         static::saving(function (Agenda $agenda): void {
             $agenda->cover_image_url = MediaUrl::normalizeManualUrl($agenda->cover_image_url);
+            $agenda->maps_url = ExternalUrl::normalizeAllowed($agenda->maps_url);
+            $agenda->registration_url = ExternalUrl::normalizeAllowed($agenda->registration_url);
 
             if (MediaUrl::isRemoteUrl($agenda->cover_image_path)) {
                 $agenda->cover_image_url ??= $agenda->cover_image_path;

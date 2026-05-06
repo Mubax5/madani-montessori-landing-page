@@ -33,7 +33,7 @@ class HtmlSanitizer
         $document = new DOMDocument;
         $previous = libxml_use_internal_errors(true);
         $document->loadHTML(
-            '<?xml encoding="UTF-8"><!DOCTYPE html><html><body>' . $html . '</body></html>',
+            '<?xml encoding="UTF-8"><!DOCTYPE html><html><body>'.$html.'</body></html>',
             LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD,
         );
         libxml_clear_errors();
@@ -99,7 +99,7 @@ class HtmlSanitizer
         $node->setAttribute('href', $href);
         $node->setAttribute('rel', 'noopener noreferrer');
 
-        if (str_starts_with($href, 'http://') || str_starts_with($href, 'https://')) {
+        if (str_starts_with($href, 'https://')) {
             $node->setAttribute('target', '_blank');
         }
     }
@@ -108,7 +108,6 @@ class HtmlSanitizer
     {
         return str_starts_with($url, '/')
             || str_starts_with($url, '#')
-            || str_starts_with($url, 'http://')
             || str_starts_with($url, 'https://')
             || str_starts_with($url, 'mailto:')
             || str_starts_with($url, 'tel:');

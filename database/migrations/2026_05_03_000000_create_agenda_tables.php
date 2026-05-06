@@ -118,7 +118,7 @@ return new class extends Migration
                 : 'parenting-class';
 
             [$startAt, $endAt] = $this->dateTimesFromTrainingEvent($event);
-            $slug = $this->uniqueAgendaSlug(Str::slug((string) $event->title) ?: 'agenda-training-' . $event->id);
+            $slug = $this->uniqueAgendaSlug(Str::slug((string) $event->title) ?: 'agenda-training-'.$event->id);
             $status = in_array($event->status, ['draft', 'published', 'closed'], true) ? $event->status : 'draft';
 
             DB::table('agendas')->insert([
@@ -182,8 +182,8 @@ return new class extends Migration
         $end = $matches[0][1] ?? null;
 
         return [
-            Carbon::parse($date->toDateString() . ' ' . $start),
-            $end ? Carbon::parse($date->toDateString() . ' ' . $end) : null,
+            Carbon::parse($date->toDateString().' '.$start),
+            $end ? Carbon::parse($date->toDateString().' '.$end) : null,
         ];
     }
 
@@ -193,7 +193,7 @@ return new class extends Migration
         $suffix = 2;
 
         while (DB::table('agendas')->where('slug', $slug)->exists()) {
-            $slug = $base . '-' . $suffix++;
+            $slug = $base.'-'.$suffix++;
         }
 
         return $slug;

@@ -4,6 +4,10 @@ namespace App\Models;
 
 use App\Models\Concerns\HasFileUrls;
 use App\Support\MediaUrl;
+use Filament\Auth\MultiFactor\App\Concerns\InteractsWithAppAuthentication;
+use Filament\Auth\MultiFactor\App\Concerns\InteractsWithAppAuthenticationRecovery;
+use Filament\Auth\MultiFactor\App\Contracts\HasAppAuthentication;
+use Filament\Auth\MultiFactor\App\Contracts\HasAppAuthenticationRecovery;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasAvatar;
 use Filament\Panel;
@@ -12,9 +16,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class AdminUser extends Authenticatable implements FilamentUser, HasAvatar
+class AdminUser extends Authenticatable implements FilamentUser, HasAppAuthentication, HasAppAuthenticationRecovery, HasAvatar
 {
-    use HasFileUrls, Notifiable;
+    use HasFileUrls, InteractsWithAppAuthentication, InteractsWithAppAuthenticationRecovery, Notifiable;
 
     protected $table = 'admin_users';
 
@@ -29,11 +33,14 @@ class AdminUser extends Authenticatable implements FilamentUser, HasAvatar
         'avatar_url',
         'is_active',
         'last_login_at',
+        'password_changed_at',
     ];
 
     protected $hidden = [
         'password_hash',
         'remember_token',
+        'app_authentication_secret',
+        'app_authentication_recovery_codes',
     ];
 
     protected function casts(): array
@@ -41,6 +48,7 @@ class AdminUser extends Authenticatable implements FilamentUser, HasAvatar
         return [
             'is_active' => 'boolean',
             'last_login_at' => 'datetime',
+            'password_changed_at' => 'datetime',
         ];
     }
 
@@ -52,6 +60,11 @@ class AdminUser extends Authenticatable implements FilamentUser, HasAvatar
     public function canAccessPanel(Panel $panel): bool
     {
         return $panel->getId() === 'admin' && $this->is_active;
+    }
+
+    public function hasEnabledMfa(): bool
+    {
+        return filled($this->getAppAuthenticationSecret());
     }
 
     public function getFilamentAvatarUrl(): ?string
@@ -114,6 +127,10 @@ class AdminUser extends Authenticatable implements FilamentUser, HasAvatar
                 $user->avatar_path = MediaUrl::isTemporaryPath($user->avatar_path)
                     ? null
                     : MediaUrl::normalizePath($user->avatar_path);
+            }
+
+            if ($user->isDirty('password_hash')) {
+                $user->password_changed_at = now();
             }
         });
     }

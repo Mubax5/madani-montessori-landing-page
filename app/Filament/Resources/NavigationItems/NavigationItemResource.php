@@ -6,6 +6,7 @@ use App\Filament\Resources\Concerns\AdminResourceAccess;
 use App\Filament\Resources\NavigationItems\Pages\ManageNavigationItems;
 use App\Filament\Support\LandingPagePreview;
 use App\Models\NavigationItem;
+use App\Rules\InternalOrAllowedExternalUrl;
 use BackedEnum;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
@@ -48,7 +49,7 @@ class NavigationItemResource extends Resource
                 ->searchable()
                 ->preload(),
             TextInput::make('label')->label('Label')->required()->maxLength(120),
-            TextInput::make('url')->label('URL')->required()->maxLength(255),
+            TextInput::make('url')->label('URL')->required()->rules(['required', new InternalOrAllowedExternalUrl])->maxLength(255),
             Select::make('location')
                 ->label('Lokasi')
                 ->options([

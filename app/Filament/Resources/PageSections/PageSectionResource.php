@@ -7,6 +7,7 @@ use App\Filament\Resources\PageSections\Pages\ManagePageSections;
 use App\Filament\Support\LandingPagePreview;
 use App\Models\MediaAsset;
 use App\Models\PageSection;
+use App\Rules\InternalOrAllowedExternalUrl;
 use App\Support\MediaUrl;
 use BackedEnum;
 use Filament\Actions\BulkActionGroup;
@@ -89,6 +90,7 @@ class PageSectionResource extends Resource
                 ->maxLength(120),
             TextInput::make('cta_url')
                 ->label('CTA URL')
+                ->rules(['nullable', new InternalOrAllowedExternalUrl])
                 ->maxLength(255),
             TextInput::make('sort_order')
                 ->label('Urutan')

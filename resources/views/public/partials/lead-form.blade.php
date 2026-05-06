@@ -1,6 +1,11 @@
 <form action="{{ route('leads.store') }}" method="POST" class="lead-form">
     @csrf
     <input type="hidden" name="source_page" value="{{ $page->slug }}">
+    <div class="honeypot-field" aria-hidden="true">
+        <label>Website
+            <input type="text" name="{{ \App\Support\PublicFormAbuseGuard::honeypotField() }}" tabindex="-1" autocomplete="off">
+        </label>
+    </div>
 
     <div>
         <div class="section-kicker">Pendaftaran</div>

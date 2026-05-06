@@ -18,8 +18,11 @@ use App\Models\Program;
 use App\Models\Role;
 use App\Models\SiteSetting;
 use App\Models\WhatsappTemplate;
+use App\Support\Security\AdminPassword;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
+use RuntimeException;
 
 class DatabaseSeeder extends Seeder
 {
@@ -41,21 +44,15 @@ class DatabaseSeeder extends Seeder
             ])
             ->delete();
 
-        $admin = AdminUser::firstOrNew([
-            'email' => 'admin@madanimontessori.sch.id',
-        ]);
-
-        $admin->fill([
-            'role_id' => $roles['super_admin']->id,
-            'name' => 'Admin Madani',
-            'is_active' => true,
-        ]);
-
-        if (! $admin->exists) {
-            $admin->password_hash = Hash::make((string) env('ADMIN_INITIAL_PASSWORD', 'admin123'));
+        if (AdminUser::query()->doesntExist()) {
+            AdminUser::create([
+                'email' => 'admin@madanimontessori.sch.id',
+                'role_id' => $roles['super_admin']->id,
+                'name' => 'Admin Madani',
+                'is_active' => true,
+                'password_hash' => Hash::make($this->initialAdminPassword()),
+            ]);
         }
-
-        $admin->save();
 
         $this->seedSettings();
         $this->seedNavigation();
@@ -68,6 +65,27 @@ class DatabaseSeeder extends Seeder
         $this->seedGallery();
         $this->seedFaqs();
         $this->seedWhatsappTemplates();
+    }
+
+    private function initialAdminPassword(): string
+    {
+        $password = env('ADMIN_INITIAL_PASSWORD');
+
+        if (filled($password)) {
+            AdminPassword::assertValid((string) $password);
+
+            return (string) $password;
+        }
+
+        if (app()->isProduction()) {
+            throw new RuntimeException('ADMIN_INITIAL_PASSWORD must be set to a strong unique password before seeding the first production admin.');
+        }
+
+        $password = Str::password(32);
+
+        $this->command?->warn('Generated random initial admin password for non-production seed. Set ADMIN_INITIAL_PASSWORD explicitly if you need to log in.');
+
+        return $password;
     }
 
     private function seedSettings(): void

@@ -33,7 +33,7 @@ class LandingPagePreview
             ->label('Preview')
             ->icon(Heroicon::OutlinedEye)
             ->color('gray')
-            ->modalHeading(fn (Model $record): string => 'Preview Landing Page: ' . static::title($record, $fallbackSlug))
+            ->modalHeading(fn (Model $record): string => 'Preview Landing Page: '.static::title($record, $fallbackSlug))
             ->modalDescription('Preview ini menampilkan halaman publik asli dengan ukuran desktop, tablet, dan mobile.')
             ->modalWidth('7xl')
             ->modalSubmitAction(false)
@@ -109,7 +109,7 @@ class LandingPagePreview
             $record instanceof Program => 'program-sekolah',
             $record instanceof FeaturedProgram => 'program-unggulan',
             $record instanceof BimbelPackage, $record instanceof BimbelPackageItem => 'bimbel',
-            $record instanceof Agenda => 'agenda/' . $record->slug,
+            $record instanceof Agenda => 'agenda/'.$record->slug,
             $record instanceof AgendaCategory, $record instanceof AgendaRegistration => 'agenda',
             $record instanceof GalleryItem, $record instanceof MediaAsset => 'galeri',
             $record instanceof Faq => $record->page_scope,

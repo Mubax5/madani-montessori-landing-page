@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Support\Security\ExternalUrl;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -30,5 +31,12 @@ class NavigationItem extends Model
     public function children(): HasMany
     {
         return $this->hasMany(NavigationItem::class, 'parent_id')->orderBy('sort_order');
+    }
+
+    protected static function booted(): void
+    {
+        static::saving(function (NavigationItem $item): void {
+            $item->url = ExternalUrl::normalizeInternalOrAllowed($item->url);
+        });
     }
 }

@@ -6,7 +6,9 @@ use App\Filament\Resources\AdminUsers\Pages\ManageAdminUsers;
 use App\Filament\Resources\Concerns\AdminResourceAccess;
 use App\Filament\Support\ImageUpload;
 use App\Models\AdminUser;
+use App\Rules\AllowedExternalUrl;
 use App\Support\MediaUrl;
+use App\Support\Security\AdminPassword;
 use BackedEnum;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
@@ -63,19 +65,32 @@ class AdminUserResource extends Resource
                 ->required()
                 ->unique(ignoreRecord: true)
                 ->maxLength(150),
-            TextInput::make('password_hash')
+            TextInput::make('password')
                 ->label('Password')
                 ->password()
                 ->revealable()
                 ->required(fn (?AdminUser $record): bool => $record === null)
+                ->rules(AdminPassword::rules())
+                ->maxLength(72)
+                ->autocomplete('new-password')
                 ->dehydrateStateUsing(fn (?string $state): ?string => filled($state) ? Hash::make($state) : null)
                 ->dehydrated(fn (?string $state): bool => filled($state)),
+            TextInput::make('password_confirmation')
+                ->label('Konfirmasi password')
+                ->password()
+                ->revealable()
+                ->required(fn (?AdminUser $record): bool => $record === null)
+                ->same('password')
+                ->maxLength(72)
+                ->autocomplete('new-password')
+                ->dehydrated(false)
+                ->visible(fn (?AdminUser $record, $get): bool => $record === null || filled($get('password'))),
             ImageUpload::make('avatar_path', 'avatars', 'Upload avatar')
                 ->helperText('File yang didukung jpeg, png, webp. Max 10MB'),
             TextInput::make('avatar_url')
                 ->label('Avatar URL')
                 ->url()
-                ->rules(['nullable', 'url', 'starts_with:http://,https://'])
+                ->rules(['nullable', new AllowedExternalUrl])
                 ->maxLength(2048)
                 ->helperText('Opsional. Jika diisi, URL ini akan dipakai dan mengabaikan upload avatar.'),
             Toggle::make('is_active')
@@ -122,6 +137,12 @@ class AdminUserResource extends Resource
 
     public static function resolveAvatarInputs(array $data): array
     {
+        if (filled($data['password'] ?? null)) {
+            $data['password_hash'] = $data['password'];
+        }
+
+        unset($data['password'], $data['password_confirmation']);
+
         $data['avatar_url'] = MediaUrl::normalizeManualUrl($data['avatar_url'] ?? null);
         $data['avatar_path'] = MediaUrl::normalizePath($data['avatar_path'] ?? null);
 

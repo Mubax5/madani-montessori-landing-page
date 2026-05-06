@@ -76,6 +76,14 @@
         outline: 3px solid rgba(245, 197, 66, 0.95);
         outline-offset: 4px;
     }
+
+    .honeypot-field {
+        position: absolute;
+        left: -10000px;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+    }
 }
 
 @layer components {
