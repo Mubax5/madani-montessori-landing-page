@@ -36,7 +36,7 @@ return [
     ],
 
     'madani_nidham' => [
-        'api_url' => env('MADANI_NIDHAM_API_URL', 'http://localhost:8000/api/v1'),
+        'api_url' => env('MADANI_NIDHAM_API_URL', 'https://api.madanimontessori.online/api/v1'),
     ],
 
 ];
