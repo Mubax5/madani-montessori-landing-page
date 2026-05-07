@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AgendaController;
 use App\Http\Controllers\LeadController;
+use App\Http\Controllers\PpdbController;
 use App\Http\Controllers\PublicPageController;
 use Illuminate\Support\Facades\Route;
 
@@ -10,6 +11,9 @@ Route::get('/tentang', fn (PublicPageController $controller) => $controller->sho
 Route::get('/program-sekolah', fn (PublicPageController $controller) => $controller->show('program-sekolah'))->name('program-sekolah');
 Route::get('/program-unggulan', fn (PublicPageController $controller) => $controller->show('program-unggulan'))->name('program-unggulan');
 Route::get('/bimbel', fn (PublicPageController $controller) => $controller->show('bimbel'))->name('bimbel');
+Route::get('/ppdb', [PpdbController::class, 'index'])->name('ppdb.index');
+Route::get('/ppdb/daftar', [PpdbController::class, 'create'])->name('ppdb.daftar');
+Route::get('/ppdb/cek-status', [PpdbController::class, 'check'])->name('ppdb.cek-status');
 Route::get('/agenda', [AgendaController::class, 'index'])->name('agenda.index');
 Route::get('/agenda/{slug}', [AgendaController::class, 'show'])->name('agenda.show');
 Route::post('/agenda/{agenda:slug}/registrations', [AgendaController::class, 'storeRegistration'])

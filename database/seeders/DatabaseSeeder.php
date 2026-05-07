@@ -119,9 +119,10 @@ class DatabaseSeeder extends Seeder
             ['Program Sekolah', '/program-sekolah', 3],
             ['Program Unggulan', '/program-unggulan', 4],
             ['Bimbel', '/bimbel', 5],
-            ['Agenda', '/agenda', 6],
-            ['Galeri', '/galeri', 7],
-            ['Kontak', '/kontak', 8],
+            ['PPDB', '/ppdb', 6],
+            ['Agenda', '/agenda', 7],
+            ['Galeri', '/galeri', 8],
+            ['Kontak', '/kontak', 9],
         ] as [$label, $url, $order]) {
             NavigationItem::updateOrCreate(['url' => $url, 'location' => 'header'], [
                 'label' => $label,

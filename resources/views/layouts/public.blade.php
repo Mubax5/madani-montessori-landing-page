@@ -49,6 +49,9 @@
                     @endphp
                     <a href="{{ $item->url }}" @class(['is-active' => $isActive])>{{ $item->label }}</a>
                 @endforeach
+                @if (\Illuminate\Support\Facades\Route::has('ppdb.daftar'))
+                    <a href="{{ route('ppdb.daftar') }}" class="nav-cta">Daftar PPDB Online</a>
+                @endif
                 <a href="{{ $whatsappUrl }}" class="nav-cta">WhatsApp</a>
             </nav>
         </div>

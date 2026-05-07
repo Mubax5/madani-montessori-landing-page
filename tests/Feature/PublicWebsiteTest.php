@@ -24,7 +24,7 @@ class PublicWebsiteTest extends TestCase
 
     public function test_public_pages_render_seeded_content(): void
     {
-        foreach (['/', '/tentang', '/program-sekolah', '/program-unggulan', '/bimbel', '/agenda', '/galeri', '/kontak'] as $path) {
+        foreach (['/', '/tentang', '/program-sekolah', '/program-unggulan', '/bimbel', '/ppdb', '/agenda', '/galeri', '/kontak'] as $path) {
             $this->get($path)
                 ->assertOk()
                 ->assertSee('Madani Montessori', false);
@@ -33,6 +33,28 @@ class PublicWebsiteTest extends TestCase
         $this->get('/training-parenting')
             ->assertMovedPermanently()
             ->assertRedirect('/agenda');
+    }
+
+    public function test_ppdb_pages_render_with_api_integration_hooks(): void
+    {
+        config(['services.madani_nidham.api_url' => 'https://api.example.test/api/v1']);
+
+        $this->get(route('ppdb.index'))
+            ->assertOk()
+            ->assertSee('Daftar PPDB Online', false)
+            ->assertSee(route('ppdb.daftar'), false);
+
+        $this->get(route('ppdb.daftar'))
+            ->assertOk()
+            ->assertSee('id="ppdb-form"', false)
+            ->assertSee('https://api.example.test/api/v1', false)
+            ->assertSee('name="childName"', false)
+            ->assertSee('name="documents[]"', false);
+
+        $this->get(route('ppdb.cek-status'))
+            ->assertOk()
+            ->assertSee('id="ppdb-check-form"', false)
+            ->assertSee('registrations/check', false);
     }
 
     public function test_agenda_detail_and_registration_form_work(): void
