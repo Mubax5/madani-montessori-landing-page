@@ -1,0 +1,13 @@
+---
+import { Image } from 'astro:assets';
+import type { GalleryPhoto } from '../content/school';
+
+interface Props {
+  photo: GalleryPhoto;
+}
+const { photo } = Astro.props;
+---
+<figure class="gallery-figure">
+  <Image src={photo.image} alt={photo.alt} widths={[480, 800, 1120]} sizes="(min-width: 64rem) 55vw, 100vw" format="webp" />
+  <figcaption>{photo.caption}</figcaption>
+</figure>

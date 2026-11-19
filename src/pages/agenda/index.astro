@@ -1,0 +1,23 @@
+---
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import InnerMasthead from '../../components/InnerMasthead.astro';
+import { activities } from '../../content/school';
+---
+<SiteLayout title="Kegiatan" description="Arsip kegiatan dan dokumentasi Madani Montessori.">
+  <InnerMasthead title="Kegiatan" intro="Arsip kegiatan sekolah dan catatan dari dokumentasi Madani Montessori." />
+  <section class="section inner-section">
+    <div class="wrap editorial-grid">
+      <h2>Arsip kegiatan</h2>
+      <div class="archive">
+        {activities.length ? activities.map((activity) => (
+          <article class="featured-story">
+            <p class="text-note">{activity.period}</p>
+            <h3><a href={'/agenda/' + activity.slug + '/'}>{activity.title}</a></h3>
+            <p>{activity.description}</p>
+            <a class="text-link" href={'/agenda/' + activity.slug + '/'}>Baca catatan kegiatan</a>
+          </article>
+        )) : <p>Dokumentasi kegiatan belum tersedia.</p>}
+      </div>
+    </div>
+  </section>
+</SiteLayout>

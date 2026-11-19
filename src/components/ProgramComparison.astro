@@ -1,0 +1,32 @@
+---
+import { schoolPrograms } from '../content/school';
+
+interface Props { compact?: boolean }
+const { compact = false } = Astro.props;
+---
+{compact ? (
+  <div class="program-disclosures">
+    {schoolPrograms.map((program) => (
+      <details name="program-beranda">
+        <summary>
+          <span class="program-title">{program.name}</span>
+          <span class="program-hours">{program.hours} WIB</span>
+        </summary>
+        <p>{program.summary}</p>
+      </details>
+    ))}
+  </div>
+) : (
+  <>
+    <dl class="comparison">
+      {schoolPrograms.map((program) => (
+        <div class="comparison-row">
+          <dt>{program.name}</dt>
+          <dd class="program-hours">{program.hours} WIB</dd>
+          <dd class="program-summary">{program.summary}</dd>
+        </div>
+      ))}
+    </dl>
+    <p class="text-note">Jam di atas mengikuti informasi yang dipublikasikan sekolah. Konfirmasi jadwal dan ketersediaan kepada admin.</p>
+  </>
+)}

@@ -1,0 +1,33 @@
+---
+import { Image } from 'astro:assets';
+import logo from '../assets/logo-madani.png';
+import { navigation, school, whatsappLink } from '../content/school';
+import SectionEdge from './SectionEdge.astro';
+import OrnamentTexture from './OrnamentTexture.astro';
+---
+<footer class="site-footer">
+  <SectionEdge />
+  <OrnamentTexture class="footer-texture" />
+  <div class="wrap footer-grid">
+    <div>
+      <a class="brand footer-brand" href="/">
+        <Image src={logo} width={56} height={56} alt="" loading="eager" />
+        <span>{school.name}</span>
+      </a>
+      <p class="footer-location">{school.location}</p>
+    </div>
+    <nav aria-label="Navigasi footer">
+      <ul class="footer-links">
+        {navigation.map((item) => <li><a href={item.href}>{item.label}</a></li>)}
+      </ul>
+    </nav>
+    <div class="footer-contact">
+      <a href={whatsappLink('contact')}>WhatsApp admin</a>
+      <a href={'mailto:' + school.email}>{school.email}</a>
+    </div>
+  </div>
+  <div class="wrap footer-bottom">
+    <small>© {new Date().getFullYear()} {school.name}</small>
+    <a href="/kebijakan-privasi/">Kebijakan Privasi</a>
+  </div>
+</footer>

@@ -1,0 +1,41 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+import InnerMasthead from '../components/InnerMasthead.astro';
+import { whatsappLink } from '../content/school';
+---
+<SiteLayout title="PPDB" description="Konsultasikan penerimaan peserta didik baru dan tanyakan jadwal kunjungan Madani Montessori.">
+  <InnerMasthead title="Penerimaan Peserta Didik Baru" intro="Konsultasi dan kunjungan untuk keluarga yang ingin mengenal Madani Montessori." />
+  <section class="section inner-section">
+    <div class="wrap editorial-grid">
+      <div>
+        <h2>Konsultasi dengan admin</h2>
+        <p>Tanyakan program yang sesuai, jadwal penerimaan, dan syarat pendaftaran. Admin dapat membantu menjelaskan langkah berikutnya.</p>
+        <a class="button" href={whatsappLink('admissions')}>Konsultasi PPDB via WhatsApp</a>
+      </div>
+      <div class="inset-panel">
+        <h3>Jadwalkan kunjungan</h3>
+        <p>Hubungi admin untuk menyepakati hari, waktu, dan lokasi sebelum datang ke sekolah.</p>
+        <a class="text-link" href={whatsappLink('visit')}>Tanya jadwal kunjungan</a>
+      </div>
+    </div>
+  </section>
+  <section class="section section--follow-up">
+    <div class="wrap narrow">
+      <h2>Pertanyaan seputar PPDB</h2>
+      <div class="faq-list">
+        <details>
+          <summary>Bagaimana cara mulai mendaftar?</summary>
+          <p>Hubungi admin untuk mengetahui jadwal, syarat, dan langkah pendaftaran yang berlaku.</p>
+        </details>
+        <details>
+          <summary>Apa bedanya Reguler, Half Day, dan Full Day?</summary>
+          <p>Ketiganya punya durasi dan susunan kegiatan berbeda. <a href="/program/">Lihat perbandingan program</a> sebelum berkonsultasi dengan admin.</p>
+        </details>
+        <details>
+          <summary>Bisakah orang tua berkunjung dulu?</summary>
+          <p>Orang tua dapat <a href={whatsappLink('visit')}>menanyakan jadwal kunjungan</a> kepada admin dan memastikan waktu serta titik temu sebelum datang.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+</SiteLayout>

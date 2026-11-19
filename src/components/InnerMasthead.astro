@@ -1,0 +1,26 @@
+---
+import OrnamentRule from './OrnamentRule.astro';
+import OrnamentTexture from './OrnamentTexture.astro';
+
+interface Props {
+  title: string;
+  intro?: string;
+  parent?: { href: string; label: string };
+}
+
+const { title, intro, parent } = Astro.props;
+---
+<div class="inner-masthead">
+  <OrnamentTexture class="masthead-texture" drift={12} />
+  <div class="wrap inner-masthead-content">
+    {parent && (
+      <nav aria-label="Jejak halaman" class="breadcrumb">
+        <a href={parent.href}>{parent.label}</a> <span aria-hidden="true">/</span>
+        <span aria-current="page">{title}</span>
+      </nav>
+    )}
+    <h1>{title}</h1>
+    {intro && <p class="lede">{intro}</p>}
+    <OrnamentRule />
+  </div>
+</div>

@@ -1,0 +1,20 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+import InnerMasthead from '../components/InnerMasthead.astro';
+import PracticalExample from '../components/PracticalExample.astro';
+---
+<SiteLayout title="Metode Montessori" description="Lihat cara anak belajar melalui satu contoh Montessori Practical Life di Madani.">
+  <InnerMasthead title="Metode Montessori" intro="Cara Madani memperkenalkan kegiatan sehari-hari melalui pengalaman langsung." parent={{ href: '/profil/', label: 'Profil' }} />
+  <section class="section inner-section">
+    <div class="wrap editorial-grid">
+      <div>
+        <h2>Cara anak belajar</h2>
+        <p>Practical Life mengajak anak berlatih melakukan pekerjaan sehari-hari. Situs sekolah mencantumkan menuang, menyusun, memilah, dan merapikan sebagai contoh kegiatan.</p>
+        <h3>Adab dalam keseharian</h3>
+        <p>Madani juga memperkenalkan kebiasaan seperti salam, doa, menunggu giliran, dan menghargai teman.</p>
+        <a class="text-link" href="/program/program-unggulan/">Jelajahi Program Unggulan</a>
+      </div>
+      <PracticalExample />
+    </div>
+  </section>
+</SiteLayout>

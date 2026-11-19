@@ -1,0 +1,19 @@
+---
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import InnerMasthead from '../../components/InnerMasthead.astro';
+import { featuredPrograms } from '../../content/school';
+---
+<SiteLayout title="Program Unggulan" description="Kenali Practical Life, pembiasaan adab, dan pengenalan tahsin di Madani.">
+  <InnerMasthead title="Program Unggulan" parent={{ href: '/program/', label: 'Program' }} />
+  <section class="section inner-section">
+    <div class="wrap narrow">
+      {featuredPrograms.map((program) => (
+        <article class="reading-item">
+          <h2>{program.title}</h2>
+          <p>{program.description}</p>
+        </article>
+      ))}
+      <a class="text-link" href="/metode-montessori/">Lihat contoh kegiatan Practical Life</a>
+    </div>
+  </section>
+</SiteLayout>

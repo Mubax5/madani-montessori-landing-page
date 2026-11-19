@@ -1,0 +1,42 @@
+---
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import '@fontsource/baskervville/latin-400.css';
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
+const pageTitle = title ? title + ' · Madani Montessori' : 'Madani Montessori';
+const indexable = import.meta.env.PUBLIC_INDEXABLE === 'true'
+  && Astro.response.status !== 404
+  && Astro.url.pathname !== '/404.html';
+---
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#fbf3e9" />
+    {indexable && Astro.site
+      ? <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site).href} />
+      : <meta name="robots" content="noindex, nofollow" />}
+    <title>{pageTitle}</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#konten">Lewati ke konten</a>
+    <Header />
+    <main id="konten" tabindex="-1">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>
+
+<script>
+  import '../scripts/scroll-motion';
+</script>

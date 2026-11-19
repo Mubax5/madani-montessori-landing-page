@@ -1,0 +1,22 @@
+---
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import InnerMasthead from '../../components/InnerMasthead.astro';
+import { school } from '../../content/school';
+---
+<SiteLayout title="Profil Sekolah" description="Kenali Madani Montessori dan pendekatan Montessori Islami.">
+  <InnerMasthead title="Mengenal Madani Montessori" intro="Profil sekolah dan pendekatan belajar di Madani Montessori." />
+  <section class="section inner-section">
+    <div class="wrap editorial-grid">
+      <div>
+        <h2>Profil Sekolah</h2>
+        <p>{school.publishedName} berada di wilayah {school.location}. Anak belajar melalui alat yang bisa mereka pegang dan kegiatan yang bisa mereka kerjakan sendiri, dengan guru yang mendampingi saat diperlukan.</p>
+        <p>Salam, doa, dan menghargai teman dipraktikkan dalam keseharian. Komunikasi dengan orang tua membantu menghubungkan kebiasaan di sekolah dengan yang dijalani anak di rumah.</p>
+      </div>
+      <ul class="detail-links">
+        <li><a href="/profil/visi-misi/">Visi &amp; Misi</a></li>
+        <li><a href="/metode-montessori/">Metode Montessori</a></li>
+        <li><a href="/program/">Program Sekolah</a></li>
+      </ul>
+    </div>
+  </section>
+</SiteLayout>

@@ -1,0 +1,12 @@
+---
+import texture from '../assets/girih-texture.webp';
+
+interface Props { class?: string; drift?: number }
+const { class: className, drift } = Astro.props;
+---
+<div
+  class:list={['ornament-texture', className]}
+  style={{ '--ornament-image': 'url("' + texture.src + '")' }}
+  data-parallax={drift}
+  aria-hidden="true"
+></div>

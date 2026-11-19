@@ -1,0 +1,24 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+import InnerMasthead from '../components/InnerMasthead.astro';
+import { school, whatsappLink } from '../content/school';
+---
+<SiteLayout title="Kontak" description="Hubungi admin Madani Montessori di Cisauk, Kabupaten Tangerang.">
+  <InnerMasthead title="Kontak" intro="Hubungi admin Madani Montessori untuk informasi sekolah, PPDB, dan kunjungan." />
+  <section class="section inner-section">
+    <div class="wrap editorial-grid">
+      <div>
+        <h2>Hubungi sekolah</h2>
+        <dl class="contact-details">
+          <div><dt>WhatsApp</dt><dd><a href={whatsappLink('contact')}>{school.displayPhone}</a></dd></div>
+          <div><dt>Email</dt><dd><a href={'mailto:' + school.email}>{school.email}</a></dd></div>
+        </dl>
+      </div>
+      <div class="inset-panel">
+        <h3>Lokasi dan kunjungan</h3>
+        <p>{school.location}. Mintalah alamat lengkap dan pin lokasi ke admin sebelum berangkat.</p>
+        <a class="text-link" href={whatsappLink('visit')}>Atur kunjungan dengan admin</a>
+      </div>
+    </div>
+  </section>
+</SiteLayout>
