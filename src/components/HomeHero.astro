@@ -1,32 +1,28 @@
 ---
 import { Image } from 'astro:assets';
-import classroomReference from '../assets/montessori-room-reference.jpg';
+import learningIllustration from '../assets/hero-learning.webp';
 import { schoolMedia } from '../content/school';
 import OrnamentRule from './OrnamentRule.astro';
 import OrnamentTexture from './OrnamentTexture.astro';
 
 const photo = schoolMedia.hero;
-const reference = !photo && import.meta.env.PUBLIC_INDEXABLE !== 'true';
-const heroImage = photo?.image ?? (reference ? classroomReference : undefined);
+const heroImage = photo?.image ?? learningIllustration;
 ---
-<section class:list={['home-hero', { 'home-hero--photo': heroImage }]} aria-labelledby="home-title">
-  {heroImage && (
-    <>
-      <Image
-        src={heroImage}
-        class="hero-photo"
-        style={photo?.position ? { objectPosition: photo.position } : undefined}
-        data-parallax="23"
-        alt=""
-        widths={[480, 800, 1280, 1600]}
-        sizes="100vw"
-        format="webp"
-        loading="eager"
-        fetchpriority="high"
-      />
-      <div class="hero-veil" aria-hidden="true"></div>
-    </>
-  )}
+<section class="home-hero" aria-labelledby="home-title">
+  <div class="hero-figure" aria-hidden="true">
+    <Image
+      src={heroImage}
+      class="hero-photo"
+      style={photo?.position ? { objectPosition: photo.position } : undefined}
+      data-parallax="14"
+      alt=""
+      widths={[520, 900, 1400, 1700]}
+      sizes="100vw"
+      format="webp"
+      loading="eager"
+      fetchpriority="high"
+    />
+  </div>
   <OrnamentTexture class="hero-texture" drift={12} />
   <div class="hero-title-block">
     <div class="hero-frame" aria-hidden="true">
@@ -45,12 +41,6 @@ const heroImage = photo?.image ?? (reference ? classroomReference : undefined);
     <h1 id="home-title"><span>Madani</span> <span>Montessori</span></h1>
     <OrnamentRule />
   </div>
-  {reference && (
-    <p class="hero-credit">
-      Foto referensi ruang Montessori · <a href="https://commons.wikimedia.org/wiki/File:Montessori.jpg">Franciane Heiden Rios</a>
-      · <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>
-    </p>
-  )}
   <svg class="hero-divider" viewBox="0 0 1536 53" preserveAspectRatio="none" fill="none" aria-hidden="true">
     <path d="M0 5H175C215 5 232 11 260 27C286 42 309 50 341 50H1197C1230 50 1253 42 1279 27C1307 11 1324 5 1364 5H1536V53H0Z" class="divider-paper" />
     <path d="M0 5H175C215 5 232 11 260 27C286 42 309 50 341 50H1197C1230 50 1253 42 1279 27C1307 11 1324 5 1364 5H1536" stroke="currentColor" stroke-width="1.6" vector-effect="non-scaling-stroke" />

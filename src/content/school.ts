@@ -1,4 +1,6 @@
 import type { ImageMetadata } from 'astro';
+import classroomIllustration from '../assets/gallery-classroom-illustration.webp';
+import practicalLifeIllustration from '../assets/gallery-practical-life-illustration.webp';
 
 export const school = {
   name: 'Madani Montessori',
@@ -10,6 +12,8 @@ export const school = {
   introduction:
     'Kenali lingkungan belajar, program sekolah, dan pendekatan Montessori Islami di Madani Montessori.',
 };
+
+export const admissionsInvitation = 'Kami mengundang Anda untuk mengenal program Madani Montessori dan berkonsultasi mengenai proses penerimaan.';
 
 export const navigation = [
   { label: 'Beranda', href: '/' },
@@ -35,21 +39,36 @@ export const navigation = [
   { label: 'Kontak', href: '/kontak/' },
 ];
 
+export function findNavigationSection(path: string) {
+  return navigation.find((item) => path === item.href
+    || (item.href !== '/' && path.startsWith(item.href))
+    || item.children?.some((link) => path === link.href));
+}
+
 export const schoolPrograms = [
   {
     name: 'Reguler',
     hours: '07.30–10.30',
     summary: 'Kegiatan inti pada pagi hari, termasuk Montessori, bahasa, dan motorik.',
+    activities: 'Montessori, bahasa, dan motorik.',
+    scope: 'Sesi inti pada pagi hari.',
+    meals: 'Perlu konfirmasi',
   },
   {
     name: 'Half Day',
     hours: '07.30–14.00',
     summary: 'Sesi belajar lebih panjang, dengan makan siang dan waktu istirahat.',
+    activities: 'Sesi belajar, makan siang, dan istirahat.',
+    scope: 'Waktu belajar berlanjut hingga awal siang.',
+    meals: 'Makan siang',
   },
   {
     name: 'Full Day',
     hours: '07.30–16.00',
     summary: 'Kegiatan, makan, istirahat, dan pendampingan anak hingga sore hari.',
+    activities: 'Kegiatan, makan, dan istirahat.',
+    scope: 'Pendampingan hingga sore.',
+    meals: 'Termasuk waktu makan',
   },
 ];
 
@@ -92,11 +111,29 @@ export interface GalleryPhoto {
   image: ImageMetadata;
   alt: string;
   caption: string;
+  description?: string;
   category: string;
 }
 
 // Add only photographs cleared for public use by the school.
 export const galleryPhotos: GalleryPhoto[] = [];
+
+export const galleryIllustrations: GalleryPhoto[] = [
+  {
+    image: classroomIllustration,
+    alt: 'Ilustrasi ruang dengan rak rendah berisi alat peraga Montessori',
+    caption: 'Ruang belajar Montessori',
+    description: 'Rak rendah menata alat peraga dalam jangkauan anak. Setiap alat memiliki tempat sehingga mudah dipilih dan dikembalikan.',
+    category: 'Ilustrasi',
+  },
+  {
+    image: practicalLifeIllustration,
+    alt: 'Ilustrasi anak menuang air di atas baki alat peraga',
+    caption: 'Latihan menuang',
+    description: 'Anak berlatih menuang air dari kendi kecil dengan gerakan terkendali. Baki membantu menjaga alat dan area kerja tetap rapi.',
+    category: 'Ilustrasi',
+  },
+];
 
 export interface HeroPhoto {
   image: ImageMetadata;

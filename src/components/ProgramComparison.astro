@@ -18,15 +18,43 @@ const { compact = false } = Astro.props;
   </div>
 ) : (
   <>
-    <dl class="comparison">
-      {schoolPrograms.map((program) => (
-        <div class="comparison-row">
-          <dt>{program.name}</dt>
-          <dd class="program-hours">{program.hours} WIB</dd>
-          <dd class="program-summary">{program.summary}</dd>
-        </div>
-      ))}
-    </dl>
-    <p class="text-note">Jam di atas mengikuti informasi yang dipublikasikan sekolah. Konfirmasi jadwal dan ketersediaan kepada admin.</p>
+    <div class="comparison-scroll" tabindex="0" role="region" aria-label="Perbandingan program sekolah">
+      <table class="comparison">
+        <caption class="visually-hidden">Perbandingan Reguler, Half Day, dan Full Day</caption>
+        <thead>
+          <tr>
+            <th scope="col">Rincian</th>
+            {schoolPrograms.map((program) => <th scope="col">{program.name}</th>)}
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">Jam sekolah</th>
+            {schoolPrograms.map((program) => <td><span class="program-hours">{program.hours}</span> <span class="time-zone">WIB</span></td>)}
+          </tr>
+          <tr>
+            <th scope="row">Kegiatan</th>
+            {schoolPrograms.map((program) => <td>{program.activities}</td>)}
+          </tr>
+          <tr>
+            <th scope="row">Keunggulan</th>
+            {schoolPrograms.map((program) => <td>{program.scope}</td>)}
+          </tr>
+          <tr>
+            <th scope="row">Layanan makan</th>
+            {schoolPrograms.map((program) => <td>{program.meals}</td>)}
+          </tr>
+          <tr>
+            <th scope="row">Jam makan</th>
+            {schoolPrograms.map(() => <td>Perlu konfirmasi</td>)}
+          </tr>
+          <tr>
+            <th scope="row">Jumlah makan</th>
+            {schoolPrograms.map(() => <td>Perlu konfirmasi</td>)}
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="text-note">Jadwal dapat dikonfirmasi melalui Madani Montessori.</p>
   </>
 )}

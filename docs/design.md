@@ -14,15 +14,18 @@ Permukaan panel dan teks sekunder memakai campuran navy dan krem. Baskervville d
 
 ## Komposisi
 
-- Navbar tetap terlihat saat menggulir. Menu memakai tautan navy dengan garis emas dan bobot teks aktif. PPDB sedikit lebih tebal. Menu mobile membuka submenu terkait pada halaman anak.
-- Hero memakai satu tinggi viewport bersama navbar. Judul dua baris diapit lengkung tipis, tekstur raster girih, dan pemisah emas dengan bahu membulat. Foto referensi ruang Montessori hanya muncul di pratinjau. Foto asli sekolah dapat diisi melalui slot media.
-- Pengenalan memakai judul dan pengantar di kiri serta foto nyata alat peraga di kanan. Sumber dan lisensi terlihat di caption.
-- Bagian belajar memakai navy dengan tekstur halus dan narasi singkat. Program memakai ringkasan yang bisa dibuka. Kegiatan dan Galeri punya panel dengan tinggi mengikuti isi. PPDB tampil dalam bidang navy bertekstur, lalu Kontak & Lokasi dibagi menurut tujuan.
+- Navbar tetap terlihat saat menggulir. Logo bulat dan nama sekolah dua baris mengikuti mockup, diikuti Profil, Program, Galeri, PPDB, dan Kontak. PPDB memakai aksen navy kecil. Rute aktif ditandai garis emas. Profil dan Program memiliki navigasi halaman terkait yang terlihat di dalam bagian masing-masing.
+- Hero memakai satu tinggi viewport bersama navbar. Judul dua baris berada di depan ilustrasi dua anak belajar yang memudar ke krem. Lengkung dan pemisah memakai garis emas tipis.
+- Pengenalan memakai judul dan pengantar di kiri serta komposisi rapat alat peraga berlatar transparan di kanan.
+- Program memakai navy dengan motif girih di tepi kanan. Ukuran dan posisi motif terhadap tepi atas tetap sama saat ringkasan dibuka. Halaman Program menyediakan tabel perbandingan dengan satu kolom per program.
+- Galeri memakai foto berasio 16 banding 9. Pergeseran otomatis dimulai ketika foto masuk layar dan berhenti saat hover, fokus, memilih jeda, atau membuka foto. Gestur sentuh, seret dengan mouse, dan keyboard dapat menggeser galeri. Dialog memuat foto dan deskripsi.
+- PPDB dan footer memakai navy. Pertemuan krem dan navy memakai kontur dangkal dan garis emas. Kontak & Lokasi menampilkan jalur ke WhatsApp dan informasi kunjungan.
 - Halaman dalam memakai masthead berornamen lalu susunan daftar, panel informasi, atau teks editorial sesuai kebutuhan tiap halaman. Contoh belajar menuang di halaman Metode Montessori tampil sebagai narasi singkat.
 
 ## Responsif dan aksesibilitas
 
 - Lebar konten maksimum sekitar 1160 px. Tata letak editorial berubah menjadi satu kolom di bawah 700 px. Tinggi kontur disesuaikan dengan lebar perangkat.
-- Di bawah 1024 px, navbar memakai menu disclosure. Tombol submenu mendukung Tab, Enter, dan Escape. Tautan lewati konten dan indikator fokus tersedia di seluruh halaman.
+- Di bawah 1024 px, navbar memakai satu tombol Menu. Tombol mendukung Tab, Enter dan Escape. Menu menutup saat fokus keyboard pindah ke luar navbar.
 - Parallax terbatas pada gambar dan tekstur dekoratif. Bagian konten muncul dengan pergeseran 10 px dan durasi 420 ms. Preferensi reduced motion menonaktifkan keduanya.
-- Foto hero, alat peraga, dan galeri diaktifkan dengan media yang sudah disetujui sekolah. Teks alternatif dan caption disediakan untuk foto yang berisi informasi.
+- Ilustrasi galeri diberi caption. Media sekolah yang telah disetujui memakai jalur penggantian pada data konten.
+- Konsultasi PPDB mengarah ke halaman Kontak. Formulir minat di halaman PPDB menyiapkan draf untuk dikirim sendiri melalui WhatsApp.

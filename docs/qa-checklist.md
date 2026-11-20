@@ -4,7 +4,7 @@
 
 - Jalankan npm run lint, npm run check, npm run build, dan npm test.
 - Buka tautan internal, submenu Profil dan Program, arsip kegiatan dan detail, halaman Galeri kosong, serta 404.
-- Cek bahwa dua tombol PPDB membuka chat admin dengan pesan berbeda untuk konsultasi dan kunjungan.
+- Cek tautan konsultasi PPDB ke Kontak, tautan formulir di dalam halaman PPDB, dan draf WhatsApp untuk minat penerimaan. Cek pula perbedaan pesan konsultasi dan kunjungan dari halaman Kontak.
 
 ## Tampilan dan aksesibilitas
 

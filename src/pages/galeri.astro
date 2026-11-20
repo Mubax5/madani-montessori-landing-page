@@ -2,7 +2,7 @@
 import SiteLayout from '../layouts/SiteLayout.astro';
 import GalleryFigure from '../components/GalleryFigure.astro';
 import InnerMasthead from '../components/InnerMasthead.astro';
-import { galleryPhotos } from '../content/school';
+import { galleryIllustrations, galleryPhotos } from '../content/school';
 
 const categories = [...new Set(galleryPhotos.map((photo) => photo.category))];
 ---
@@ -18,10 +18,11 @@ const categories = [...new Set(galleryPhotos.map((photo) => photo.category))];
           </div>
         </div>
       )) : (
-        <div class="narrow">
-          <h2>Dokumentasi sekolah</h2>
-          <p>Foto kegiatan akan ditampilkan setelah mendapat persetujuan publikasi dari sekolah.</p>
-          <a class="text-link" href="/agenda/">Baca arsip kegiatan</a>
+        <div class="gallery-category">
+          <h2>Ilustrasi lingkungan belajar</h2>
+          <div class="gallery-collection">
+            {galleryIllustrations.map((photo) => <GalleryFigure {photo} />)}
+          </div>
         </div>
       )}
     </div>

@@ -1,6 +1,7 @@
 ---
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import { findNavigationSection } from '../content/school';
 import '@fontsource/baskervville/latin-400.css';
 import '../styles/global.css';
 
@@ -11,6 +12,9 @@ interface Props {
 
 const { title, description } = Astro.props;
 const pageTitle = title ? title + ' · Madani Montessori' : 'Madani Montessori';
+const currentPath = Astro.url.pathname.replace(/\/?$/, '/');
+const section = findNavigationSection(currentPath);
+const sectionLinks = section?.children ? [section, ...section.children] : [];
 const indexable = import.meta.env.PUBLIC_INDEXABLE === 'true'
   && Astro.response.status !== 404
   && Astro.url.pathname !== '/404.html';
@@ -31,6 +35,15 @@ const indexable = import.meta.env.PUBLIC_INDEXABLE === 'true'
     <a class="skip-link" href="#konten">Lewati ke konten</a>
     <Header />
     <main id="konten" tabindex="-1">
+      {section && sectionLinks.length > 0 && (
+        <nav class="section-nav" aria-label={'Halaman ' + section.label}>
+          <ul class="wrap">
+            {sectionLinks.map((link) => (
+              <li><a href={link.href} aria-current={link.href === currentPath ? 'page' : undefined}>{link.label}</a></li>
+            ))}
+          </ul>
+        </nav>
+      )}
       <slot />
     </main>
     <Footer />

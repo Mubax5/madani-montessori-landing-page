@@ -1,53 +1,31 @@
 ---
 import { Image } from 'astro:assets';
 import logo from '../assets/logo-madani.png';
-import { navigation, school } from '../content/school';
+import { findNavigationSection, navigation } from '../content/school';
 
 const currentPath = Astro.url.pathname.replace(/\/?$/, '/');
-const currentSection = navigation.find((item) => currentPath === item.href
-  || (item.href !== '/' && currentPath.startsWith(item.href))
-  || item.children?.some((link) => currentPath === link.href));
+const currentSection = findNavigationSection(currentPath);
+const mainNavigation = navigation.filter((item) => item.href !== '/' && item.href !== '/agenda/');
 ---
 <header class="site-header" data-site-header>
   <div class="header-inner">
-    <a class="brand" href="/" aria-label="Madani Montessori, Beranda">
-      <Image src={logo} alt="" width={34} height={34} />
-      <span>{school.name}</span>
+    <a class="brand header-brand" href="/" aria-label="Madani Montessori, Beranda" aria-current={currentPath === '/' ? 'page' : undefined}>
+      <Image src={logo} alt="" width={72} height={72} />
+      <span class="brand-wordmark">Madani<br />Montessori</span>
     </a>
     <button class="menu-toggle" type="button" aria-label="Menu" aria-expanded="false" aria-controls="main-nav" hidden>
       Menu <span class="chevron" aria-hidden="true"></span>
     </button>
     <nav id="main-nav" class="main-nav" aria-label="Navigasi utama">
       <ul class="nav-list">
-        {navigation.map((item, index) => {
+        {mainNavigation.map((item) => {
           const active = currentPath === item.href;
           const sectionActive = item === currentSection;
           return (
             <li class:list={['nav-item', { 'is-active': sectionActive, 'nav-item--admissions': item.href === '/ppdb/' }]}>
               <div class="nav-label">
                 <a href={item.href} aria-current={active ? 'page' : undefined}>{item.label}</a>
-                {item.children && (
-                  <button
-                    class="submenu-toggle"
-                    type="button"
-                    aria-label={'Submenu ' + item.label}
-                    aria-expanded="false"
-                    aria-controls={'submenu-' + index}
-                    hidden
-                  >
-                    <span class="chevron" aria-hidden="true"></span>
-                  </button>
-                )}
               </div>
-              {item.children && (
-                <ul class="submenu" id={'submenu-' + index}>
-                  {item.children.map((link) => (
-                    <li>
-                      <a href={link.href} aria-current={currentPath === link.href ? 'page' : undefined}>{link.label}</a>
-                    </li>
-                  ))}
-                </ul>
-              )}
             </li>
           );
         })}
@@ -59,8 +37,6 @@ const currentSection = navigation.find((item) => currentPath === item.href
 <script>
   const header = document.querySelector<HTMLElement>('[data-site-header]');
   const menu = header?.querySelector<HTMLButtonElement>('.menu-toggle');
-  const submenus = [...(header?.querySelectorAll<HTMLButtonElement>('.submenu-toggle') ?? [])];
-
   function isExpanded(button: HTMLButtonElement) {
     return button.getAttribute('aria-expanded') === 'true';
   }
@@ -70,54 +46,35 @@ const currentSection = navigation.find((item) => currentPath === item.href
   }
 
   if (header && menu) {
+    const closeNavigation = () => {
+      setExpanded(menu, false);
+    };
+
     header.dataset.ready = '';
     menu.hidden = false;
     menu.addEventListener('click', () => {
-      const open = !isExpanded(menu);
-      setExpanded(menu, open);
-      submenus.forEach((button) => setExpanded(button, open && Boolean(button.closest('.is-active'))));
-    });
-
-    submenus.forEach((button) => {
-      button.hidden = false;
-      button.addEventListener('click', () => {
-        const open = !isExpanded(button);
-        submenus.forEach((other) => setExpanded(other, other === button && open));
-      });
+      setExpanded(menu, !isExpanded(menu));
     });
 
     document.addEventListener('click', (event) => {
       const target = event.target;
-      if (!(target instanceof Node) || menu.contains(target)) return;
-      if (!header.contains(target)) setExpanded(menu, false);
-      for (const button of submenus) {
-        if (!button.closest('.nav-item')?.contains(target)) {
-          setExpanded(button, false);
-        }
+      if (target instanceof Node && !header.contains(target)) closeNavigation();
+    });
+
+    header.addEventListener('focusout', (event) => {
+      if (event.relatedTarget instanceof Node && !header.contains(event.relatedTarget)) {
+        closeNavigation();
       }
     });
 
     header.addEventListener('keydown', (event) => {
-      if (event.key !== 'Escape') return;
-      const current = submenus.find((button) => (
-        isExpanded(button) && button.closest('.nav-item')?.contains(document.activeElement)
-      ));
-      if (current) {
-        setExpanded(current, false);
-        current.focus();
-      } else if (isExpanded(menu) && menu.getClientRects().length > 0) {
-        setExpanded(menu, false);
-        submenus.forEach((button) => setExpanded(button, false));
+      if (event.key === 'Escape' && isExpanded(menu)) {
+        closeNavigation();
         menu.focus();
-      } else {
-        submenus.forEach((button) => setExpanded(button, false));
       }
     });
 
     const wideLayout = window.matchMedia('(min-width: 64rem)');
-    wideLayout.addEventListener('change', () => {
-      setExpanded(menu, false);
-      submenus.forEach((button) => setExpanded(button, false));
-    });
+    wideLayout.addEventListener('change', closeNavigation);
   }
 </script>

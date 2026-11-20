@@ -6,7 +6,7 @@ const layers = [...document.querySelectorAll<HTMLElement>('[data-parallax]')].fl
   return frame && Number.isFinite(distance) ? [{ element, frame, distance }] : [];
 });
 const revealed = new WeakSet<Element>();
-const animations = new Set<Animation>();
+const revealThreshold = .1;
 let observation: IntersectionObserver | undefined;
 let frameId = 0;
 
@@ -30,7 +30,7 @@ function queueParallax() {
 function syncMotion() {
   if (preference.matches) {
     observation?.disconnect();
-    animations.forEach((animation) => animation.cancel());
+    reveals.forEach((element) => element.classList.remove('is-revealing'));
     removeEventListener('scroll', queueParallax);
     removeEventListener('resize', queueParallax);
     cancelAnimationFrame(frameId);
@@ -39,23 +39,16 @@ function syncMotion() {
     return;
   }
 
-  if ('IntersectionObserver' in window && typeof Element.prototype.animate === 'function') {
+  if ('IntersectionObserver' in window) {
     observation ??= new IntersectionObserver((entries) => {
-      for (const { target, isIntersecting } of entries) {
-        if (!isIntersecting || preference.matches) continue;
+      for (const { target, intersectionRatio } of entries) {
+        if (intersectionRatio < revealThreshold || preference.matches) continue;
         revealed.add(target);
         observation?.unobserve(target);
         if (target.contains(document.activeElement)) continue;
-        const animation = target.animate(
-          [{ opacity: .6, transform: 'translateY(10px)' }, { opacity: 1, transform: 'translateY(0)' }],
-          { duration: 420, easing: 'cubic-bezier(.2, .7, .25, 1)' },
-        );
-        animations.add(animation);
-        const forget = () => animations.delete(animation);
-        animation.addEventListener('finish', forget);
-        animation.addEventListener('cancel', forget);
+        target.classList.add('is-revealing');
       }
-    }, { threshold: .1 });
+    }, { threshold: revealThreshold });
     reveals.forEach((element) => {
       if (!revealed.has(element)) observation?.observe(element);
     });
@@ -67,6 +60,12 @@ function syncMotion() {
     queueParallax();
   }
 }
+
+document.addEventListener('animationend', (event) => {
+  if (event.animationName === 'section-reveal' && event.target instanceof Element) {
+    event.target.classList.remove('is-revealing');
+  }
+});
 
 preference.addEventListener('change', syncMotion);
 syncMotion();

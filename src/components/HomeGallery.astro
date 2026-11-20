@@ -1,0 +1,55 @@
+---
+import { Image } from 'astro:assets';
+import { galleryIllustrations, galleryPhotos } from '../content/school';
+
+const photos = galleryPhotos.length ? galleryPhotos : galleryIllustrations;
+const canScroll = photos.length > 1;
+---
+<section class="section home-gallery" aria-labelledby="gallery-title">
+  <div class="wrap" data-home-gallery data-reveal>
+    <h2 id="gallery-title">Galeri</h2>
+    <div
+      id="galeri-beranda"
+      class:list={['gallery-track', { 'gallery-track--scrollable': canScroll }]}
+      role="group"
+      aria-label="Foto Galeri"
+      tabindex={canScroll ? 0 : undefined}
+    >
+      {photos.map((photo) => (
+        <figure class="gallery-figure">
+          <a
+            class="gallery-photo-link"
+            href={photo.image.src}
+            data-gallery-photo
+            data-title={photo.caption}
+            data-description={photo.description ?? photo.alt}
+          >
+            <Image src={photo.image} alt={photo.alt} widths={[420, 720, 1080]} sizes="(min-width: 56rem) 44rem, 86vw" format="webp" draggable="false" />
+          </a>
+        </figure>
+      ))}
+    </div>
+    {canScroll && (
+      <div class="gallery-controls" hidden>
+        {photos.map((photo, index) => (
+          <button class="gallery-dot" type="button" aria-controls="galeri-beranda" aria-label={'Tampilkan gambar ' + (index + 1) + ': ' + photo.caption} aria-pressed={index === 0 ? 'true' : 'false'}></button>
+        ))}
+        <button class="gallery-playback" type="button" aria-controls="galeri-beranda">Jeda</button>
+      </div>
+    )}
+    <dialog class="gallery-dialog" data-gallery-dialog aria-labelledby="gallery-photo-title" aria-describedby="gallery-photo-description">
+      <div class="gallery-dialog-content">
+        <button class="gallery-close" type="button" autofocus aria-label="Tutup foto">Tutup</button>
+        <img data-dialog-image alt="" />
+        <div class="gallery-dialog-copy">
+          <h3 id="gallery-photo-title"></h3>
+          <p id="gallery-photo-description"></p>
+        </div>
+      </div>
+    </dialog>
+  </div>
+</section>
+
+<script>
+  import '../scripts/home-gallery';
+</script>
