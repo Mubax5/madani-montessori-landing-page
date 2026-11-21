@@ -15,11 +15,11 @@ Permukaan panel dan teks sekunder memakai campuran navy dan krem. Baskervville d
 ## Komposisi
 
 - Navbar tetap terlihat saat menggulir. Logo bulat dan nama sekolah dua baris mengikuti mockup, diikuti Profil, Program, Galeri, PPDB, dan Kontak. PPDB memakai aksen navy kecil. Rute aktif ditandai garis emas. Profil dan Program memiliki navigasi halaman terkait yang terlihat di dalam bagian masing-masing.
-- Hero memakai satu tinggi viewport bersama navbar. Judul dua baris berada di depan ilustrasi dua anak belajar yang memudar ke krem. Lengkung dan pemisah memakai garis emas tipis.
+- Hero memakai satu tinggi viewport bersama navbar. Nama lengkap diawali label TK IT di atas judul dua baris. Salam pembuka berada di bawah garis emas kecil. Ilustrasi dua anak belajar memudar ke krem dan bayangan satu lengkung arsitektur Islam menjadi lapisan cahaya di belakang judul.
 - Pengenalan memakai judul dan pengantar di kiri serta komposisi rapat alat peraga berlatar transparan di kanan.
-- Program memakai navy dengan motif girih di tepi kanan. Ukuran dan posisi motif terhadap tepi atas tetap sama saat ringkasan dibuka. Halaman Program menyediakan tabel perbandingan dengan satu kolom per program.
+- Program memakai navy dengan perlakuan cahaya tonal di tepi kanan. Posisi lapisannya tetap sama saat ringkasan dibuka. Halaman Program menyediakan tabel perbandingan dengan satu kolom per program.
 - Galeri memakai foto berasio 16 banding 9. Pergeseran otomatis dimulai ketika foto masuk layar dan berhenti saat hover, fokus, memilih jeda, atau membuka foto. Gestur sentuh, seret dengan mouse, dan keyboard dapat menggeser galeri. Dialog memuat foto dan deskripsi.
-- PPDB dan footer memakai navy. Pertemuan krem dan navy memakai kontur dangkal dan garis emas. Kontak & Lokasi menampilkan jalur ke WhatsApp dan informasi kunjungan.
+- PPDB dan footer memakai navy dengan lapisan cahaya tonal seperti Program. Pertemuan krem dan navy memakai kontur dangkal dan garis emas. Kontak & Lokasi menampilkan jalur ke WhatsApp dan informasi kunjungan.
 - Halaman dalam memakai masthead berornamen lalu susunan daftar, panel informasi, atau teks editorial sesuai kebutuhan tiap halaman. Contoh belajar menuang di halaman Metode Montessori tampil sebagai narasi singkat.
 
 ## Responsif dan aksesibilitas

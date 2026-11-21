@@ -20,3 +20,10 @@
 ## Penyelarasan visual
 
 - Perubahan relatif terhadap gambar mockup mencakup kontur krem-navy tambahan, Galeri yang lebih ringkas, dan variasi gambar Montessori. Lengkung tipis di hero memakai ruang kosong di atas judul, sementara mockup memuat ranting di area tersebut.
+
+## Revisi lapisan cahaya
+
+- [Hero desktop](preview-evidence/hero-tk-it-desktop.jpg), [hero ponsel](preview-evidence/hero-tk-it-mobile.jpg), dan [Program navy](preview-evidence/overlay-program-desktop.jpg).
+- Bayangan raster di balik judul hero dibuat untuk menyatu dengan foto dan krem. Bentuk lengkung tetap terlihat pada layar sempit. Tiap sisi lapisan memudar hingga batas gambar tidak tampak.
+- Nama TK IT Madani Montessori tampil sebagai satu judul. Label TK IT terlihat di desktop dan pada viewport 390 × 844 px, dengan hero tepat setinggi layar ponsel.
+- Pada Program, gambar cahaya ditambatkan ke tepi kanan atas dan memakai skala yang berasal dari lebar bidang. Membuka Reguler menambah tinggi panel tanpa menggeser lapisan atau menampakkan garis di bawah kontur.

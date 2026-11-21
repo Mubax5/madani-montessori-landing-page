@@ -5,7 +5,6 @@ import HomeHero from '../components/HomeHero.astro';
 import OrnamentRule from '../components/OrnamentRule.astro';
 import ProgramComparison from '../components/ProgramComparison.astro';
 import HomeGallery from '../components/HomeGallery.astro';
-import OrnamentTexture from '../components/OrnamentTexture.astro';
 import SectionEdge from '../components/SectionEdge.astro';
 import materialsIllustration from '../assets/montessori-materials.webp';
 import { admissionsInvitation, school, schoolMedia } from '../content/school';
@@ -16,7 +15,6 @@ const materials = schoolMedia.materials;
   <HomeHero />
 
   <section class="section home-intro" aria-labelledby="intro-title" data-reveal>
-    <OrnamentTexture class="intro-texture" drift={8} />
     <div class="wrap intro-grid">
       <h2 id="intro-title">Mengenal<br />Madani Montessori</h2>
       <div class="intro-text">
@@ -33,9 +31,8 @@ const materials = schoolMedia.materials;
     </div>
   </section>
 
-  <section class="home-program" aria-labelledby="program-title">
+  <section class="home-program" aria-labelledby="program-title" data-background-parallax="16">
     <SectionEdge />
-    <OrnamentTexture class="program-texture" />
     <div class="wrap" data-reveal>
       <h2 id="program-title">Program Sekolah</h2>
       <ProgramComparison compact />
@@ -46,9 +43,8 @@ const materials = schoolMedia.materials;
 
   <HomeGallery />
 
-  <section class="admissions-panel" aria-labelledby="admissions-title">
+  <section class="admissions-panel" aria-labelledby="admissions-title" data-background-parallax="14">
     <SectionEdge />
-    <OrnamentTexture class="admissions-texture" drift={12} />
     <div class="wrap" data-reveal>
       <h2 id="admissions-title">Penerimaan Peserta Didik</h2>
       <p>{admissionsInvitation}</p>

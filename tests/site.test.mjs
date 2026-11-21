@@ -64,6 +64,7 @@ test('Beranda flows from the introduction through programs to contact', () => {
   const positions = titles.map((title) => main.indexOf(title));
   assert.doesNotMatch(main, /Cara anak belajar di Madani|Kegiatan Sekolah/);
   assert.match(main, /class="hero-figure"/);
+  assert.match(main, /<span class="hero-school-level">TK IT<\/span>/);
   assert.match(main, /class="section-edge section-edge--bottom"/);
   assert.equal([...main.matchAll(/<details name="program-beranda"/g)].length, 3);
   assert.match(main, /<dialog[^>]*data-gallery-dialog/);

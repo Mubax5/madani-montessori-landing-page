@@ -1,6 +1,5 @@
 ---
 import OrnamentRule from './OrnamentRule.astro';
-import OrnamentTexture from './OrnamentTexture.astro';
 
 interface Props {
   title: string;
@@ -10,8 +9,7 @@ interface Props {
 
 const { title, intro, parent } = Astro.props;
 ---
-<div class="inner-masthead">
-  <OrnamentTexture class="masthead-texture" drift={12} />
+<div class="inner-masthead" data-background-parallax="12">
   <div class="wrap inner-masthead-content">
     {parent && (
       <nav aria-label="Jejak halaman" class="breadcrumb">

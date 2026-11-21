@@ -9,7 +9,9 @@
 | hero-learning.webp | Ilustrasi generatif dua anak menggunakan alat peraga. | Latar hero tertutup lapisan krem. |
 | montessori-materials.webp | Ilustrasi generatif alat peraga Montessori dengan transparansi. | Komposisi alat di pengenalan. |
 | gallery-classroom-illustration.webp dan gallery-practical-life-illustration.webp | Ilustrasi generatif ruang Montessori dan kegiatan menuang. | Galeri sementara dengan caption ilustrasi. |
-| girih-texture.webp | Ornamen raster generatif dengan garis slate yang terinspirasi ubin girih. | Tekstur dekoratif beropasitas rendah. |
+| hero-arch-light.webp | Bayangan lengkung arsitektur Islam yang dibuat sebagai gambar raster. | Lapisan cahaya di belakang judul hero. |
+| architectural-light.webp | Bayangan lengkung yang dipotong pada sisi kanan gambar. | Lapisan latar halaman dalam dan bidang navy Program, PPDB, serta footer. |
+| girih-texture.webp | Ornamen garis dari revisi terdahulu. | Arsip, di luar tampilan aktif. |
 | Foto Galeri | Foto sekolah dengan keterangan yang disetujui. | Menunggu aset pengganti ilustrasi. |
 | Baskervville dan Plus Jakarta Sans | Paket Fontsource dengan lisensi SIL Open Font License. | Font lokal. |
 

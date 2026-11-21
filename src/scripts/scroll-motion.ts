@@ -5,6 +5,7 @@ const layers = [...document.querySelectorAll<HTMLElement>('[data-parallax]')].fl
   const distance = Number(element.dataset.parallax);
   return frame && Number.isFinite(distance) ? [{ element, frame, distance }] : [];
 });
+const backgrounds = [...document.querySelectorAll<HTMLElement>('[data-background-parallax]')];
 const revealed = new WeakSet<Element>();
 const revealThreshold = .1;
 let observation: IntersectionObserver | undefined;
@@ -21,6 +22,14 @@ function renderParallax() {
   positions.forEach(({ element, offset }) => {
     element.style.setProperty('--parallax-offset', offset.toFixed(1) + 'px');
   });
+  backgrounds.forEach((element) => {
+    const bounds = element.getBoundingClientRect();
+    const progress = (height / 2 - bounds.top - bounds.height / 2) / (height / 2 + bounds.height / 2);
+    const distance = Number(element.dataset.backgroundParallax);
+    if (Number.isFinite(distance)) {
+      element.style.setProperty('--background-offset', (Math.max(-1, Math.min(1, progress)) * distance).toFixed(1) + 'px');
+    }
+  });
 }
 
 function queueParallax() {
@@ -36,6 +45,7 @@ function syncMotion() {
     cancelAnimationFrame(frameId);
     frameId = 0;
     layers.forEach(({ element }) => element.style.removeProperty('--parallax-offset'));
+    backgrounds.forEach((element) => element.style.removeProperty('--background-offset'));
     return;
   }
 
@@ -54,7 +64,7 @@ function syncMotion() {
     });
   }
 
-  if (layers.length) {
+  if (layers.length || backgrounds.length) {
     addEventListener('scroll', queueParallax, { passive: true });
     addEventListener('resize', queueParallax);
     queueParallax();
