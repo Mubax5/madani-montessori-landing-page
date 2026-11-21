@@ -6,13 +6,14 @@
 | PDF Annual Celebration | Undangan asli yang diberikan melalui Drive. Acuan ornamen dan ringkasan susunan acara. | Dokumen referensi internal. |
 | logo-madani.png | Logo dari repo Laravel lama. Secara visual cocok dengan undangan. Navbar dan footer. | Dipakai di navbar dan footer. Piksel cocok dengan PNG logo sekolah di Drive. |
 | Foto hero Madani | Foto berizin dari kegiatan sekolah. | Menunggu dokumentasi yang disetujui untuk menggantikan ilustrasi sementara. |
-| hero-learning.webp | Ilustrasi generatif dua anak menggunakan alat peraga. | Gambar pendamping pada galeri beranda dengan keterangan ilustrasi. |
-| montessori-materials.webp | Ilustrasi generatif alat peraga Montessori dengan transparansi. | Komposisi alat di pengenalan dengan keterangan ilustrasi. |
-| gallery-classroom-illustration.webp dan gallery-practical-life-illustration.webp | Ilustrasi generatif ruang Montessori dan kegiatan menuang. | Galeri sementara. Ilustrasi ruang belajar juga dipakai di Profil, sementara ilustrasi menuang dipakai di hero dan Metode Montessori. Semua diberi keterangan ilustrasi. |
-| hero-arch-light.webp | Bayangan lengkung arsitektur Islam yang dibuat sebagai gambar raster. | Arsip, di luar tampilan aktif. |
-| architectural-light.webp | Bayangan lengkung yang dipotong pada sisi kanan gambar. | Arsip, di luar tampilan aktif. |
-| girih-texture.webp | Ornamen garis dari revisi terdahulu. | Arsip, di luar tampilan aktif. |
-| Foto Galeri | Foto sekolah dengan keterangan yang disetujui. | Menunggu aset pengganti ilustrasi. |
+| hero-learning.webp | Ilustrasi generatif dua anak menggunakan alat peraga. | Ilustrasi pada halaman PPDB. |
+| montessori-materials.webp | Ilustrasi generatif alat peraga Montessori dengan transparansi. | Komposisi alat di pengenalan beranda. |
+| gallery-classroom-illustration.webp dan gallery-practical-life-illustration.webp | Ilustrasi generatif ruang Montessori dan kegiatan menuang. | Galeri sementara. Ilustrasi ruang belajar juga dipakai di Profil, sementara ilustrasi menuang dipakai di hero dan Metode Montessori. |
+| hero-arch-light.webp | Bayangan lengkung arsitektur Islam. | Hero beranda. |
+| architectural-light.webp | Bayangan lengkung di sisi kanan. | Masthead halaman dalam. |
+| girih-texture.webp | Motif girih dari revisi terdahulu. | Latar gambar PPDB dan bingkai lengkung di footer. |
+| pink-tower-illustration.webp | Ilustrasi menara merah muda dari revisi terdahulu. | Galeri sementara. |
+| Foto Galeri | Foto sekolah dengan teks alternatif. | Menunggu aset pengganti ilustrasi. |
 | Baskervville dan Plus Jakarta Sans | Paket Fontsource dengan lisensi SIL Open Font License. | Font lokal. |
 
 Foto murid membutuhkan persetujuan publikasi yang dikelola sekolah. Nama penerima undangan, tanda tangan, dan dokumen pribadi tidak digunakan di website.

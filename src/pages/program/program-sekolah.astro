@@ -2,17 +2,32 @@
 import SiteLayout from '../../layouts/SiteLayout.astro';
 import InnerMasthead from '../../components/InnerMasthead.astro';
 import ProgramAccordion from '../../components/ProgramAccordion.astro';
+import { featuredPrograms } from '../../content/school';
 ---
-<SiteLayout title="Program Sekolah" description="Jam belajar dan ringkasan Reguler, Half Day, dan Full Day di Madani.">
-  <InnerMasthead title="Program Sekolah" intro="Lihat jam dan ringkasan setiap pilihan program." />
-  <section class="section inner-section" aria-labelledby="jadwal-kegiatan">
-    <div class="wrap program-panel program-panel--overview">
+<SiteLayout title="Program Sekolah" description="Jadwal, kegiatan, dan layanan makan Reguler, Half Day, dan Full Day di Madani Montessori.">
+  <InnerMasthead title="Jadwal dan kegiatan" />
+  <section class="section program-details" aria-labelledby="rincian-program">
+    <div class="wrap editorial-grid program-details-layout">
       <div>
-        <h2 id="jadwal-kegiatan">Jadwal dan kegiatan</h2>
-        <a class="text-link" href="/program/#perbandingan">Bandingkan semua program</a>
-        <a class="text-link" href="/ppdb/">Lihat informasi PPDB</a>
+        <h2 id="rincian-program">Rincian tiap program</h2>
+        <p>Buka pilihan untuk melihat kegiatan dan layanan makan.</p>
       </div>
-      <ProgramAccordion detailed />
+      <div>
+        <ProgramAccordion detailed />
+        <a class="text-link" href="/program/#perbandingan">Bandingkan program</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section featured-programs" aria-labelledby="program-unggulan">
+    <div class="wrap editorial-grid program-details-layout">
+      <div>
+        <h2 id="program-unggulan">Program unggulan</h2>
+        <a class="text-link" href="/program/program-unggulan/">Lihat program unggulan</a>
+      </div>
+      <ul class="detail-list" role="list">
+        {featuredPrograms.map((program) => <li><strong>{program.title}</strong><p>{program.description}</p></li>)}
+      </ul>
     </div>
   </section>
 </SiteLayout>

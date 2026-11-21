@@ -1,0 +1,131 @@
+---
+import { Image } from 'astro:assets';
+import type { GalleryPhoto } from '../content/school';
+
+interface Props {
+  id: string;
+  photos: GalleryPhoto[];
+  eager?: boolean;
+}
+
+const { id, photos, eager = false } = Astro.props;
+---
+<div class="gallery-carousel" data-gallery-carousel role="group" aria-label="Galeri gambar">
+  <div id={id} class="gallery-viewport" data-gallery-viewport aria-live="off">
+    {photos.map((photo, index) => (
+      <div class="gallery-slide" data-gallery-slide>
+        <Image
+          src={photo.image}
+          alt={photo.alt}
+          widths={[480, 720, 960, 1280, 1600]}
+          sizes="(min-width: 83rem) 72.5rem, 90vw"
+          format="webp"
+          loading={index === 0 && eager ? 'eager' : 'lazy'}
+        />
+      </div>
+    ))}
+  </div>
+  {photos.length > 1 && (
+    <>
+      <button class="gallery-playback" data-gallery-playback type="button" aria-controls={id} aria-label="Jeda putar otomatis" hidden>
+        <span aria-hidden="true"></span>
+      </button>
+      <div class="gallery-pagination" data-gallery-pagination role="group" aria-label="Pilih gambar" hidden>
+        {photos.map((_, index) => (
+          <button type="button" aria-controls={id} aria-label={'Tampilkan gambar ' + (index + 1)} aria-current={index === 0 ? 'true' : undefined}>
+            <span aria-hidden="true"></span>
+          </button>
+        ))}
+      </div>
+    </>
+  )}
+</div>
+
+<script>
+  import '../scripts/gallery-carousel';
+</script>
+
+<style>
+  .gallery-carousel { position: relative; }
+  .gallery-viewport {
+    position: relative;
+    display: grid;
+    gap: .8rem;
+    overflow: hidden;
+    isolation: isolate;
+    border-radius: clamp(2rem, 6vw, 5rem) clamp(2rem, 6vw, 5rem) .85rem .85rem;
+    background: var(--cream);
+  }
+  .gallery-slide { position: relative; min-width: 0; }
+  .gallery-carousel[data-ready] .gallery-slide { grid-area: 1 / 1; }
+  .gallery-slide[data-active] { z-index: 1; }
+  .gallery-slide img {
+    width: 100%;
+    aspect-ratio: 2.12;
+    object-fit: cover;
+    object-position: center 54%;
+  }
+  .gallery-playback {
+    position: absolute;
+    z-index: 2;
+    inset: .9rem max(1.25rem, 4.5%) auto auto;
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    padding: 0;
+    border: 1px solid var(--paper);
+    border-radius: 50%;
+    background: var(--paper);
+    color: var(--action);
+    transition: background-color var(--motion-quick) ease, transform var(--motion-quick) var(--motion-ease);
+  }
+  .gallery-playback span { display: grid; place-items: center; }
+  .gallery-playback span::before, .gallery-playback span::after {
+    grid-area: 1 / 1;
+    content: "";
+    transition: opacity var(--motion-quick) ease, transform var(--motion-quick) var(--motion-ease);
+  }
+  .gallery-playback span::before { width: .67rem; height: .78rem; border-inline: 2px solid; }
+  .gallery-playback span::after {
+    margin-left: .14rem;
+    border: .36rem solid transparent;
+    border-left: .55rem solid currentColor;
+    border-right: 0;
+    opacity: 0;
+    transform: scale(.7);
+  }
+  .gallery-playback[data-paused] span::before { opacity: 0; transform: scale(.7); }
+  .gallery-playback[data-paused] span::after { opacity: 1; transform: none; }
+  .gallery-playback:hover { background: var(--action-tint); }
+  .gallery-playback:active { transform: scale(.92); }
+  .gallery-playback:focus-visible { outline-color: var(--paper); box-shadow: 0 0 0 .45rem var(--action); }
+  .gallery-pagination { display: flex; flex-wrap: wrap; justify-content: center; margin-top: .3rem; }
+  .gallery-pagination button {
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--action);
+    transition: background-color var(--motion-quick) ease;
+  }
+  .gallery-pagination button span {
+    width: .55rem;
+    height: .55rem;
+    border: 1px solid;
+    border-radius: 50%;
+    transition: background-color var(--motion-quick) ease, transform var(--motion-panel) var(--motion-ease);
+  }
+  .gallery-pagination button[aria-current="true"] span { transform: scale(1.3); background: currentColor; }
+  .gallery-pagination button:hover { background: var(--action-tint); }
+  .gallery-pagination button:active span { transform: scale(.85); }
+
+  @media (max-width: 42rem) {
+    .gallery-slide img { aspect-ratio: 4 / 3; }
+    .gallery-playback { inset: .7rem 1rem auto auto; }
+  }
+</style>

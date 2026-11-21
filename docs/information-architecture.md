@@ -6,14 +6,14 @@
 | Profil | /profil/ | Pengenalan sekolah dengan tautan menuju Visi & Misi dan Metode Montessori |
 | Visi & Misi | /profil/visi-misi/ | Ruang untuk rumusan resmi |
 | Metode Montessori | /metode-montessori/ | Satu contoh aktivitas Practical Life |
-| Program | /program/ | Tabel dengan satu kolom per program, lalu Program Unggulan |
-| Program Sekolah | /program/program-sekolah/ | Rincian program Reguler, Half Day, dan Full Day |
+| Program | /program/ | Pilihan dengan jam belajar, tabel perbandingan, dan jalur konsultasi atau formulir PPDB |
+| Program Sekolah | /program/program-sekolah/ | Kegiatan dan layanan makan Reguler, Half Day, dan Full Day, serta pengantar Program Unggulan |
 | Program Unggulan | /program/program-unggulan/ | Practical Life, adab, dan pengenalan tahsin |
 | Kegiatan | /agenda/ | Arsip kegiatan |
 | Detail kegiatan | /agenda/annual-celebration/ | Catatan dari undangan sekolah |
-| Galeri | /galeri/ | Foto yang disetujui, dikelompokkan menurut kategori |
+| Galeri | /galeri/ | Rangkaian foto yang disetujui atau ilustrasi sementara |
 | PPDB | /ppdb/ | Ajakan konsultasi dan formulir minat yang menyiapkan draf WhatsApp |
-| Kontak | /kontak/ | Saluran resmi yang dipublikasikan dan informasi kunjungan |
+| Footer | /#info-sekolah | Lokasi, WhatsApp, dan email. Rute /kontak/ mengarah ke footer. |
 | 404 | /404.html | Pemulihan untuk alamat yang tidak dikenal |
 
 ## Audit kompatibilitas

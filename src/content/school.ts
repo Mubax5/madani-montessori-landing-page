@@ -1,6 +1,7 @@
 import type { ImageMetadata } from 'astro';
 import classroomIllustration from '../assets/gallery-classroom-illustration.webp';
 import practicalLifeIllustration from '../assets/gallery-practical-life-illustration.webp';
+import towerIllustration from '../assets/pink-tower-illustration.webp';
 
 export const school = {
   name: 'Madani Montessori',
@@ -12,8 +13,6 @@ export const school = {
   introduction:
     'Kenali lingkungan belajar, program sekolah, dan pendekatan Montessori Islami di Madani Montessori.',
 };
-
-export const admissionsInvitation = 'Kami mengundang Anda untuk mengenal program Madani Montessori dan berkonsultasi mengenai proses penerimaan.';
 
 export const navigation = [
   { label: 'Beranda', href: '/' },
@@ -36,7 +35,6 @@ export const navigation = [
   { label: 'Kegiatan', href: '/agenda/' },
   { label: 'Galeri', href: '/galeri/' },
   { label: 'PPDB', href: '/ppdb/' },
-  { label: 'Kontak', href: '/kontak/' },
 ];
 
 export function findNavigationSection(path: string) {
@@ -110,9 +108,6 @@ export const activities = [
 export interface GalleryPhoto {
   image: ImageMetadata;
   alt: string;
-  caption: string;
-  description?: string;
-  category: string;
 }
 
 // Add only photographs cleared for public use by the school.
@@ -122,33 +117,29 @@ export const galleryIllustrations: GalleryPhoto[] = [
   {
     image: classroomIllustration,
     alt: 'Ilustrasi ruang dengan rak rendah berisi alat peraga Montessori',
-    caption: 'Ruang belajar Montessori',
-    description: 'Rak rendah menata alat peraga dalam jangkauan anak. Setiap alat memiliki tempat sehingga mudah dipilih dan dikembalikan.',
-    category: 'Ilustrasi',
   },
   {
     image: practicalLifeIllustration,
     alt: 'Ilustrasi anak menuang air di atas baki alat peraga',
-    caption: 'Latihan menuang',
-    description: 'Anak berlatih menuang air dari kendi kecil dengan gerakan terkendali. Baki membantu menjaga alat dan area kerja tetap rapi.',
-    category: 'Ilustrasi',
+  },
+  {
+    image: towerIllustration,
+    alt: 'Ilustrasi tangan menyusun balok pada menara merah muda Montessori',
   },
 ];
 
 export interface HeroPhoto {
   image: ImageMetadata;
   alt: string;
-  caption: string;
   position?: string;
   mobilePosition?: string;
 }
 
-type SchoolPhoto = Omit<GalleryPhoto, 'category'>;
 export const schoolMedia: {
   hero?: HeroPhoto;
-  materials?: SchoolPhoto;
-  profile?: SchoolPhoto;
-  practicalLife?: SchoolPhoto;
+  materials?: GalleryPhoto;
+  profile?: GalleryPhoto;
+  practicalLife?: GalleryPhoto;
 } = {};
 
 const whatsappMessages = {
@@ -157,6 +148,9 @@ const whatsappMessages = {
   visit: 'Assalamualaikum, saya ingin menanyakan jadwal kunjungan ke Madani Montessori.',
 };
 
-export function whatsappLink(purpose: keyof typeof whatsappMessages) {
-  return 'https://wa.me/' + school.phone + '?text=' + encodeURIComponent(whatsappMessages[purpose]);
+export function whatsappLink(purpose: keyof typeof whatsappMessages, program?: string) {
+  const message = program
+    ? whatsappMessages[purpose] + '\nProgram yang diminati: ' + program
+    : whatsappMessages[purpose];
+  return 'https://wa.me/' + school.phone + '?text=' + encodeURIComponent(message);
 }

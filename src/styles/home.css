@@ -2,6 +2,7 @@
 
 .home-page main h2 { font-size: clamp(2.35rem, 4.7vw, 4.4rem); text-wrap: balance; }
 .home-page .section { padding-block: var(--home-space); }
+.home-page .home-intro { padding-block: clamp(2.9rem, 7vw, 6.6rem); }
 #pendekatan { scroll-margin-block-start: calc(var(--header-height) + 1.4rem); }
 
 .home-actions {
@@ -15,9 +16,24 @@
 .home-actions :is(.button, .text-link) { margin: 0; }
 
 .home-hero {
+  position: relative;
+  isolation: isolate;
   --hero-position: 50% 38%;
   padding-top: clamp(2.5rem, 5.25vh, 4.5rem);
   text-align: center;
+}
+
+.home-hero::before {
+  position: absolute;
+  inset: 0 0 auto;
+  z-index: -1;
+  height: clamp(17rem, 40vw, 32rem);
+  background: var(--hero-arch) center top / min(100%, 59rem) auto no-repeat;
+  mix-blend-mode: multiply;
+  mask-image: linear-gradient(black 0%, black 42%, transparent 100%);
+  opacity: .72;
+  pointer-events: none;
+  content: "";
 }
 
 .hero-title-block { position: relative; z-index: 1; }
@@ -57,15 +73,7 @@
   mask-composite: intersect;
 }
 
-.home-page figcaption, .home-page .media-caption {
-  color: var(--copy);
-  font-size: .82rem;
-  line-height: 1.5;
-}
-
-.hero-figure figcaption { padding: 0 var(--gutter) .45rem; }
-
-.intro-grid, .admissions-layout, .contact-layout {
+.intro-grid {
   display: grid;
   align-items: center;
   gap: clamp(1.75rem, 6vw, 5.5rem);
@@ -88,97 +96,17 @@
 .study-figure img { width: 100%; object-fit: contain; }
 .study-figure--photo::before { inset: 15% 0 0 8%; }
 .study-figure--photo img { max-height: 29rem; object-fit: cover; border-radius: .35rem; }
-.study-figure figcaption {
-  position: relative;
-  width: fit-content;
-  margin: .75rem auto 0;
-  padding-inline: .25rem;
-  background: var(--sage);
-  text-align: center;
-}
-
-.home-page .home-program { padding-block: clamp(.6rem, 2vw, 1.5rem) 0; }
-.home-program .home-actions { align-items: flex-start; flex-direction: column; gap: 0; }
-.home-page .home-gallery { padding-top: clamp(3.25rem, 7vw, 6rem); }
-
-.gallery-heading { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: .65rem 2rem; }
-.gallery-heading .home-actions { margin-top: 0; }
-.gallery-spread {
-  display: grid;
-  grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr);
+.home-page .home-program { padding-block: 0; }
+.home-page .home-gallery { padding-block: clamp(3.3rem, 8vw, 7.4rem) clamp(3rem, 6vw, 6rem); }
+.gallery-heading {
+  display: flex;
+  flex-wrap: wrap;
   align-items: end;
-  gap: clamp(1.25rem, 4.2vw, 3.5rem);
-  margin-top: clamp(1.3rem, 3.6vw, 3.25rem);
+  justify-content: space-between;
+  gap: .25rem 1.25rem;
+  margin-bottom: clamp(.85rem, 2.55vw, 1.75rem);
 }
-.gallery-spread--single { grid-template-columns: minmax(0, 48rem); }
-.gallery-photo-link { position: relative; display: block; border-radius: .4rem; cursor: zoom-in; }
-.gallery-photo-link img {
-  aspect-ratio: 3 / 2;
-  object-fit: cover;
-  border-radius: inherit;
-}
-.gallery-expand {
-  position: absolute;
-  inset: auto .6rem .6rem auto;
-  padding: .25rem .58rem;
-  border-radius: .25rem;
-  background: var(--paper);
-  color: var(--action);
-  font-size: .78rem;
-  font-weight: 700;
-}
-.gallery-photo-link:hover .gallery-expand { text-decoration: underline; }
-.home-gallery-figure figcaption { margin-top: .65rem; }
-
-.gallery-dialog {
-  width: min(calc(100% - 2rem), 53rem);
-  max-height: calc(100dvh - 2rem);
-  padding: 0;
-  border: 0;
-  border-radius: .7rem;
-  background: var(--paper);
-  color: var(--copy);
-}
-.gallery-dialog::backdrop { background: rgb(25 27 53 / 76%); }
-.gallery-dialog img { object-fit: contain; max-height: 65dvh; background: var(--cream); }
-.gallery-close {
-  position: absolute;
-  z-index: 1;
-  top: .75rem;
-  right: .75rem;
-  min-height: 2.75rem;
-  padding: .35rem .85rem;
-  border: 1px solid var(--paper);
-  border-radius: .35rem;
-  background: var(--action);
-  color: var(--paper);
-}
-.gallery-close:hover { background: var(--action-hover); }
-.home-page .gallery-close:focus-visible {
-  outline-color: var(--paper);
-  outline-offset: 2px;
-  box-shadow: 0 0 0 6px var(--action);
-}
-.gallery-dialog-copy { padding: clamp(1.1rem, 3vw, 2.15rem); }
-.gallery-dialog-copy p { margin-top: .55rem; }
-.home-page:has(.gallery-dialog[open]) { overflow: hidden; }
-
-.home-admissions { padding: 0 var(--gutter); }
-.admissions-layout {
-  width: min(100%, 72.5rem);
-  grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr);
-  padding: clamp(2rem, 5.1vw, 4.6rem);
-  border-radius: .8rem;
-  background: var(--sun);
-}
-.admissions-layout .home-actions { justify-self: end; align-items: flex-start; flex-direction: column; gap: .3rem; margin-top: 0; }
-.home-page .admissions-layout h2 { text-wrap: wrap; }
-
-.home-contact { padding-block: clamp(3.5rem, 7vw, 6rem); }
-.contact-layout { grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); align-items: start; }
-.contact-layout h3 { font-size: clamp(1.6rem, 2.5vw, 2.4rem); }
-.contact-layout h3 + p { margin-top: .55rem; }
-.contact-layout .home-actions { margin-top: .75rem; }
+.gallery-heading a { margin-top: 0; }
 
 @media (min-width: 54rem) and (max-height: 49rem) {
   .home-hero { padding-top: 1.625rem; }
@@ -187,7 +115,8 @@
 }
 
 @media (max-width: 53.999rem) {
-  .home-hero { padding-top: clamp(2.8rem, 8vw, 4rem); }
+  .home-hero { padding-top: clamp(2.65rem, 8vw, 4rem); }
+  .home-hero::before { background-size: max(29rem, 100%) auto; }
   .hero-title-block h1 { max-width: 12ch; margin-inline: auto; font-size: clamp(2.65rem, 12vw, 4.8rem); }
   .hero-figure { width: min(100%, 43rem); }
   .hero-photo {
@@ -196,14 +125,10 @@
     mask-image: radial-gradient(ellipse 87% 84% at 50% 48%, black 46%, transparent 76%),
       linear-gradient(to bottom, transparent 1%, black 13% 84%, transparent);
   }
-  .intro-grid, .admissions-layout, .contact-layout { grid-template-columns: minmax(0, 1fr); }
+  .intro-grid { grid-template-columns: minmax(0, 1fr); }
   .intro-text { padding: 0; }
   .study-figure { width: min(100%, 34rem); margin-inline: auto; }
-  .home-program .home-actions { flex-direction: row; gap: 0 1rem; }
-  .gallery-spread { grid-template-columns: minmax(0, 1fr); }
-  .home-gallery-figure + .home-gallery-figure { width: min(86%, 29rem); justify-self: end; }
-  .admissions-layout .home-actions { justify-self: start; }
-  .contact-layout { gap: 1.15rem; }
+
 }
 
 @media (max-width: 28.5rem) {

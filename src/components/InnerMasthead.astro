@@ -1,4 +1,6 @@
 ---
+import arch from '../assets/architectural-light.webp';
+
 interface Props {
   title: string;
   intro?: string;
@@ -9,7 +11,7 @@ interface Props {
 const { title, intro, parent, tone = 'cream' } = Astro.props;
 const hasVisual = Astro.slots.has('visual');
 ---
-<header class:list={['inner-masthead', `inner-masthead--${tone}`]}>
+<header class:list={['inner-masthead', `inner-masthead--${tone}`, { 'inner-masthead--visual': hasVisual }]} style={{ '--masthead-arch': 'url("' + arch.src + '")' }}>
   <div class:list={['wrap', 'inner-masthead-content', { 'inner-masthead-content--split': hasVisual }]}>
     <div>
       {parent && (

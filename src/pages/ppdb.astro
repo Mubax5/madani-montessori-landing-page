@@ -1,58 +1,59 @@
 ---
 import SiteLayout from '../layouts/SiteLayout.astro';
-import InnerMasthead from '../components/InnerMasthead.astro';
-import { admissionsInvitation, school, schoolPrograms } from '../content/school';
+import AdmissionsHero from '../components/AdmissionsHero.astro';
+import SelectField from '../components/SelectField.astro';
+import { school, schoolPrograms, whatsappLink } from '../content/school';
+
+const programOptions = [
+  { value: '', label: 'Belum menentukan' },
+  ...schoolPrograms.map(({ name }) => ({ value: name, label: name })),
+];
 ---
 <SiteLayout title="PPDB" description="Konsultasikan penerimaan peserta didik baru dan tanyakan jadwal kunjungan Madani Montessori.">
-  <InnerMasthead title="Penerimaan Peserta Didik" intro={admissionsInvitation} tone="sun" />
-  <section class="section inner-section" aria-labelledby="pilihan-program-kunjungan">
-    <div class="wrap editorial-grid admissions-options">
-      <div>
-        <h2 id="pilihan-program-kunjungan">Pilihan program dan kunjungan</h2>
-        <p>Dapatkan informasi mengenai pilihan program, persyaratan pendaftaran, dan rencana kunjungan ke sekolah.</p>
-        <a class="button" href="/kontak/#konsultasi">Konsultasi Penerimaan</a>
-      </div>
-      <div class="inset-panel admissions-shortcut">
-        <h3>Formulir minat</h3>
-        <p>Jika sudah siap, silakan sampaikan minat penerimaan Anda melalui formulir di halaman ini.</p>
-        <a class="text-link" href="#formulir-minat">Isi Formulir Minat</a>
-      </div>
-    </div>
-  </section>
+  <AdmissionsHero />
   <section id="formulir-minat" class="section admissions-form-section contact-destination" tabindex="-1" aria-labelledby="formulir-title">
     <div class="wrap editorial-grid admissions-form-layout">
       <div>
-        <h2 id="formulir-title">Formulir Minat Penerimaan</h2>
-        <p id="formulir-penjelasan">Formulir ini menyiapkan pesan WhatsApp ke Madani Montessori. Anda dapat meninjau pesan sebelum mengirimkannya.</p>
+        <h2 id="formulir-title">Formulir minat</h2>
+        <p id="formulir-penjelasan">Tinjau draf pesan di WhatsApp sebelum Anda mengirimkannya.</p>
       </div>
       <form class="interest-form" data-admissions-form data-whatsapp={school.phone} aria-labelledby="formulir-title" aria-describedby="formulir-penjelasan" hidden>
-        <label for="nama-orang-tua">Nama orang tua atau wali <span class="field-note">(wajib)</span></label>
-        <input id="nama-orang-tua" name="nama" autocomplete="name" required maxlength="100" pattern={/.*\S.*/.source} />
-        <label for="pilihan-program">Program yang diminati</label>
-        <select id="pilihan-program" name="program">
-          <option value="">Belum menentukan</option>
-          {schoolPrograms.map((program) => <option>{program.name}</option>)}
-        </select>
+        <div class="interest-field">
+          <label for="nama-orang-tua">Nama orang tua atau wali</label>
+          <input class="form-control" id="nama-orang-tua" name="nama" autocomplete="name"
+            placeholder="Misalnya Nur Aisyah" required maxlength="100" pattern={/.*\S.*/.source} />
+          <p class="field-error" id="nama-error" hidden>Masukkan nama orang tua atau wali.</p>
+        </div>
+        <SelectField id="pilihan-program" name="program" label="Program yang diminati" options={programOptions} />
         <button class="button" type="submit">Lanjutkan ke WhatsApp</button>
       </form>
-      <noscript><a class="text-link" href="/kontak/#konsultasi">Hubungi Madani Montessori untuk menyampaikan minat penerimaan</a></noscript>
+      <noscript><a class="button" href={whatsappLink('admissions')}>Hubungi kami via WhatsApp</a></noscript>
     </div>
   </section>
   <section class="section" aria-labelledby="pertanyaan-ppdb">
     <div class="wrap narrow">
       <h2 id="pertanyaan-ppdb">Pertanyaan seputar PPDB</h2>
       <div class="faq-list">
-        <details>
+        <details class="disclosure">
           <summary>Bagaimana cara mulai mendaftar?</summary>
-          <p>Kami menyarankan <a href="/kontak/#konsultasi">konsultasi penerimaan</a> terlebih dahulu. Jika sudah siap, Anda dapat langsung mengisi <a href="#formulir-minat">formulir minat</a>.</p>
+          <div class="disclosure-body">
+            <p>Mulai dengan konsultasi atau isi formulir minat jika sudah siap.</p>
+            <a class="text-link" href="#formulir-minat">Isi formulir minat</a>
+          </div>
         </details>
-        <details>
+        <details class="disclosure">
           <summary>Apa bedanya Reguler, Half Day, dan Full Day?</summary>
-          <p>Ketiganya memiliki durasi dan susunan kegiatan yang berbeda. <a href="/program/">Lihat perbandingan program</a>.</p>
+          <div class="disclosure-body">
+            <p>Perbedaan utamanya ada pada jam belajar, kegiatan, dan waktu makan.</p>
+            <a class="text-link" href="/program/#perbandingan">Bandingkan program</a>
+          </div>
         </details>
-        <details>
+        <details class="disclosure">
           <summary>Bisakah orang tua berkunjung dulu?</summary>
-          <p>Silakan <a href="/kontak/#lokasi">hubungi sekolah untuk informasi kunjungan</a> dan konfirmasi jadwal sebelum datang.</p>
+          <div class="disclosure-body">
+            <p>Bisa. Konfirmasikan waktu kunjungan dengan sekolah sebelum datang.</p>
+            <a class="text-link" href={whatsappLink('visit')}>Tanyakan jadwal kunjungan</a>
+          </div>
         </details>
       </div>
     </div>
@@ -61,8 +62,33 @@ import { admissionsInvitation, school, schoolPrograms } from '../content/school'
 
 <script>
   const form = document.querySelector<HTMLFormElement>('[data-admissions-form]');
-  if (form?.dataset.whatsapp) {
+  const nameField = form?.querySelector<HTMLInputElement>('#nama-orang-tua');
+  const nameError = form?.querySelector<HTMLElement>('#nama-error');
+
+  if (form?.dataset.whatsapp && nameField && nameError) {
     const destination = new URL('https://wa.me/' + form.dataset.whatsapp);
+    const selectedProgram = new URLSearchParams(window.location.search).get('program');
+    const programField = form.querySelector<HTMLSelectElement>('select[name="program"]');
+
+    if (programField && [...programField.options].some((option) => option.value === selectedProgram)) {
+      programField.value = selectedProgram ?? '';
+      programField.dispatchEvent(new Event('change', { bubbles: true }));
+    }
+
+    nameField.addEventListener('invalid', (event) => {
+      event.preventDefault();
+      nameError.hidden = false;
+      nameField.setAttribute('aria-invalid', 'true');
+      nameField.setAttribute('aria-describedby', nameError.id);
+      nameField.focus();
+    });
+    nameField.addEventListener('input', () => {
+      if (!nameField.validity.valid) return;
+      nameError.hidden = true;
+      nameField.removeAttribute('aria-invalid');
+      nameField.removeAttribute('aria-describedby');
+    });
+
     form.addEventListener('submit', (event) => {
       event.preventDefault();
       const fields = new FormData(form);

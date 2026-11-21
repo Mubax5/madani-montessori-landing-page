@@ -12,6 +12,6 @@
 | WhatsApp dan email sekolah | Navbar, Kontak, dan footer di situs aktif | Tautan dapat dibuka. Konfirmasi ulang kepemilikan sebelum publikasi. |
 | PPDB dan kunjungan | Keputusan pengguna dan situs aktif | Konsultasi dan kunjungan melalui Kontak. Formulir minat di halaman PPDB menyiapkan draf pesan WhatsApp. |
 | Alamat lengkap dan pin | Situs aktif dan undangan berbeda konteks | Gunakan wilayah umum. Minta alamat dan pin resmi gedung sekolah. |
-| Hero, alat peraga, galeri, dan caption | Ilustrasi generatif yang dibuat untuk pratinjau | Galeri memberi label ilustrasi melalui caption. Jalur media resmi tersedia saat aset disetujui. |
+| Hero, alat peraga, dan galeri | Ilustrasi generatif yang dibuat untuk pratinjau | Footer memberi keterangan umum tentang penggunaan ilustrasi. Jalur media resmi tersedia saat aset disetujui. |
 
 Sumber publik utama adalah [Tentang](https://madanimontessori.my.id/tentang/), [halaman Program](https://madanimontessori.my.id/program/), [Agenda & Galeri](https://madanimontessori.my.id/agenda-galeri/), dan [Kontak](https://madanimontessori.my.id/kontak/).

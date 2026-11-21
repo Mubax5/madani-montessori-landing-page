@@ -1,47 +1,89 @@
 ---
 import SiteLayout from '../../layouts/SiteLayout.astro';
-import InnerMasthead from '../../components/InnerMasthead.astro';
-import ProgramAccordion from '../../components/ProgramAccordion.astro';
 import ProgramComparison from '../../components/ProgramComparison.astro';
-import { featuredPrograms } from '../../content/school';
+import { schoolPrograms, whatsappLink } from '../../content/school';
 ---
-<SiteLayout title="Program" description="Bandingkan Reguler, Half Day, dan Full Day serta lihat Program Unggulan Madani.">
-  <InnerMasthead title="Program" intro="Perbandingan program belajar dan kegiatan yang diperkenalkan Madani Montessori." />
-  <section class="section inner-section" aria-labelledby="pilihan-program">
-    <div class="wrap program-panel program-panel--overview">
+<SiteLayout title="Pilihan Program" description="Pilih dan bandingkan Reguler, Half Day, dan Full Day sebelum melanjutkan ke PPDB Madani.">
+  <div class="wrap program-journey" data-program-journey>
+    <section class="program-panel program-chooser" aria-labelledby="pilihan-program">
       <div>
-        <h2 id="pilihan-program">Pilihan program</h2>
-        <a class="text-link" href="/program/program-sekolah/">Rincian jadwal dan kegiatan</a>
+        <h1 id="pilihan-program">Pilihan program</h1>
+        <p>Lihat jam belajar dan pilih program yang ingin Anda tanyakan ke sekolah.</p>
       </div>
-      <ProgramAccordion />
-    </div>
-    <div class="wrap program-comparison">
-      <details id="perbandingan" class="contact-destination">
-        <summary>Bandingkan Program Sekolah <span class="chevron" aria-hidden="true"></span></summary>
-        <ProgramComparison />
-      </details>
-    </div>
-  </section>
-  <section class="section featured-programs" aria-labelledby="program-unggulan">
-    <div class="wrap editorial-grid">
       <div>
-        <h2 id="program-unggulan">Program Unggulan</h2>
-        <a class="text-link" href="/program/program-unggulan/">Baca Program Unggulan</a>
+        <fieldset class="program-choices">
+          <legend class="visually-hidden">Program yang diminati</legend>
+          {schoolPrograms.map((program) => (
+            <label class="program-choice">
+              <input type="radio" name="minat-program" value={program.name} data-consultation={whatsappLink('admissions', program.name)} hidden />
+              <span class="program-choice-name">{program.name}</span>
+              <span class="program-hours">{program.hours} WIB</span>
+            </label>
+          ))}
+        </fieldset>
+        <a class="button" href="#perbandingan">Bandingkan program</a>
       </div>
-      <ul class="detail-list" role="list">
-        {featuredPrograms.map((program) => <li><strong>{program.title}</strong><p>{program.description}</p></li>)}
-      </ul>
-    </div>
-  </section>
+    </section>
+
+    <section class="program-comparison contact-destination" id="perbandingan" tabindex="-1" aria-labelledby="perbandingan-judul">
+      <h2 id="perbandingan-judul">Bandingkan program</h2>
+      <ProgramComparison />
+    </section>
+
+    <section class="program-next" aria-labelledby="lanjut-ppdb">
+      <div>
+        <h2 id="lanjut-ppdb">Lanjut ke PPDB</h2>
+        <p data-program-context aria-live="polite">Tanyakan pilihan belajar ke sekolah atau sampaikan minat Anda.</p>
+      </div>
+      <div class="program-next-actions">
+        <a class="button" data-program-consultation href={whatsappLink('admissions')}>Konsultasi via WhatsApp</a>
+        <a class="button button--secondary" data-program-form href="/ppdb/#formulir-minat">Isi formulir minat</a>
+      </div>
+    </section>
+    <a class="text-link" href="/program/program-sekolah/">Lihat jadwal dan rincian kegiatan</a>
+  </div>
 </SiteLayout>
 
 <script>
-  const comparison = document.querySelector<HTMLDetailsElement>('#perbandingan');
-  if (comparison) {
-    const openComparison = () => {
-      if (window.location.hash === '#perbandingan') comparison.open = true;
+  const journey = document.querySelector<HTMLElement>('[data-program-journey]');
+  const consultation = journey?.querySelector<HTMLAnchorElement>('[data-program-consultation]');
+  const formLink = journey?.querySelector<HTMLAnchorElement>('[data-program-form]');
+  const context = journey?.querySelector<HTMLElement>('[data-program-context]');
+
+  if (journey && consultation && formLink && context) {
+    const choices = [...journey.querySelectorAll<HTMLInputElement>('input[name="minat-program"]')];
+    const defaultConsultation = consultation.href;
+    const defaultContext = context.textContent;
+    const formDestination = new URL(formLink.href);
+
+    const updateSelection = () => {
+      const selected = choices.find((choice) => choice.checked);
+      consultation.href = selected?.dataset.consultation ?? defaultConsultation;
+
+      if (selected) formDestination.searchParams.set('program', selected.value);
+      else formDestination.searchParams.delete('program');
+      formLink.href = formDestination.href;
+
+      context.textContent = selected ? 'Program yang diminati: ' + selected.value : defaultContext;
+      for (const cell of journey.querySelectorAll<HTMLElement>('[data-comparison-program]')) {
+        cell.toggleAttribute('data-selected', cell.dataset.comparisonProgram === selected?.value);
+      }
     };
-    openComparison();
-    window.addEventListener('hashchange', openComparison);
+
+    const requested = new URLSearchParams(window.location.search).get('program');
+    const initialChoice = choices.find((choice) => choice.value === requested);
+    if (initialChoice) initialChoice.checked = true;
+
+    for (const choice of choices) {
+      choice.hidden = false;
+      choice.addEventListener('change', () => {
+        const currentPage = new URL(window.location.href);
+        currentPage.searchParams.set('program', choice.value);
+        window.history.replaceState(window.history.state, '', currentPage);
+        updateSelection();
+      });
+    }
+    updateSelection();
+    window.addEventListener('pageshow', updateSelection);
   }
 </script>

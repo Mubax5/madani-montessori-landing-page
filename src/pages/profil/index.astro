@@ -8,28 +8,26 @@ import { school, schoolMedia } from '../../content/school';
 const photo = schoolMedia.profile;
 ---
 <SiteLayout title="Profil Sekolah" description="Kenali Madani Montessori dan pendekatan Montessori Islami.">
-  <InnerMasthead title="Mengenal Madani Montessori" intro="Profil sekolah dan pendekatan belajar di Madani Montessori." tone="sage">
+  <InnerMasthead title="Mengenal Madani Montessori" tone="sky">
     <figure slot="visual" class="profile-figure">
       <Image
         src={photo?.image ?? classroomIllustration}
-        alt={photo?.alt ?? 'Rak rendah berisi alat peraga yang mudah dijangkau anak'}
+        alt={photo?.alt ?? 'Ilustrasi rak rendah berisi alat peraga yang mudah dijangkau anak'}
         widths={[400, 640, 960, 1200]}
         sizes="(min-width: 56rem) 45vw, (min-width: 36rem) 32rem, 90vw"
         format="webp"
         loading="eager"
       />
-      <figcaption>{photo?.caption ?? 'Ilustrasi sementara · Ruang belajar Montessori'}</figcaption>
     </figure>
   </InnerMasthead>
   <section class="section inner-section" aria-labelledby="profil-sekolah">
     <div class="wrap editorial-grid profile-spread">
       <div>
-        <h2 id="profil-sekolah">Profil Sekolah</h2>
-        <p>{school.publishedName} berada di wilayah {school.location}. Anak belajar melalui alat yang bisa mereka pegang dan kegiatan yang bisa mereka kerjakan sendiri, dengan guru yang mendampingi saat diperlukan.</p>
-        <p>Salam, doa, dan menghargai teman dipraktikkan dalam keseharian. Komunikasi dengan orang tua membantu menghubungkan kebiasaan di sekolah dengan yang dijalani anak di rumah.</p>
+        <h2 id="profil-sekolah">Montessori Islami</h2>
+        <p>Di {school.publishedName}, anak belajar dengan alat peraga dan kegiatan sehari-hari. Guru mendampingi saat anak membutuhkannya.</p>
+        <p>Anak membiasakan salam, doa, dan sikap menghargai teman. Sekolah dan orang tua bekerja sama untuk melanjutkan kebiasaan itu di rumah.</p>
       </div>
       <nav aria-label="Kenali sekolah">
-        <h3>Kenali sekolah</h3>
         <ul class="detail-links" role="list">
           <li><a href="/profil/visi-misi/">Visi &amp; Misi</a></li>
           <li><a href="/metode-montessori/">Metode Montessori</a></li>

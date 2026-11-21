@@ -11,7 +11,7 @@
 - Cek hierarki judul, keterbacaan kedua tombol hero, crop dan label ilustrasi, serta kontur sebelum footer pada beranda dan halaman dalam.
 - Cek viewport 320, 360, 390, 768, 1280, 1440, dan 1920 px, serta mobile lanskap. Pastikan halaman tidak bergeser horizontal. Periksa gulir tabel Program dan keterbacaan judul.
 - Uji fokus, skip link, menu keyboard dan sentuh, Escape, dan pengembalian fokus dari dialog galeri. Cek kontras dan pembesaran teks.
-- Saat media asli tersedia, cek crop dan overlay per perangkat, izin publikasi, caption, dan ukuran file. Audit Core Web Vitals pada host tujuan sebelum peluncuran.
+- Saat media asli tersedia, cek crop dan overlay per perangkat, izin publikasi, teks alternatif, dan ukuran file. Audit Core Web Vitals pada host tujuan sebelum peluncuran.
 
 ## Publikasi dan perubahan sistem
 

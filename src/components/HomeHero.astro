@@ -1,15 +1,16 @@
 ---
 import { Image } from 'astro:assets';
+import archLight from '../assets/hero-arch-light.webp';
 import pouringIllustration from '../assets/gallery-practical-life-illustration.webp';
 import { school, schoolMedia } from '../content/school';
 
 const photo = schoolMedia.hero;
 ---
-<section class="home-hero" aria-labelledby="home-title">
+<section class="home-hero" aria-labelledby="home-title" style={{ '--hero-arch': 'url("' + archLight.src + '")' }}>
   <div class="wrap hero-title-block">
     <p class="hero-school-level">TK Islam Terpadu</p>
     <h1 id="home-title">{school.name}</h1>
-    <p class="hero-intro">Anak memilih alat belajar, mencoba sendiri, lalu merapikannya kembali. Doa dan adab menjadi bagian dari keseharian di kelas.</p>
+    <p class="hero-intro">Belajar lewat pengalaman langsung, dengan doa dan adab dalam keseharian.</p>
     <div class="home-actions hero-actions">
       <a class="button" href="/ppdb/">Lihat informasi PPDB</a>
       <a class="button button--secondary" href="#pendekatan">Kenali sekolah</a>
@@ -19,13 +20,12 @@ const photo = schoolMedia.hero;
     <Image
       src={photo?.image ?? pouringIllustration}
       class="hero-photo"
-      alt={photo?.alt ?? 'Anak menuang air dari kendi kecil ke gelas di atas baki Montessori'}
+      alt={photo?.alt ?? 'Ilustrasi anak menuang air dari kendi kecil ke gelas di atas baki Montessori'}
       widths={[400, 560, 800, 960, 1200, 1600]}
       sizes="(max-width: 43rem) 100vw, (max-width: 54rem) 43rem, (max-height: 48rem) 52rem, (min-height: 57rem) 72rem, 78vw"
       format="webp"
       loading="eager"
       fetchpriority="high"
     />
-    <figcaption>{photo ? photo.caption : 'Ilustrasi sementara · Latihan menuang'}</figcaption>
   </figure>
 </section>

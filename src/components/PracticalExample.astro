@@ -9,12 +9,11 @@ const photo = schoolMedia.practicalLife;
   <figure>
     <Image
       src={photo?.image ?? pouringIllustration}
-      alt={photo?.alt ?? 'Anak berlatih menuang air dari kendi kecil ke gelas di atas baki'}
+      alt={photo?.alt ?? 'Ilustrasi anak berlatih menuang air dari kendi kecil ke gelas di atas baki'}
       widths={[400, 640, 960, 1200]}
       sizes="(min-width: 56rem) 51vw, (min-width: 36rem) 32rem, 90vw"
       format="webp"
     />
-    <figcaption>{photo?.caption ?? 'Ilustrasi sementara · Latihan menuang'}</figcaption>
   </figure>
   <div class="learning-example-copy">
     <h2 id="contoh-practical-life">{practicalLife.title}</h2>

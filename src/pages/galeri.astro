@@ -1,34 +1,13 @@
 ---
 import SiteLayout from '../layouts/SiteLayout.astro';
-import GalleryFigure from '../components/GalleryFigure.astro';
-import InnerMasthead from '../components/InnerMasthead.astro';
+import GalleryCarousel from '../components/GalleryCarousel.astro';
 import { galleryIllustrations, galleryPhotos } from '../content/school';
 
-const categories = [...new Set(galleryPhotos.map((photo) => photo.category))];
-const introduction = categories.length
-  ? 'Foto ruang belajar dan kegiatan sekolah.'
-  : 'Ilustrasi ruang dan kegiatan belajar Montessori.';
+const photos = galleryPhotos.length ? galleryPhotos : galleryIllustrations;
 ---
-<SiteLayout title="Galeri" description={introduction}>
-  <InnerMasthead title="Galeri" intro={introduction} />
-  <section class="section inner-section" aria-label={categories.length ? 'Dokumentasi foto' : 'Ilustrasi sementara'}>
-    <div class="wrap">
-      {categories.length ? categories.map((category) => (
-        <div class="gallery-category">
-          <h2>{category}</h2>
-          <div class="gallery-collection">
-            {galleryPhotos.filter((photo) => photo.category === category).map((photo) => <GalleryFigure {photo} />)}
-          </div>
-        </div>
-      )) : (
-        <div class="gallery-category">
-          <h2>Ilustrasi lingkungan belajar</h2>
-          <p>Ilustrasi sementara sambil menunggu dokumentasi sekolah.</p>
-          <div class="gallery-collection">
-            {galleryIllustrations.map((photo) => <GalleryFigure {photo} />)}
-          </div>
-        </div>
-      )}
-    </div>
+<SiteLayout title="Galeri" description="Ruang dan kegiatan belajar Montessori.">
+  <section class="wrap gallery-page" aria-labelledby="galeri-judul">
+    <h1 id="galeri-judul">Galeri</h1>
+    <GalleryCarousel id="galeri-sekolah" {photos} eager />
   </section>
 </SiteLayout>

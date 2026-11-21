@@ -6,56 +6,80 @@ const { detailed = false } = Astro.props;
 ---
 <div class="program-accordion">
   {schoolPrograms.map((program) => (
-    <details name="program-sekolah">
+    <details name="program-sekolah" class="disclosure">
       <summary>
         <span class="plan-name">{program.name}</span>
         <span class="plan-hours">{program.hours} WIB</span>
-        <span class="chevron" aria-hidden="true"></span>
+        <span class="plan-toggle" aria-hidden="true"></span>
       </summary>
-      <div class="plan-description">
-        <p>{program.summary}</p>
-        {detailed && (
-          <dl>
-            <div><dt>Kegiatan</dt><dd>{program.activities}</dd></div>
-            <div><dt>Layanan makan</dt><dd>{program.meals}</dd></div>
-          </dl>
-        )}
+      <div class="plan-description disclosure-body">
+        {detailed ? (
+          <>
+            <p>{program.scope}</p>
+            <dl class="plan-breakdown">
+              <div><dt>Kegiatan</dt><dd>{program.activities}</dd></div>
+              <div><dt>Layanan makan</dt><dd>{program.meals}</dd></div>
+            </dl>
+          </>
+        ) : <p>{program.summary}</p>}
       </div>
     </details>
   ))}
 </div>
 
 <style>
-  .program-accordion { display: grid; gap: .45rem; }
-  details { border-radius: .75rem; }
+  .program-accordion { display: grid; gap: .65rem; }
+  details { border-radius: 1.5rem .65rem 1.5rem .65rem; background: var(--plan-tint, var(--sky)); }
+  details:nth-child(2) { --plan-tint: var(--sage); }
+  details:nth-child(3) { --plan-tint: var(--sun); }
   summary {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) auto .8rem;
+    grid-template-columns: minmax(0, 1fr) auto 2rem;
     align-items: center;
-    gap: .35rem .8rem;
-    min-height: 3.5rem;
-    padding: .65rem clamp(.75rem, 2vw, 1.25rem);
-    border-radius: .75rem;
+    gap: .3rem clamp(.5rem, 1.2vw, 1.15rem);
+    min-height: clamp(4rem, 6vw, 5.1rem);
+    padding: .6rem clamp(.85rem, 2.55vw, 1.85rem);
+    border-radius: inherit;
     color: var(--ink);
     list-style: none;
     cursor: pointer;
   }
   summary::-webkit-details-marker { display: none; }
-  summary:hover { background: color-mix(in srgb, var(--paper) 65%, transparent); }
-  details[open] { background: var(--paper); }
-  details[open] summary { border-end-start-radius: 0; border-end-end-radius: 0; }
-  details[open] .chevron { transform: translateY(.08rem) rotate(225deg); }
-  .plan-name { font-weight: 720; }
-  .plan-hours { color: var(--action); font-size: .9rem; font-weight: 650; font-variant-numeric: tabular-nums; }
-  .chevron { justify-self: center; color: var(--action); }
-  .plan-description { padding: .15rem clamp(.75rem, 2vw, 1.25rem) 1.1rem; }
-  .plan-description p { max-width: 54ch; }
-  .plan-description dl { display: grid; gap: .65rem 1.5rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 10rem), 1fr)); margin-top: .8rem; }
-  .plan-description dt { color: var(--ink); font-weight: 700; }
-  .plan-description dd { font-size: .92rem; }
+  .plan-name {
+    font: 400 clamp(1.4rem, 3.9vw, 2.2rem) / 1.06 var(--display);
+    letter-spacing: -.025em;
+  }
+  .plan-hours { color: var(--action); font-size: clamp(.8rem, 1.45vw, .94rem); font-weight: 720; font-variant-numeric: tabular-nums; }
+  .plan-toggle {
+    display: grid;
+    place-items: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background: var(--paper);
+    color: var(--action);
+    transition: background-color var(--motion-quick) ease, color var(--motion-quick) ease,
+      transform var(--motion-quick) var(--motion-ease);
+  }
+  .plan-toggle::before, .plan-toggle::after { grid-area: 1 / 1; width: .7rem; height: 2px; border-radius: 1px; background: currentColor; content: ""; }
+  .plan-toggle::after { transform: rotate(90deg); transition: transform var(--motion-panel) var(--motion-ease); }
+  details[open] .plan-toggle::after { transform: none; }
+  summary:hover .plan-toggle, details[open] .plan-toggle { background: var(--action); color: var(--paper); }
+  summary:active .plan-toggle { transform: scale(.88); }
+  .plan-description { padding: 0 clamp(.85rem, 2.55vw, 1.85rem) 1.1rem; }
+  .plan-description p { max-width: 48ch; }
+  .plan-breakdown {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    gap: .65rem 1rem;
+    margin-top: .75rem;
+    font-size: .9rem;
+  }
+  .plan-breakdown dt { color: var(--ink); font-weight: 700; }
 
-  @media (max-width: 23rem) {
-    summary { column-gap: .45rem; }
-    .plan-hours { font-size: .83rem; }
+  @media (max-width: 24rem) {
+    .plan-breakdown { grid-template-columns: minmax(0, 1fr); }
+    summary { grid-template-columns: minmax(0, 1fr) auto 1.55rem; padding-inline: .75rem; }
+    .plan-toggle { width: 1.55rem; height: 1.55rem; }
   }
 </style>

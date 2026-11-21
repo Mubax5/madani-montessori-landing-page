@@ -52,7 +52,9 @@ const overviewLabels: Record<string, string> = {
   const header = document.querySelector<HTMLElement>('[data-site-header]');
   const menu = header?.querySelector<HTMLButtonElement>('.menu-toggle');
 
-  if (header && menu) {
+  const nav = header?.querySelector<HTMLElement>('.main-nav');
+
+  if (header && menu && nav) {
     const groups = [...header.querySelectorAll<HTMLDetailsElement>('.nav-group')];
     const wide = window.matchMedia('(min-width: 64rem)');
     const menuIsOpen = () => menu.getAttribute('aria-expanded') === 'true';
@@ -61,10 +63,12 @@ const overviewLabels: Record<string, string> = {
         if (!target || !group.contains(target)) group.open = false;
       }
     };
-    const closeMenu = () => {
-      closeGroups();
-      menu.setAttribute('aria-expanded', 'false');
+    const setMenuOpen = (open: boolean) => {
+      menu.setAttribute('aria-expanded', String(open));
+      nav.inert = !wide.matches && !open;
+      if (!open) closeGroups();
     };
+    const closeMenu = () => setMenuOpen(false);
 
     for (const group of groups) {
       group.addEventListener('toggle', () => {
@@ -86,10 +90,8 @@ const overviewLabels: Record<string, string> = {
 
     header.dataset.ready = '';
     menu.hidden = false;
-    menu.addEventListener('click', () => {
-      if (menuIsOpen()) closeMenu();
-      else menu.setAttribute('aria-expanded', 'true');
-    });
+    setMenuOpen(false);
+    menu.addEventListener('click', () => setMenuOpen(!menuIsOpen()));
 
     document.addEventListener('click', (event) => {
       if (!(event.target instanceof Node)) return;
@@ -99,6 +101,7 @@ const overviewLabels: Record<string, string> = {
 
     header.addEventListener('focusout', (event) => {
       if (!(event.relatedTarget instanceof Node)) return;
+      if (event.relatedTarget instanceof Element && event.relatedTarget.closest('.nav-group')) return;
       if (header.contains(event.relatedTarget)) closeGroups(event.relatedTarget);
       else closeMenu();
     });
@@ -117,8 +120,12 @@ const overviewLabels: Record<string, string> = {
 
     wide.addEventListener('change', (event) => {
       const active = document.activeElement;
-      if (event.matches && active === menu) groups[0]?.querySelector('summary')?.focus();
-      else if (!event.matches && header.querySelector('.main-nav')?.contains(active)) menu.focus();
+      if (event.matches) {
+        nav.inert = false;
+        if (active === menu) groups[0]?.querySelector('summary')?.focus();
+      } else if (nav.contains(active)) {
+        menu.focus();
+      }
       closeMenu();
     });
   }

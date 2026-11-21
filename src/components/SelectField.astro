@@ -1,0 +1,95 @@
+---
+interface Props {
+  id: string;
+  name: string;
+  label: string;
+  options: { value: string; label: string }[];
+}
+
+const { id, name, label, options } = Astro.props;
+const labelId = id + '-label';
+const listId = id + '-options';
+---
+<div class="select-field" data-select-field>
+  <label id={labelId} for={id}>{label}</label>
+  <select {id} {name} class="form-control" data-select-native>
+    {options.map((option) => <option value={option.value}>{option.label}</option>)}
+  </select>
+  <div class="select-picker" data-select-picker hidden>
+    <button
+      id={id + '-trigger'}
+      class="form-control select-trigger"
+      type="button"
+      role="combobox"
+      aria-expanded="false"
+      aria-controls={listId}
+      aria-labelledby={labelId}
+    >
+      <span data-select-value>{options[0]?.label}</span>
+      <span class="chevron" aria-hidden="true"></span>
+    </button>
+    <ul id={listId} class="select-options" role="listbox" aria-labelledby={labelId} hidden>
+      {options.map((option, index) => (
+        <li id={listId + '-' + index} role="option" aria-selected={index === 0 ? 'true' : 'false'}>
+          {option.label}
+        </li>
+      ))}
+    </ul>
+  </div>
+</div>
+
+<script>
+  import '../scripts/select-field';
+</script>
+
+<style>
+  .select-field { display: grid; gap: .45rem; }
+  .select-picker { position: relative; }
+  .select-trigger { display: flex; align-items: center; justify-content: space-between; gap: .75rem; text-align: start; }
+  .select-trigger .chevron { flex: none; margin-inline-end: .25rem; color: var(--action); }
+  .select-trigger[aria-expanded="true"] { border-color: var(--action); background: var(--action-tint); }
+  .select-options {
+    position: absolute;
+    z-index: 2;
+    inset: calc(100% + .4rem) 0 auto;
+    max-block-size: 14rem;
+    overflow: auto;
+    overscroll-behavior: contain;
+    margin: 0;
+    padding: .32rem;
+    border: 1px solid var(--rule);
+    border-radius: .7rem;
+    background: var(--paper);
+    box-shadow: 0 .6rem 1.6rem rgb(21 58 91 / 15%);
+    color: var(--ink);
+    font: inherit;
+    list-style: none;
+    animation: disclosure-enter var(--motion-quick) var(--motion-ease) both;
+  }
+  .select-options li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: .5rem;
+    min-height: 2.75rem;
+    padding: .4rem .65rem;
+    border-radius: .4rem;
+    cursor: pointer;
+  }
+  .select-options li:is(:hover, [data-highlighted]) { background: var(--action-tint); }
+  .select-options li[aria-selected="true"] { color: var(--action); font-weight: 700; }
+  .select-options li[aria-selected="true"]::after {
+    flex: none;
+    width: .35rem;
+    height: .65rem;
+    margin-inline-end: .3rem;
+    border: solid currentColor;
+    border-width: 0 2px 2px 0;
+    content: "";
+    transform: translateY(-.1rem) rotate(45deg);
+  }
+
+  @media (max-width: 43.75rem) {
+    .select-options { position: static; margin-block-start: .4rem; }
+  }
+</style>

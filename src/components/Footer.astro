@@ -1,31 +1,49 @@
 ---
-import { Image } from 'astro:assets';
+import { getImage, Image } from 'astro:assets';
+import girih from '../assets/girih-texture.webp';
 import logo from '../assets/logo-madani.png';
-import { navigation, school, whatsappLink } from '../content/school';
+import { galleryPhotos, navigation, school, schoolMedia, whatsappLink } from '../content/school';
 import SectionEdge from './SectionEdge.astro';
 
+const pattern = await getImage({ src: girih, width: 300, format: 'webp', quality: 68 });
+const arch = 'M22 436V223C22 164 64 121 130 99C190 79 234 54 260 16C286 54 330 79 390 99C456 121 498 164 498 223V436Z';
+const innerArch = 'M43 436V225C43 174 82 138 139 119C193 101 235 76 260 49C285 76 327 101 381 119C438 138 477 174 477 225V436';
+const hasIllustrations = galleryPhotos.length === 0
+  || [schoolMedia.hero, schoolMedia.materials, schoolMedia.profile, schoolMedia.practicalLife].some((photo) => !photo);
 ---
-<footer class="site-footer">
+<footer class="site-footer" id="info-sekolah" tabindex="-1">
   <SectionEdge />
+  <svg class="footer-arch" viewBox="0 0 520 436" aria-hidden="true" focusable="false">
+    <defs>
+      <pattern id="footer-girih" width="208" height="208" patternUnits="userSpaceOnUse">
+        <image href={pattern.src} width="208" height="208" />
+      </pattern>
+    </defs>
+    <path d={arch} class="footer-arch-surface" />
+    <path d={arch} class="footer-arch-pattern" fill="url(#footer-girih)" />
+    <path d={arch} class="footer-arch-frame" />
+    <path d={innerArch} class="footer-arch-frame footer-arch-frame--inner" />
+  </svg>
   <div class="wrap footer-grid">
     <div>
       <a class="brand footer-brand" href="/">
-        <Image src={logo} width={56} height={56} alt="" loading="eager" />
+        <Image src={logo} width={56} height={56} alt="" />
         <span>{school.name}</span>
       </a>
-      <p class="footer-location">{school.location}</p>
+      <address class="footer-contact">
+        <a href={whatsappLink('visit')} aria-label={school.location + ', tanyakan petunjuk kunjungan via WhatsApp'}>{school.location}</a>
+        <a href={whatsappLink('contact')}>WhatsApp {school.displayPhone}</a>
+        <a href={'mailto:' + school.email}>{school.email}</a>
+      </address>
     </div>
     <nav aria-label="Navigasi footer">
       <ul class="footer-links" role="list">
-        {navigation.map((item) => <li><a href={item.href}>{item.label}</a></li>)}
+        {navigation.filter((item) => item.href !== '/').map((item) => <li><a href={item.href}>{item.label}</a></li>)}
       </ul>
     </nav>
-    <div class="footer-contact">
-      <a href={whatsappLink('contact')}>WhatsApp Madani Montessori</a>
-      <a href={'mailto:' + school.email}>{school.email}</a>
-    </div>
   </div>
   <div class="wrap footer-bottom">
     <small>© {new Date().getFullYear()} {school.name}</small>
+    {hasIllustrations && <small>Situs ini masih menggunakan ilustrasi sementara.</small>}
   </div>
 </footer>

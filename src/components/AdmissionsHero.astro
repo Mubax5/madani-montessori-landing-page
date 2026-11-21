@@ -1,0 +1,44 @@
+---
+import { getImage, Image } from 'astro:assets';
+import girih from '../assets/girih-texture.webp';
+import classroom from '../assets/gallery-classroom-illustration.webp';
+import learning from '../assets/hero-learning.webp';
+import { schoolMedia, whatsappLink } from '../content/school';
+
+interface Props { home?: boolean }
+const { home = false } = Astro.props;
+const Title = home ? 'h2' : 'h1';
+const pattern = await getImage({ src: girih, width: 300, format: 'webp', quality: 68 });
+const art = home ? schoolMedia.profile?.image ?? classroom : schoolMedia.hero?.image ?? learning;
+---
+<section class:list={['admissions-feature', { 'admissions-feature--home': home }]} aria-labelledby="admissions-title">
+  <div class="wrap admissions-feature-inner">
+    <div class="admissions-feature-copy">
+      <Title id="admissions-title">Penerimaan peserta didik</Title>
+      <p>{home
+        ? 'Kenali program dan rencanakan kunjungan ke Madani Montessori.'
+        : 'Tanyakan pilihan program, syarat pendaftaran, dan jadwal kunjungan sekolah.'}</p>
+      <div class="admissions-feature-actions">
+        {home ? (
+          <a class="button" href="/ppdb/">Lihat informasi PPDB</a>
+        ) : (
+          <>
+            <a class="button" href={whatsappLink('admissions')}>Konsultasi via WhatsApp</a>
+            <a class="button button--secondary" href="#formulir-minat">Isi formulir minat</a>
+          </>
+        )}
+      </div>
+    </div>
+    <div class="admissions-feature-visual" aria-hidden="true" style={{ '--admissions-pattern': 'url("' + pattern.src + '")' }}>
+      <Image
+        class="admissions-feature-photo"
+        src={art}
+        alt=""
+        widths={[360, 560, 760]}
+        sizes="(min-width: 55rem) 35vw, (min-width: 38rem) 26rem, 80vw"
+        format="webp"
+        loading={home ? 'lazy' : 'eager'}
+      />
+    </div>
+  </div>
+</section>

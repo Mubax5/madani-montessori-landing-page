@@ -1,11 +1,12 @@
 ---
 import { Image } from 'astro:assets';
 import SiteLayout from '../layouts/SiteLayout.astro';
+import AdmissionsHero from '../components/AdmissionsHero.astro';
 import HomeHero from '../components/HomeHero.astro';
 import HomeGallery from '../components/HomeGallery.astro';
 import ProgramAccordion from '../components/ProgramAccordion.astro';
 import materialsIllustration from '../assets/montessori-materials.webp';
-import { admissionsInvitation, school, schoolMedia } from '../content/school';
+import { school, schoolMedia } from '../content/school';
 import '../styles/home.css';
 
 const materials = schoolMedia.materials;
@@ -17,21 +18,17 @@ const materials = schoolMedia.materials;
     <div class="wrap intro-grid">
       <div class="intro-text">
         <h2 id="pendekatan" tabindex="-1">Montessori Islami dalam keseharian</h2>
-        <p>Di Madani Montessori, anak belajar dari benda dan kegiatan yang mereka jumpai sehari-hari. Lingkungan kelas disiapkan supaya anak bisa memilih alat, mencoba sendiri, dan membereskannya kembali. Doa dan adab hadir dalam kebiasaan seperti memberi salam dan bergiliran.</p>
-        <div class="home-actions">
-          <a class="text-link" href="/metode-montessori/">Kenali metode Montessori</a>
-          <a class="text-link" href="/profil/">Lihat profil sekolah</a>
-        </div>
+        <p>Anak memilih alat belajar, mencoba sendiri, lalu merapikannya kembali. Salam, doa, dan adab dipraktikkan lewat rutinitas di kelas.</p>
+        <a class="text-link" href="/metode-montessori/">Kenali metode Montessori</a>
       </div>
       <figure class:list={['study-figure', { 'study-figure--photo': materials }]}>
         <Image
           src={materials?.image ?? materialsIllustration}
-          alt={materials?.alt ?? 'Menara merah muda, silinder kayu, dan manik emas Montessori'}
+          alt={materials?.alt ?? 'Ilustrasi menara merah muda, silinder kayu, dan manik emas Montessori'}
           widths={[420, 680, 960]}
           sizes="(min-width: 54rem) 48vw, 90vw"
           format="webp"
         />
-        <figcaption>{materials?.caption ?? 'Ilustrasi sementara · Alat peraga Montessori'}</figcaption>
       </figure>
     </div>
   </section>
@@ -40,42 +37,12 @@ const materials = schoolMedia.materials;
     <div class="wrap program-panel">
       <div>
         <h2 id="program-title">Program sekolah</h2>
-        <p>Bandingkan durasi dan kegiatan dalam pilihan Reguler, Half Day, dan Full Day.</p>
-        <div class="home-actions">
-          <a class="text-link" href="/program/#perbandingan">Bandingkan program</a>
-          <a class="text-link" href="/program/program-unggulan/">Lihat program unggulan</a>
-        </div>
+        <a class="text-link" href="/program/#perbandingan">Bandingkan program</a>
       </div>
       <ProgramAccordion />
     </div>
   </section>
 
   <HomeGallery />
-
-  <section class="home-admissions" aria-labelledby="admissions-title">
-    <div class="wrap admissions-layout">
-      <div>
-        <h2 id="admissions-title">Penerimaan peserta didik</h2>
-        <p>{admissionsInvitation}</p>
-      </div>
-      <div class="home-actions">
-        <a class="button" href="/ppdb/">Lihat informasi PPDB</a>
-        <a class="text-link" href="/kontak/#konsultasi">Konsultasi penerimaan</a>
-      </div>
-    </div>
-  </section>
-
-  <section class="home-contact" aria-labelledby="contact-title">
-    <div class="wrap contact-layout">
-      <h2 id="contact-title">Kontak &amp; lokasi</h2>
-      <div>
-        <h3>{school.location}</h3>
-        <p>Hubungi sekolah untuk menanyakan penerimaan atau mengatur waktu kunjungan.</p>
-        <div class="home-actions">
-          <a class="text-link" href="/kontak/#konsultasi">Hubungi sekolah</a>
-          <a class="text-link" href="/kontak/#lokasi">Lihat informasi kunjungan</a>
-        </div>
-      </div>
-    </div>
-  </section>
+  <AdmissionsHero home />
 </SiteLayout>
