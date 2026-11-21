@@ -8,9 +8,9 @@
 
 ## Tampilan dan aksesibilitas
 
-- Bandingkan Beranda dengan PNG sumber pada 1536 × 1024. Cek hierarki judul, lengkung dan divider, posisi botani, dan spasi sebelum pengenalan.
-- Cek viewport 360, 390, 768, 1280, 1440, dan 1920 px. Pastikan tidak ada overflow horizontal, judul terpotong, atau tata letak program sulit dipindai.
-- Uji fokus, skip link, menu keyboard dan sentuh, serta Escape. Cek kontras dan zoom.
+- Cek hierarki judul, keterbacaan kedua tombol hero, crop dan label ilustrasi, serta kontur sebelum footer pada beranda dan halaman dalam.
+- Cek viewport 320, 360, 390, 768, 1280, 1440, dan 1920 px, serta mobile lanskap. Pastikan halaman tidak bergeser horizontal. Periksa gulir tabel Program dan keterbacaan judul.
+- Uji fokus, skip link, menu keyboard dan sentuh, Escape, dan pengembalian fokus dari dialog galeri. Cek kontras dan pembesaran teks.
 - Saat media asli tersedia, cek crop dan overlay per perangkat, izin publikasi, caption, dan ukuran file. Audit Core Web Vitals pada host tujuan sebelum peluncuran.
 
 ## Publikasi dan perubahan sistem

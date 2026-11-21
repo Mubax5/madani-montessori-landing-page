@@ -4,6 +4,7 @@ import Footer from '../components/Footer.astro';
 import { findNavigationSection } from '../content/school';
 import '@fontsource/baskervville/latin-400.css';
 import '../styles/global.css';
+import '../styles/inner.css';
 
 interface Props {
   title?: string;
@@ -13,6 +14,7 @@ interface Props {
 const { title, description } = Astro.props;
 const pageTitle = title ? title + ' · Madani Montessori' : 'Madani Montessori';
 const currentPath = Astro.url.pathname.replace(/\/?$/, '/');
+const isHomepage = currentPath === '/';
 const section = findNavigationSection(currentPath);
 const sectionLinks = section?.children ? [section, ...section.children] : [];
 const indexable = import.meta.env.PUBLIC_INDEXABLE === 'true'
@@ -25,19 +27,19 @@ const indexable = import.meta.env.PUBLIC_INDEXABLE === 'true'
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
-    <meta name="theme-color" content="#fbf3e9" />
+    <meta name="theme-color" content="#fffcf7" />
     {indexable && Astro.site
       ? <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site).href} />
       : <meta name="robots" content="noindex, nofollow" />}
     <title>{pageTitle}</title>
   </head>
-  <body>
+  <body class:list={[{ 'home-page': isHomepage }]}>
     <a class="skip-link" href="#konten">Lewati ke konten</a>
     <Header />
     <main id="konten" tabindex="-1">
       {section && sectionLinks.length > 0 && (
         <nav class="section-nav" aria-label={'Halaman ' + section.label}>
-          <ul class="wrap">
+          <ul class="wrap" role="list">
             {sectionLinks.map((link) => (
               <li><a href={link.href} aria-current={link.href === currentPath ? 'page' : undefined}>{link.label}</a></li>
             ))}
@@ -49,7 +51,3 @@ const indexable = import.meta.env.PUBLIC_INDEXABLE === 'true'
     <Footer />
   </body>
 </html>
-
-<script>
-  import '../scripts/scroll-motion';
-</script>

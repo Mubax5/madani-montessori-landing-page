@@ -1,13 +1,8 @@
 ---
-interface Props { edge?: 'top' | 'bottom' }
-const { edge = 'top' } = Astro.props;
-const curve = edge === 'bottom'
-  ? 'M0 49H197C258 49 283 39 314 23C349 6 378 1 446 1H963C1031 1 1060 6 1095 23C1126 39 1151 49 1212 49H1440'
-  : 'M0 7H197C258 7 283 17 314 33C349 50 378 55 446 55H963C1031 55 1060 50 1095 33C1126 17 1151 7 1212 7H1440';
+const curve = 'M0 7H197C258 7 283 17 314 33C349 50 378 55 446 55H963C1031 55 1060 50 1095 33C1126 17 1151 7 1212 7H1440';
 ---
-<div class:list={['section-edge', { 'section-edge--bottom': edge === 'bottom' }]} aria-hidden="true">
+<div class="section-edge" aria-hidden="true">
   <svg viewBox="0 0 1440 56" preserveAspectRatio="none">
-    <path d={curve + (edge === 'bottom' ? 'V56H0Z' : 'V0H0Z')} />
-    <path d={curve} fill="none" stroke="currentColor" vector-effect="non-scaling-stroke" />
+    <path d={curve + 'V0H0Z'} />
   </svg>
 </div>

@@ -3,18 +3,22 @@ import SiteLayout from '../../layouts/SiteLayout.astro';
 import InnerMasthead from '../../components/InnerMasthead.astro';
 ---
 <SiteLayout title="Visi & Misi" description="Halaman visi dan misi Madani Montessori.">
-  <InnerMasthead title="Visi & Misi" intro="Ringkasan arah pendidikan yang dipublikasikan sekolah." parent={{ href: '/profil/', label: 'Profil' }} />
-  <section class="section inner-section">
-    <div class="wrap narrow">
-      <h2>Visi</h2>
-      <p>Madani ingin mendampingi anak tumbuh mandiri dan percaya diri, membiasakan adab yang baik, serta memelihara rasa ingin tahunya.</p>
-      <h2>Misi</h2>
-      <ul class="reading-list">
-        <li>Menata ruang belajar agar anak dapat memilih, mencoba, dan merapikan alat sesuai kemampuannya.</li>
-        <li>Mengenalkan doa, ibadah, dan adab lewat rutinitas yang dekat dengan kehidupan anak.</li>
-        <li>Menjaga komunikasi dengan orang tua agar pendampingan di sekolah dan di rumah saling mendukung.</li>
-      </ul>
-      <a class="text-link" href="/metode-montessori/">Kenali Metode Montessori</a>
+  <InnerMasthead title="Visi & Misi" intro="Ringkasan arah pendidikan yang dipublikasikan sekolah." parent={{ href: '/profil/', label: 'Profil' }} tone="sage" />
+  <div class="section inner-section">
+    <div class="wrap editorial-grid vision-spread">
+      <section class="vision-statement" aria-labelledby="visi">
+        <h2 id="visi">Visi</h2>
+        <p>Madani ingin mendampingi anak tumbuh mandiri dan percaya diri, membiasakan adab yang baik, serta memelihara rasa ingin tahunya.</p>
+      </section>
+      <section aria-labelledby="misi">
+        <h2 id="misi">Misi</h2>
+        <ul class="reading-list">
+          <li>Menata ruang belajar agar anak dapat memilih, mencoba, dan merapikan alat sesuai kemampuannya.</li>
+          <li>Mengenalkan doa, ibadah, dan adab lewat rutinitas yang dekat dengan kehidupan anak.</li>
+          <li>Menjaga komunikasi dengan orang tua agar pendampingan di sekolah dan di rumah saling mendukung.</li>
+        </ul>
+        <a class="text-link" href="/metode-montessori/">Kenali Metode Montessori</a>
+      </section>
     </div>
-  </section>
+  </div>
 </SiteLayout>

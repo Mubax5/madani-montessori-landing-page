@@ -1,24 +1,27 @@
 ---
-import OrnamentRule from './OrnamentRule.astro';
-
 interface Props {
   title: string;
   intro?: string;
   parent?: { href: string; label: string };
+  tone?: 'cream' | 'sage' | 'sky' | 'sun';
 }
 
-const { title, intro, parent } = Astro.props;
+const { title, intro, parent, tone = 'cream' } = Astro.props;
+const hasVisual = Astro.slots.has('visual');
 ---
-<div class="inner-masthead" data-background-parallax="12">
-  <div class="wrap inner-masthead-content">
-    {parent && (
-      <nav aria-label="Jejak halaman" class="breadcrumb">
-        <a href={parent.href}>{parent.label}</a> <span aria-hidden="true">/</span>
-        <span aria-current="page">{title}</span>
-      </nav>
-    )}
-    <h1>{title}</h1>
-    {intro && <p class="lede">{intro}</p>}
-    <OrnamentRule />
+<header class:list={['inner-masthead', `inner-masthead--${tone}`]}>
+  <div class:list={['wrap', 'inner-masthead-content', { 'inner-masthead-content--split': hasVisual }]}>
+    <div>
+      {parent && (
+        <nav aria-label="Jejak halaman" class="breadcrumb">
+          <a href={parent.href}>{parent.label}</a>
+          <span aria-hidden="true">/</span>
+          <span aria-current="page">{title}</span>
+        </nav>
+      )}
+      <h1>{title}</h1>
+      {intro && <p class="lede">{intro}</p>}
+    </div>
+    {hasVisual && <slot name="visual" />}
   </div>
-</div>
+</header>

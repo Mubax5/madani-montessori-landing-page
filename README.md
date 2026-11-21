@@ -16,7 +16,7 @@ Untuk verifikasi, jalankan npm run lint, npm run check, npm run build, lalu npm 
 ## Memperbarui isi
 
 - Data program, kontak, dan kegiatan ada di [src/content/school.ts](src/content/school.ts). Sumber dan status konfirmasi tercatat di [inventaris konten](docs/content-inventory.md).
-- Untuk foto hero, impor file berizin ke src/content/school.ts, lalu isi schoolMedia.hero dengan gambar dan posisi crop bila perlu. Gunakan schoolMedia.materials untuk foto alat peraga di pengenalan. Untuk Galeri, tambah entri dengan teks alternatif, caption, dan kategori. Foto pertama tampil di Beranda.
+- Impor foto berizin ke `src/content/school.ts`. Isi `image`, `alt`, dan `caption` pada `schoolMedia.hero`, `schoolMedia.materials`, `schoolMedia.profile`, atau `schoolMedia.practicalLife` sesuai penempatannya. Gunakan `position` dan `mobilePosition` bila crop hero perlu disesuaikan. Untuk Galeri, tambahkan kategori di setiap entri. Hingga dua foto pertama tampil di Beranda.
 - Pratinjau mengirim noindex secara default. Variabel PUBLIC_INDEXABLE=true disediakan untuk build yang sudah disetujui untuk publikasi.
 - Domain tujuan adalah madanimontessori.com. Build yang bisa diindeks memakai domain itu untuk URL canonical.
 

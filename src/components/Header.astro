@@ -17,7 +17,7 @@ const mainNavigation = navigation.filter((item) => item.href !== '/' && item.hre
       Menu <span class="chevron" aria-hidden="true"></span>
     </button>
     <nav id="main-nav" class="main-nav" aria-label="Navigasi utama">
-      <ul class="nav-list">
+      <ul class="nav-list" role="list">
         {mainNavigation.map((item) => {
           const active = currentPath === item.href;
           const sectionActive = item === currentSection;

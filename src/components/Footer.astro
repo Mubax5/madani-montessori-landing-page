@@ -3,8 +3,9 @@ import { Image } from 'astro:assets';
 import logo from '../assets/logo-madani.png';
 import { navigation, school, whatsappLink } from '../content/school';
 import SectionEdge from './SectionEdge.astro';
+
 ---
-<footer class="site-footer" data-background-parallax="12">
+<footer class="site-footer">
   <SectionEdge />
   <div class="wrap footer-grid">
     <div>
@@ -15,7 +16,7 @@ import SectionEdge from './SectionEdge.astro';
       <p class="footer-location">{school.location}</p>
     </div>
     <nav aria-label="Navigasi footer">
-      <ul class="footer-links">
+      <ul class="footer-links" role="list">
         {navigation.map((item) => <li><a href={item.href}>{item.label}</a></li>)}
       </ul>
     </nav>

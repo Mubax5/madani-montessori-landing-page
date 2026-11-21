@@ -5,10 +5,13 @@ import InnerMasthead from '../components/InnerMasthead.astro';
 import { galleryIllustrations, galleryPhotos } from '../content/school';
 
 const categories = [...new Set(galleryPhotos.map((photo) => photo.category))];
+const introduction = categories.length
+  ? 'Foto ruang belajar dan kegiatan sekolah.'
+  : 'Ilustrasi ruang dan kegiatan belajar Montessori.';
 ---
-<SiteLayout title="Galeri" description="Dokumentasi foto Madani Montessori.">
-  <InnerMasthead title="Galeri" intro="Foto ruang belajar dan kegiatan sekolah." />
-  <section class="section inner-section" aria-label="Dokumentasi foto">
+<SiteLayout title="Galeri" description={introduction}>
+  <InnerMasthead title="Galeri" intro={introduction} />
+  <section class="section inner-section" aria-label={categories.length ? 'Dokumentasi foto' : 'Ilustrasi sementara'}>
     <div class="wrap">
       {categories.length ? categories.map((category) => (
         <div class="gallery-category">
@@ -20,6 +23,7 @@ const categories = [...new Set(galleryPhotos.map((photo) => photo.category))];
       )) : (
         <div class="gallery-category">
           <h2>Ilustrasi lingkungan belajar</h2>
+          <p>Ilustrasi sementara sambil menunggu dokumentasi sekolah.</p>
           <div class="gallery-collection">
             {galleryIllustrations.map((photo) => <GalleryFigure {photo} />)}
           </div>

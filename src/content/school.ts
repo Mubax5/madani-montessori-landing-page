@@ -137,10 +137,19 @@ export const galleryIllustrations: GalleryPhoto[] = [
 
 export interface HeroPhoto {
   image: ImageMetadata;
+  alt: string;
+  caption: string;
   position?: string;
+  mobilePosition?: string;
 }
 
-export const schoolMedia: { hero?: HeroPhoto; materials?: Omit<GalleryPhoto, 'category'> } = {};
+type SchoolPhoto = Omit<GalleryPhoto, 'category'>;
+export const schoolMedia: {
+  hero?: HeroPhoto;
+  materials?: SchoolPhoto;
+  profile?: SchoolPhoto;
+  practicalLife?: SchoolPhoto;
+} = {};
 
 const whatsappMessages = {
   contact: 'Assalamualaikum, saya ingin bertanya tentang Madani Montessori.',

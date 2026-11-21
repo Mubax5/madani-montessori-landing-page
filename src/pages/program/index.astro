@@ -5,21 +5,21 @@ import ProgramComparison from '../../components/ProgramComparison.astro';
 import { featuredPrograms } from '../../content/school';
 ---
 <SiteLayout title="Program" description="Bandingkan Reguler, Half Day, dan Full Day serta lihat Program Unggulan Madani.">
-  <InnerMasthead title="Program" intro="Perbandingan program belajar dan kegiatan yang diperkenalkan Madani Montessori." />
-  <section class="section inner-section contact-destination" id="perbandingan">
+  <InnerMasthead title="Program" intro="Perbandingan program belajar dan kegiatan yang diperkenalkan Madani Montessori." tone="sky" />
+  <section class="section inner-section contact-destination" id="perbandingan" tabindex="-1" aria-labelledby="bandingkan-program">
     <div class="wrap">
-      <h2>Bandingkan Program Sekolah</h2>
+      <h2 id="bandingkan-program">Bandingkan Program Sekolah</h2>
       <ProgramComparison />
       <a class="text-link" href="/program/program-sekolah/">Rincian Program Sekolah</a>
     </div>
   </section>
-  <section class="section section--follow-up">
+  <section class="section featured-programs" aria-labelledby="program-unggulan">
     <div class="wrap editorial-grid">
       <div>
-        <h2>Program Unggulan</h2>
+        <h2 id="program-unggulan">Program Unggulan</h2>
         <a class="text-link" href="/program/program-unggulan/">Baca Program Unggulan</a>
       </div>
-      <ul class="detail-list">
+      <ul class="detail-list" role="list">
         {featuredPrograms.map((program) => <li><strong>{program.title}</strong><p>{program.description}</p></li>)}
       </ul>
     </div>

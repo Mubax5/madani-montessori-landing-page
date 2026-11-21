@@ -1,37 +1,31 @@
 ---
 import { Image } from 'astro:assets';
-import learningIllustration from '../assets/hero-learning.webp';
-import { schoolMedia } from '../content/school';
-import OrnamentRule from './OrnamentRule.astro';
+import pouringIllustration from '../assets/gallery-practical-life-illustration.webp';
+import { school, schoolMedia } from '../content/school';
 
 const photo = schoolMedia.hero;
-const heroImage = photo?.image ?? learningIllustration;
 ---
-<section class="home-hero" aria-labelledby="home-title" data-background-parallax="18">
-  <div class="hero-figure" aria-hidden="true">
+<section class="home-hero" aria-labelledby="home-title">
+  <div class="wrap hero-title-block">
+    <p class="hero-school-level">TK Islam Terpadu</p>
+    <h1 id="home-title">{school.name}</h1>
+    <p class="hero-intro">Anak memilih alat belajar, mencoba sendiri, lalu merapikannya kembali. Doa dan adab menjadi bagian dari keseharian di kelas.</p>
+    <div class="home-actions hero-actions">
+      <a class="button" href="/ppdb/">Lihat informasi PPDB</a>
+      <a class="button button--secondary" href="#pendekatan">Kenali sekolah</a>
+    </div>
+  </div>
+  <figure class="hero-figure" style={{ '--hero-position': photo?.position, '--hero-mobile-position': photo?.mobilePosition }}>
     <Image
-      src={heroImage}
+      src={photo?.image ?? pouringIllustration}
       class="hero-photo"
-      style={photo?.position ? { objectPosition: photo.position } : undefined}
-      data-parallax="14"
-      alt=""
-      widths={[520, 900, 1400, 1700]}
-      sizes="100vw"
+      alt={photo?.alt ?? 'Anak menuang air dari kendi kecil ke gelas di atas baki Montessori'}
+      widths={[400, 560, 800, 960, 1200, 1600]}
+      sizes="(max-width: 43rem) 100vw, (max-width: 54rem) 43rem, (max-height: 48rem) 52rem, (min-height: 57rem) 72rem, 78vw"
       format="webp"
       loading="eager"
       fetchpriority="high"
     />
-  </div>
-  <div class="hero-title-block">
-    <h1 id="home-title">
-      <span class="hero-school-level">TK IT</span>
-      <span>Madani</span> <span>Montessori</span>
-    </h1>
-    <OrnamentRule />
-    <p class="hero-greeting">Assalamualaikum</p>
-  </div>
-  <svg class="hero-divider" viewBox="0 0 1536 53" preserveAspectRatio="none" fill="none" aria-hidden="true">
-    <path d="M0 5H175C215 5 232 11 260 27C286 42 309 50 341 50H1197C1230 50 1253 42 1279 27C1307 11 1324 5 1364 5H1536V53H0Z" class="divider-paper" />
-    <path d="M0 5H175C215 5 232 11 260 27C286 42 309 50 341 50H1197C1230 50 1253 42 1279 27C1307 11 1324 5 1364 5H1536" stroke="currentColor" stroke-width="1.6" vector-effect="non-scaling-stroke" />
-  </svg>
+    <figcaption>{photo ? photo.caption : 'Ilustrasi sementara · Latihan menuang'}</figcaption>
+  </figure>
 </section>

@@ -57,21 +57,30 @@ test('PPDB keeps the interest form on-site and offers consultation first', () =>
   assert.match(contact, /wa\.me\/6282123576275\?text=[^"]*jadwal%20kunjungan/);
 });
 
-test('Beranda flows from the introduction through programs to contact', () => {
+test('Beranda introduces the school and links to programs, activities, and admissions', () => {
   const html = readFileSync(builtPage('/'), 'utf8');
-  const titles = ['Mengenal<br', 'Program Sekolah', 'id="gallery-title">Galeri', 'Penerimaan Peserta Didik', 'Kontak &amp; Lokasi'];
   const main = html.slice(html.indexOf('<main'), html.indexOf('</main>'));
-  const positions = titles.map((title) => main.indexOf(title));
-  assert.doesNotMatch(main, /Cara anak belajar di Madani|Kegiatan Sekolah/);
-  assert.match(main, /class="hero-figure"/);
-  assert.match(main, /<span class="hero-school-level">TK IT<\/span>/);
-  assert.match(main, /class="section-edge section-edge--bottom"/);
-  assert.equal([...main.matchAll(/<details name="program-beranda"/g)].length, 3);
+  const hero = main.slice(0, main.indexOf('</section>'));
+  const sectionHeadings = ['pendekatan', 'program-title', 'gallery-title', 'admissions-title', 'contact-title'];
+  const positions = sectionHeadings.map((heading) => main.indexOf('id="' + heading + '"'));
+
+  assert.match(hero, /TK Islam Terpadu/);
+  assert.match(hero, /<h1 id="home-title">Madani Montessori<\/h1>/);
+  assert.match(hero, /href="\/ppdb\/"[^>]*>Lihat informasi PPDB</);
+  assert.match(hero, /href="#pendekatan"[^>]*>Kenali sekolah</);
+  assert.match(hero, /<figcaption>Ilustrasi sementara/);
+  assert.match(main, /href="\/agenda\/"[^>]*>Lihat arsip kegiatan</);
+  assert.match(main, /href="\/program\/#perbandingan"/);
   assert.match(main, /<dialog[^>]*data-gallery-dialog/);
   assert.match(main, /data-gallery-photo/);
-  assert.doesNotMatch(main, /Buka Galeri|Foto sebelumnya|Foto berikutnya/);
+  assert.equal([...html.matchAll(/class="section-edge"/g)].length, 1);
+
+  for (const [name, hours] of [['Reguler', '07.30–10.30'], ['Half Day', '07.30–14.00'], ['Full Day', '07.30–16.00']]) {
+    assert.ok(main.includes('<h3>' + name + '</h3>'));
+    assert.ok(main.includes(hours + ' WIB'));
+  }
   for (let index = 0; index < positions.length; index += 1) {
-    assert.ok(positions[index] > (positions[index - 1] ?? -1), titles[index] + ' is out of order');
+    assert.ok(positions[index] > (positions[index - 1] ?? -1), sectionHeadings[index] + ' is out of order');
   }
 });
 

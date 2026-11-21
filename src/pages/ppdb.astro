@@ -4,27 +4,29 @@ import InnerMasthead from '../components/InnerMasthead.astro';
 import { admissionsInvitation, school, schoolPrograms } from '../content/school';
 ---
 <SiteLayout title="PPDB" description="Konsultasikan penerimaan peserta didik baru dan tanyakan jadwal kunjungan Madani Montessori.">
-  <InnerMasthead title="Penerimaan Peserta Didik" intro={admissionsInvitation} />
-  <section class="section inner-section">
+  <InnerMasthead title="Penerimaan Peserta Didik" intro={admissionsInvitation} tone="sun" />
+  <section class="section inner-section" aria-labelledby="pilihan-program-kunjungan">
     <div class="wrap editorial-grid admissions-options">
       <div>
-        <h2>Pilihan program dan kunjungan</h2>
+        <h2 id="pilihan-program-kunjungan">Pilihan program dan kunjungan</h2>
         <p>Dapatkan informasi mengenai pilihan program, persyaratan pendaftaran, dan rencana kunjungan ke sekolah.</p>
         <a class="button" href="/kontak/#konsultasi">Konsultasi Penerimaan</a>
       </div>
-      <div class="inset-panel">
+      <div class="inset-panel admissions-shortcut">
         <h3>Formulir minat</h3>
         <p>Jika sudah siap, silakan sampaikan minat penerimaan Anda melalui formulir di halaman ini.</p>
         <a class="text-link" href="#formulir-minat">Isi Formulir Minat</a>
       </div>
     </div>
   </section>
-  <section id="formulir-minat" class="section section--follow-up contact-destination" aria-labelledby="formulir-title">
-    <div class="wrap narrow">
-      <h2 id="formulir-title">Formulir Minat Penerimaan</h2>
-      <p>Formulir ini menyiapkan pesan WhatsApp ke Madani Montessori. Anda dapat meninjau pesan sebelum mengirimkannya.</p>
-      <form class="interest-form" data-admissions-form data-whatsapp={school.phone} hidden>
-        <label for="nama-orang-tua">Nama orang tua atau wali</label>
+  <section id="formulir-minat" class="section admissions-form-section contact-destination" tabindex="-1" aria-labelledby="formulir-title">
+    <div class="wrap editorial-grid admissions-form-layout">
+      <div>
+        <h2 id="formulir-title">Formulir Minat Penerimaan</h2>
+        <p id="formulir-penjelasan">Formulir ini menyiapkan pesan WhatsApp ke Madani Montessori. Anda dapat meninjau pesan sebelum mengirimkannya.</p>
+      </div>
+      <form class="interest-form" data-admissions-form data-whatsapp={school.phone} aria-labelledby="formulir-title" aria-describedby="formulir-penjelasan" hidden>
+        <label for="nama-orang-tua">Nama orang tua atau wali <span class="field-note">(wajib)</span></label>
         <input id="nama-orang-tua" name="nama" autocomplete="name" required maxlength="100" pattern={/.*\S.*/.source} />
         <label for="pilihan-program">Program yang diminati</label>
         <select id="pilihan-program" name="program">
@@ -36,9 +38,9 @@ import { admissionsInvitation, school, schoolPrograms } from '../content/school'
       <noscript><a class="text-link" href="/kontak/#konsultasi">Hubungi Madani Montessori untuk menyampaikan minat penerimaan</a></noscript>
     </div>
   </section>
-  <section class="section section--follow-up">
+  <section class="section" aria-labelledby="pertanyaan-ppdb">
     <div class="wrap narrow">
-      <h2>Pertanyaan seputar PPDB</h2>
+      <h2 id="pertanyaan-ppdb">Pertanyaan seputar PPDB</h2>
       <div class="faq-list">
         <details>
           <summary>Bagaimana cara mulai mendaftar?</summary>
