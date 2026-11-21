@@ -3,6 +3,9 @@ import SiteLayout from '../layouts/SiteLayout.astro';
 import InnerMasthead from '../components/InnerMasthead.astro';
 ---
 <SiteLayout title="Halaman tidak ditemukan" description="Halaman yang Anda cari tidak ditemukan.">
-  <InnerMasthead title="Halaman tidak ditemukan" intro="Periksa kembali alamat halaman atau kembali ke Beranda." />
-  <div class="wrap missing-page"><a class="button" href="/">Kembali ke Beranda</a></div>
+  <InnerMasthead title="Halaman tidak ditemukan" intro="Periksa kembali alamat halaman atau lanjutkan ke Beranda dan Program Madani Montessori." />
+  <div class="wrap missing-page">
+    <a class="button" href="/">Kembali ke Beranda</a>
+    <a class="button button--secondary" href="/program/">Lihat program</a>
+  </div>
 </SiteLayout>

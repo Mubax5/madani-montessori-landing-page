@@ -13,6 +13,5 @@
 | PPDB dan kunjungan | Keputusan pengguna dan situs aktif | Konsultasi dan kunjungan melalui Kontak. Formulir minat di halaman PPDB menyiapkan draf pesan WhatsApp. |
 | Alamat lengkap dan pin | Situs aktif dan undangan berbeda konteks | Gunakan wilayah umum. Minta alamat dan pin resmi gedung sekolah. |
 | Hero, alat peraga, galeri, dan caption | Ilustrasi generatif yang dibuat untuk pratinjau | Galeri memberi label ilustrasi melalui caption. Jalur media resmi tersedia saat aset disetujui. |
-| Kebijakan privasi resmi | Belum diserahkan | Halaman menjelaskan ruang lingkup pratinjau. Tinjau kebijakan resmi bersama sekolah sebelum publikasi. |
 
 Sumber publik utama adalah [Tentang](https://madanimontessori.my.id/tentang/), [halaman Program](https://madanimontessori.my.id/program/), [Agenda & Galeri](https://madanimontessori.my.id/agenda-galeri/), dan [Kontak](https://madanimontessori.my.id/kontak/).

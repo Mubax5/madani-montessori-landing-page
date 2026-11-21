@@ -102,35 +102,54 @@ button { color: inherit; font: inherit; cursor: pointer; }
 .brand img { width: 2.125rem; height: 2.125rem; flex: none; }
 .header-brand { gap: .85rem; font-size: clamp(1.16rem, 2vw, 1.6rem); line-height: 1; }
 .header-brand img { width: clamp(2.5rem, 3.8vw, 3.15rem); height: auto; }
-.nav-list, .footer-links { list-style: none; padding: 0; }
-.nav-list { display: flex; align-items: center; column-gap: clamp(.85rem, 2vw, 2rem); font-size: .875rem; font-weight: 580; }
-.nav-item { position: relative; }
-.nav-label { display: flex; align-items: center; }
-.nav-label a { text-decoration: none; }
-.nav-label a { position: relative; display: flex; align-items: center; min-height: 2.75rem; padding-inline: .3rem; border-radius: .65rem; }
-.nav-label a::after {
-  content: "";
-  position: absolute;
-  bottom: .36rem;
-  inset-inline: .04rem;
-  height: 1px;
-  background: transparent;
+.nav-list, .nav-submenu, .footer-links { list-style: none; padding: 0; }
+.nav-list {
+  display: flex;
+  align-items: center;
+  gap: clamp(.3rem, 1.6vw, 1.35rem);
+  font-size: .9rem;
+  font-weight: 620;
 }
-.nav-item.is-active .nav-label a { font-weight: 740; }
-.nav-item.is-active .nav-label a::after, .nav-label a:hover::after { background: var(--action); height: 2px; }
-.nav-item--admissions .nav-label a {
-  padding-inline: .95rem;
-  border: 1px solid var(--action);
-  border-radius: .4rem;
+.nav-group { position: relative; }
+.nav-control, .nav-submenu a {
+  display: flex;
+  align-items: center;
+  gap: .55rem;
+  min-height: 2.75rem;
+  padding: .35rem .7rem;
+  border-radius: .5rem;
+  text-decoration: none;
+}
+.nav-control { list-style: none; }
+summary.nav-control { cursor: pointer; }
+summary.nav-control::-webkit-details-marker { display: none; }
+.nav-control:hover, .nav-group[open] > .nav-control, .nav-item.is-active .nav-control,
+.nav-submenu a:hover, .nav-submenu a[aria-current="page"] { background: color-mix(in srgb, var(--sage) 63%, var(--paper)); }
+.nav-item.is-active .nav-control, .nav-submenu a[aria-current="page"] { font-weight: 730; }
+.nav-submenu {
+  position: absolute;
+  inset-block-start: calc(100% + .4rem);
+  inset-inline-start: 0;
+  min-width: 12.5rem;
+  padding: .4rem;
+  border: 1px solid color-mix(in srgb, var(--ink) 10%, var(--paper));
+  border-radius: .75rem;
+  background: var(--paper);
+  box-shadow: 0 .65rem 1.75rem rgb(38 40 98 / 11%);
+}
+.nav-submenu a { font-size: .88rem; }
+.nav-item--admissions > .nav-control {
+  padding-inline: 1rem;
   background: var(--action);
   color: var(--paper);
 }
-.nav-item--admissions .nav-label a:hover { border-color: var(--action-hover); background: var(--action-hover); }
-.nav-item--admissions .nav-label a::after { bottom: .26rem; inset-inline: .85rem; }
-.nav-item--admissions:is(.is-active, :hover) .nav-label a::after { background: var(--paper); }
+.nav-item--admissions > .nav-control:hover { background: var(--action-hover); }
+.nav-item--admissions.is-active > .nav-control { background: var(--action-hover); }
+.nav-control:focus-visible, .nav-submenu a:focus-visible { outline-offset: -3px; }
+.nav-item--admissions > .nav-control:focus-visible { outline-color: var(--paper); }
 .menu-toggle { display: none; border: 0; background: transparent; }
 .chevron { display: block; width: .38rem; height: .38rem; border: solid currentColor; border-width: 0 1px 1px 0; transform: translateY(-.11rem) rotate(45deg); }
-button[aria-expanded="true"] .chevron { transform: translateY(.05rem) rotate(225deg); }
+button[aria-expanded="true"] .chevron, .nav-group[open] > summary .chevron { transform: translateY(.05rem) rotate(225deg); }
 .editorial-grid {
   display: grid;
   grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
@@ -198,12 +217,12 @@ button[aria-expanded="true"] .chevron { transform: translateY(.05rem) rotate(225
 .footer-brand img { width: 3.25rem; height: 3.25rem; }
 .footer-location { margin-top: .55rem; }
 .footer-links { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .35rem 1.35rem; }
-.footer-links a, .footer-contact a, .footer-bottom a { text-decoration-color: var(--accent-rule); }
+.footer-links a, .footer-contact a { text-decoration-color: var(--accent-rule); }
 .footer-contact { display: grid; justify-items: start; gap: .35rem; min-width: 0; }
 .footer-contact a { overflow-wrap: anywhere; }
-.footer-links a, .footer-contact a, .footer-bottom a { display: inline-flex; align-items: center; min-height: 2.75rem; }
+.footer-links a, .footer-contact a { display: inline-flex; align-items: center; min-height: 2.75rem; }
 .site-footer :focus-visible { outline-color: var(--paper); }
-.footer-bottom { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: .3rem 1rem; margin-top: 2.6rem; padding-block: 1.1rem; border-top: 1px solid var(--rule); font-size: .82rem; }
+.footer-bottom { margin-top: 2.6rem; padding-block: 1.1rem; border-top: 1px solid var(--rule); font-size: .82rem; }
 .footer-bottom small { font-size: inherit; }
 
 @media (max-width: 63.999rem) {
@@ -212,12 +231,18 @@ button[aria-expanded="true"] .chevron { transform: translateY(.05rem) rotate(225
   .header-inner { flex-wrap: wrap; gap: 0; }
   .menu-toggle { display: inline-flex; align-items: center; gap: .55rem; min-height: 2.75rem; padding-inline: .25rem; border-radius: .55rem; font-size: .88rem; }
   .main-nav { width: 100%; padding-block: .25rem 1rem; border-top: 1px solid var(--rule); }
-  .site-header[data-ready] .main-nav { position: absolute; top: 100%; inset-inline: 0; max-height: calc(100dvh - var(--header-height)); overflow-y: auto; padding-inline: var(--gutter); background: var(--paper); border-bottom: 1px solid var(--rule); }
+  .site-header[data-ready] .main-nav { position: absolute; top: 100%; inset-inline: 0; max-height: calc(100dvh - var(--header-height)); overflow-y: auto; overscroll-behavior: contain; padding-inline: var(--gutter); background: var(--paper); border-bottom: 1px solid var(--rule); }
   .site-header[data-ready] .menu-toggle[aria-expanded="false"] + .main-nav { display: none; }
-  .nav-list { display: grid; }
-  .nav-label a { min-height: 2.875rem; }
-  .nav-item--admissions .nav-label a { min-height: 2.75rem; }
-  .nav-item--admissions .nav-label { padding-block: .3rem; }
+  .nav-list { display: grid; gap: .2rem; }
+  .nav-control { justify-content: space-between; }
+  .nav-submenu {
+    position: static;
+    min-width: 0;
+    padding: .2rem 0 .3rem .8rem;
+    border: 0;
+    box-shadow: none;
+  }
+  .nav-item--admissions { justify-self: start; margin-block: .2rem; }
   .footer-grid { grid-template-columns: 1fr 1fr; }
   .footer-contact { grid-column: 1 / -1; }
 }

@@ -1,0 +1,61 @@
+---
+import { schoolPrograms } from '../content/school';
+
+interface Props { detailed?: boolean }
+const { detailed = false } = Astro.props;
+---
+<div class="program-accordion">
+  {schoolPrograms.map((program) => (
+    <details name="program-sekolah">
+      <summary>
+        <span class="plan-name">{program.name}</span>
+        <span class="plan-hours">{program.hours} WIB</span>
+        <span class="chevron" aria-hidden="true"></span>
+      </summary>
+      <div class="plan-description">
+        <p>{program.summary}</p>
+        {detailed && (
+          <dl>
+            <div><dt>Kegiatan</dt><dd>{program.activities}</dd></div>
+            <div><dt>Layanan makan</dt><dd>{program.meals}</dd></div>
+          </dl>
+        )}
+      </div>
+    </details>
+  ))}
+</div>
+
+<style>
+  .program-accordion { display: grid; gap: .45rem; }
+  details { border-radius: .75rem; }
+  summary {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto .8rem;
+    align-items: center;
+    gap: .35rem .8rem;
+    min-height: 3.5rem;
+    padding: .65rem clamp(.75rem, 2vw, 1.25rem);
+    border-radius: .75rem;
+    color: var(--ink);
+    list-style: none;
+    cursor: pointer;
+  }
+  summary::-webkit-details-marker { display: none; }
+  summary:hover { background: color-mix(in srgb, var(--paper) 65%, transparent); }
+  details[open] { background: var(--paper); }
+  details[open] summary { border-end-start-radius: 0; border-end-end-radius: 0; }
+  details[open] .chevron { transform: translateY(.08rem) rotate(225deg); }
+  .plan-name { font-weight: 720; }
+  .plan-hours { color: var(--action); font-size: .9rem; font-weight: 650; font-variant-numeric: tabular-nums; }
+  .chevron { justify-self: center; color: var(--action); }
+  .plan-description { padding: .15rem clamp(.75rem, 2vw, 1.25rem) 1.1rem; }
+  .plan-description p { max-width: 54ch; }
+  .plan-description dl { display: grid; gap: .65rem 1.5rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 10rem), 1fr)); margin-top: .8rem; }
+  .plan-description dt { color: var(--ink); font-weight: 700; }
+  .plan-description dd { font-size: .92rem; }
+
+  @media (max-width: 23rem) {
+    summary { column-gap: .45rem; }
+    .plan-hours { font-size: .83rem; }
+  }
+</style>

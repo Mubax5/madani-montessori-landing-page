@@ -29,7 +29,7 @@ export const navigation = [
     label: 'Program',
     href: '/program/',
     children: [
-      { label: 'Program Sekolah', href: '/program/program-sekolah/' },
+      { label: 'Jadwal dan kegiatan', href: '/program/program-sekolah/' },
       { label: 'Program Unggulan', href: '/program/program-unggulan/' },
     ],
   },

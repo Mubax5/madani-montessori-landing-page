@@ -1,34 +1,3 @@
-.section-nav {
-  background: var(--paper);
-  border-bottom: 1px solid color-mix(in srgb, var(--ink) 13%, transparent);
-}
-.section-nav ul {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: .1rem clamp(.38rem, 2vw, 1.1rem);
-  list-style: none;
-  padding: .45rem 0;
-}
-.section-nav a {
-  display: inline-flex;
-  align-items: center;
-  min-height: 2.75rem;
-  padding: .2rem .68rem;
-  border-radius: .3rem;
-  color: var(--action);
-  font-size: .85rem;
-  font-weight: 600;
-  text-decoration: none;
-}
-.section-nav a:hover { background: var(--cream); text-decoration: underline; }
-.section-nav a[aria-current="page"] {
-  background: var(--sky);
-  font-weight: 740;
-  text-decoration: underline;
-  text-decoration-thickness: 2px;
-}
-
 .inner-masthead { background: var(--cream); }
 .inner-masthead--sage { background: var(--sage); }
 .inner-masthead--sky { background: var(--sky); }
@@ -104,8 +73,33 @@
 .comparison-scroll + .text-note { margin-top: .85rem; }
 .comparison .time-zone { white-space: nowrap; }
 .program-hours { white-space: nowrap; font-variant-numeric: lining-nums tabular-nums; }
-.featured-programs { background: var(--cream); }
-main:has(> .featured-programs:last-child) + .site-footer .section-edge { fill: var(--cream); }
+.program-panel {
+  display: grid;
+  grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr);
+  align-items: start;
+  gap: clamp(1.1rem, 4vw, 3rem);
+  padding: clamp(1.35rem, 5vw, 4rem);
+  background: color-mix(in srgb, var(--sky) 84%, var(--paper));
+  border-radius: clamp(2.65rem, 9vw, 7rem) 1.1rem clamp(2.8rem, 7vw, 5rem) 1.25rem /
+    clamp(1.8rem, 4.2vw, 3.5rem) 1.1rem clamp(1.4rem, 4vw, 2.8rem) 1.25rem;
+}
+.program-panel > div > p { max-width: 37ch; }
+.program-panel--overview .text-link { display: flex; width: fit-content; }
+.program-panel--overview .text-link + .text-link { margin-top: 0; }
+.program-comparison { margin-top: clamp(1.45rem, 4vw, 2.75rem); }
+.program-comparison summary {
+  display: inline-flex;
+  align-items: center;
+  gap: .65rem;
+  min-height: 2.75rem;
+  color: var(--action);
+  cursor: pointer;
+  list-style: none;
+  font-weight: 700;
+}
+.program-comparison summary::-webkit-details-marker { display: none; }
+.program-comparison details[open] > summary .chevron { transform: translateY(.05rem) rotate(225deg); }
+.featured-programs { padding-top: 0; }
 
 .detail-links, .detail-list { border-top: 1px solid var(--rule); list-style: none; padding: 0; }
 .detail-links li, .detail-list li { border-bottom: 1px solid var(--rule); }
@@ -197,13 +191,11 @@ main:has(> .featured-programs:last-child) + .site-footer .section-edge { fill: v
 .missing-page .button { margin-top: 0; }
 
 @media (max-width: 55.999rem) {
-  .inner-masthead-content--split, .profile-spread, .method-spread { grid-template-columns: minmax(0, 1fr); }
+  .inner-masthead-content--split, .profile-spread, .method-spread, .program-panel { grid-template-columns: minmax(0, 1fr); }
   .learning-example { max-width: 36rem; }
 }
 
 @media (max-width: 43.75rem) {
-  .section-nav ul { column-gap: .35rem; }
-  .section-nav a { padding-inline: .42rem; }
   .vision-spread, .admissions-options, .admissions-form-layout { grid-template-columns: minmax(0, 1fr); }
   .comparison :is(th, td) { font-size: .9rem; }
   .comparison .time-zone { display: block; }

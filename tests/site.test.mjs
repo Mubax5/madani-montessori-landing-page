@@ -17,7 +17,6 @@ const routes = [
   '/galeri/',
   '/ppdb/',
   '/kontak/',
-  '/kebijakan-privasi/',
   '/404.html',
 ];
 
@@ -75,32 +74,51 @@ test('Beranda introduces the school and links to programs, activities, and admis
   assert.match(main, /data-gallery-photo/);
   assert.equal([...html.matchAll(/class="section-edge"/g)].length, 1);
 
-  for (const [name, hours] of [['Reguler', '07.30–10.30'], ['Half Day', '07.30–14.00'], ['Full Day', '07.30–16.00']]) {
-    assert.ok(main.includes('<h3>' + name + '</h3>'));
-    assert.ok(main.includes(hours + ' WIB'));
-  }
   for (let index = 0; index < positions.length; index += 1) {
     assert.ok(positions[index] > (positions[index - 1] ?? -1), sectionHeadings[index] + ' is out of order');
   }
 });
 
-test('the navbar marks the current page, including admissions and contact', () => {
-  for (const route of ['/ppdb/', '/kontak/', '/program/program-unggulan/']) {
+test('one navbar exposes the Profil and Program destinations and marks the current link', () => {
+  for (const route of ['/profil/', '/metode-montessori/', '/program/', '/program/program-unggulan/', '/ppdb/', '/kontak/']) {
     const html = readFileSync(builtPage(route), 'utf8');
-    assert.match(html, new RegExp('href="' + route + '" aria-current="page"'));
+    const header = html.slice(html.indexOf('<header'), html.indexOf('</header>'));
+    assert.equal([...header.matchAll(/<details class="nav-group"/g)].length, 2);
+    assert.match(header, new RegExp('href="' + route + '" aria-current="page"'));
+    assert.match(header, /href="\/profil\/visi-misi\/"/);
+    assert.match(header, /href="\/program\/program-sekolah\/"/);
+    assert.doesNotMatch(html, /class="section-nav"/);
   }
-  const profile = readFileSync(builtPage('/profil/'), 'utf8');
-  assert.doesNotMatch(profile.slice(profile.indexOf('<header'), profile.indexOf('</header>')), /submenu-toggle/);
-  assert.match(profile, /aria-label="Halaman Profil"/);
-  assert.match(profile, /href="\/profil\/visi-misi\/"/);
-  assert.match(profile, /href="\/metode-montessori\/"/);
 });
 
-test('Program places each plan in a table column with shared comparison rows', () => {
+test('Program accordions keep all names and hours in their summaries and retain a full comparison', () => {
+  for (const route of ['/', '/program/', '/program/program-sekolah/']) {
+    const html = readFileSync(builtPage(route), 'utf8');
+    const summaries = Array.from(html.matchAll(/<details name="program-sekolah"[^>]*>\s*<summary[^>]*>([\s\S]*?)<\/summary>/g), (match) => match[1]);
+    assert.equal(summaries.length, 3, route);
+    for (const [index, name, hours] of [[0, 'Reguler', '07.30–10.30'], [1, 'Half Day', '07.30–14.00'], [2, 'Full Day', '07.30–16.00']]) {
+      assert.ok(summaries[index].includes('>' + name + '</span>'));
+      assert.ok(summaries[index].includes(hours + ' WIB</span>'));
+    }
+  }
+
   const html = readFileSync(builtPage('/program/'), 'utf8');
-  assert.match(html, /<table class="comparison"/);
+  assert.match(html, /<details id="perbandingan"/);
   assert.match(html, /<th scope="col">Reguler<\/th>\s*<th scope="col">Half Day<\/th>\s*<th scope="col">Full Day<\/th>/);
-  for (const row of ['Jam sekolah', 'Kegiatan', 'Keunggulan', 'Jam makan', 'Jumlah makan']) {
+  for (const row of ['Jam sekolah', 'Kegiatan', 'Keunggulan', 'Layanan makan']) {
     assert.ok(html.includes('<th scope="row">' + row + '</th>'), 'Missing comparison row ' + row);
   }
+  assert.match(html, /Jam makan dan jumlah makan untuk semua program/);
+});
+
+test('the retired privacy route is absent and the custom 404 provides recovery links', () => {
+  assert.ok(!existsSync(builtPage('/kebijakan-privasi/')));
+  for (const route of routes) {
+    const html = readFileSync(builtPage(route), 'utf8');
+    assert.doesNotMatch(html, /href="\/kebijakan-privasi/);
+  }
+  const missing = readFileSync(builtPage('/404.html'), 'utf8');
+  assert.match(missing, /<h1>Halaman tidak ditemukan<\/h1>/);
+  assert.match(missing, /href="\/"[^>]*>Kembali ke Beranda/);
+  assert.match(missing, /href="\/program\/"[^>]*>Lihat program/);
 });

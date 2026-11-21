@@ -1,15 +1,18 @@
 ---
 import SiteLayout from '../../layouts/SiteLayout.astro';
 import InnerMasthead from '../../components/InnerMasthead.astro';
-import ProgramComparison from '../../components/ProgramComparison.astro';
+import ProgramAccordion from '../../components/ProgramAccordion.astro';
 ---
 <SiteLayout title="Program Sekolah" description="Jam belajar dan ringkasan Reguler, Half Day, dan Full Day di Madani.">
-  <InnerMasthead title="Program Sekolah" intro="Lihat jam dan ringkasan setiap pilihan program." parent={{ href: '/program/', label: 'Program' }} tone="sky" />
-  <section class="section inner-section">
-    <div class="wrap">
-      <h2>Jadwal dan kegiatan</h2>
-      <ProgramComparison />
-      <a class="text-link" href="/ppdb/">Konsultasikan pilihan program</a>
+  <InnerMasthead title="Program Sekolah" intro="Lihat jam dan ringkasan setiap pilihan program." />
+  <section class="section inner-section" aria-labelledby="jadwal-kegiatan">
+    <div class="wrap program-panel program-panel--overview">
+      <div>
+        <h2 id="jadwal-kegiatan">Jadwal dan kegiatan</h2>
+        <a class="text-link" href="/program/#perbandingan">Bandingkan semua program</a>
+        <a class="text-link" href="/ppdb/">Lihat informasi PPDB</a>
+      </div>
+      <ProgramAccordion detailed />
     </div>
   </section>
 </SiteLayout>

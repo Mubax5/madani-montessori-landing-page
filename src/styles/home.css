@@ -65,7 +65,7 @@
 
 .hero-figure figcaption { padding: 0 var(--gutter) .45rem; }
 
-.intro-grid, .program-grid, .admissions-layout, .contact-layout {
+.intro-grid, .admissions-layout, .contact-layout {
   display: grid;
   align-items: center;
   gap: clamp(1.75rem, 6vw, 5.5rem);
@@ -97,25 +97,9 @@
   text-align: center;
 }
 
-.home-program { background: var(--sky); }
-.program-grid {
-  align-items: start;
-  grid-template-columns: minmax(0, .67fr) minmax(0, 1.33fr);
-}
-.program-grid > div p { max-width: 31ch; }
-.program-grid .home-actions { align-items: flex-start; flex-direction: column; gap: 0; }
-.program-list { list-style: none; padding: 0; border-top: 1px solid #9ab4c7; }
-.program-list li {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: baseline;
-  gap: .3rem 1rem;
-  padding-block: 1.3rem;
-  border-bottom: 1px solid #9ab4c7;
-}
-.program-list h3 { font-size: clamp(1.85rem, 3.1vw, 2.8rem); }
-.program-list .program-hours { color: var(--action); font-size: .86rem; font-weight: 720; }
-.program-summary { grid-column: 1 / -1; }
+.home-page .home-program { padding-block: clamp(.6rem, 2vw, 1.5rem) 0; }
+.home-program .home-actions { align-items: flex-start; flex-direction: column; gap: 0; }
+.home-page .home-gallery { padding-top: clamp(3.25rem, 7vw, 6rem); }
 
 .gallery-heading { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: .65rem 2rem; }
 .gallery-heading .home-actions { margin-top: 0; }
@@ -212,10 +196,10 @@
     mask-image: radial-gradient(ellipse 87% 84% at 50% 48%, black 46%, transparent 76%),
       linear-gradient(to bottom, transparent 1%, black 13% 84%, transparent);
   }
-  .intro-grid, .program-grid, .admissions-layout, .contact-layout { grid-template-columns: minmax(0, 1fr); }
+  .intro-grid, .admissions-layout, .contact-layout { grid-template-columns: minmax(0, 1fr); }
   .intro-text { padding: 0; }
   .study-figure { width: min(100%, 34rem); margin-inline: auto; }
-  .program-grid .home-actions { flex-direction: row; gap: 0 1rem; }
+  .home-program .home-actions { flex-direction: row; gap: 0 1rem; }
   .gallery-spread { grid-template-columns: minmax(0, 1fr); }
   .home-gallery-figure + .home-gallery-figure { width: min(86%, 29rem); justify-self: end; }
   .admissions-layout .home-actions { justify-self: start; }

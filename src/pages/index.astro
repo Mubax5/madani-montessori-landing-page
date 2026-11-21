@@ -3,8 +3,9 @@ import { Image } from 'astro:assets';
 import SiteLayout from '../layouts/SiteLayout.astro';
 import HomeHero from '../components/HomeHero.astro';
 import HomeGallery from '../components/HomeGallery.astro';
+import ProgramAccordion from '../components/ProgramAccordion.astro';
 import materialsIllustration from '../assets/montessori-materials.webp';
-import { admissionsInvitation, school, schoolMedia, schoolPrograms } from '../content/school';
+import { admissionsInvitation, school, schoolMedia } from '../content/school';
 import '../styles/home.css';
 
 const materials = schoolMedia.materials;
@@ -36,7 +37,7 @@ const materials = schoolMedia.materials;
   </section>
 
   <section class="section home-program" aria-labelledby="program-title">
-    <div class="wrap program-grid">
+    <div class="wrap program-panel">
       <div>
         <h2 id="program-title">Program sekolah</h2>
         <p>Bandingkan durasi dan kegiatan dalam pilihan Reguler, Half Day, dan Full Day.</p>
@@ -45,15 +46,7 @@ const materials = schoolMedia.materials;
           <a class="text-link" href="/program/program-unggulan/">Lihat program unggulan</a>
         </div>
       </div>
-      <ul class="program-list" role="list">
-        {schoolPrograms.map((program) => (
-          <li>
-            <h3>{program.name}</h3>
-            <p class="program-hours">{program.hours} WIB</p>
-            <p class="program-summary">{program.summary}</p>
-          </li>
-        ))}
-      </ul>
+      <ProgramAccordion />
     </div>
   </section>
 

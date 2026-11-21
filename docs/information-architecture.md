@@ -14,7 +14,6 @@
 | Galeri | /galeri/ | Foto yang disetujui, dikelompokkan menurut kategori |
 | PPDB | /ppdb/ | Ajakan konsultasi dan formulir minat yang menyiapkan draf WhatsApp |
 | Kontak | /kontak/ | Saluran resmi yang dipublikasikan dan informasi kunjungan |
-| Kebijakan Privasi | /kebijakan-privasi/ | Kebijakan lingkup pratinjau |
 | 404 | /404.html | Pemulihan untuk alamat yang tidak dikenal |
 
 ## Audit kompatibilitas
